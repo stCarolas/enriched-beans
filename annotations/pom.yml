@@ -1,0 +1,45 @@
+name: Enriched Beans Annotations
+artifactId: enriched-beans-annotations
+groupId: com.github.stcarolas.enriched-beans
+version: 0.1.5
+
+modelVersion: 4.0.0
+properties: 
+  maven.compiler.target: 11
+  maven.compiler.source: 14
+
+build:
+  plugins:
+
+  - groupId: org.codehaus.mojo
+    artifactId: flatten-maven-plugin
+    version: 1.1.0
+    configuration:
+      updatePomFile: true
+      flattenMode: resolveCiFriendliesOnly
+    executions:
+    - id: flatten
+      goals: [flatten]
+      phase: process-resources
+    - id: flatten.clean
+      goals: [clean]
+      phase: clean
+
+  - groupId: org.apache.maven.plugins
+    artifactId: maven-source-plugin
+    version: 3.2.1
+    executions:
+    - id: attach-sources
+      goals: [jar-no-fork]
+      phase: package
+
+  - groupId: org.apache.maven.plugins
+    artifactId: maven-compiler-plugin
+    version: 3.8.1
+
+distributionManagement:
+  repository: 
+    id: bintray-stcarolas-maven
+    layout: default
+    uniqueVersion: true
+    url: "https://api.bintray.com/maven/stcarolas/maven/${project.artifactId}/;publish=1"

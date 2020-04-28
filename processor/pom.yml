@@ -1,0 +1,58 @@
+name: Enriched Beans Processor
+artifactId: enriched-beans-processor
+groupId: com.github.stcarolas.enriched-beans
+version: 0.1.4
+
+modelVersion: 4.0.0
+properties: 
+  maven.compiler.target: 11
+  maven.compiler.source: 14
+
+dependencies:
+- {groupId: com.squareup,                        artifactId: javapoet,                   version: 1.12.1}
+- {groupId: com.github.stcarolas.enriched-beans, artifactId: enriched-beans-annotations, version: 0.1.0}
+- {groupId: io.vavr,                             artifactId: vavr,                       version: 0.10.2}
+- {groupId: javax.inject,                        artifactId: javax.inject,               version: 1}
+- {groupId: com.google.auto.service,             artifactId: auto-service-annotations,   version: 1.0-rc6, scope: provided}
+
+build:
+  plugins:
+
+  - groupId: org.codehaus.mojo
+    artifactId: flatten-maven-plugin
+    version: 1.1.0
+    configuration:
+      updatePomFile: true
+      flattenMode: resolveCiFriendliesOnly
+    executions:
+    - id: flatten
+      goals: [flatten]
+      phase: process-resources
+    - id: flatten.clean
+      goals: [clean]
+      phase: clean
+
+  - groupId: org.apache.maven.plugins
+    artifactId: maven-source-plugin
+    version: 3.2.1
+    executions:
+    - id: attach-sources
+      goals: [jar-no-fork]
+      phase: package
+
+  - groupId: org.apache.maven.plugins
+    artifactId: maven-compiler-plugin
+    version: 3.8.1
+    configuration:
+      compilerArguments: {AaddGeneratedAnnotation: false, Adebug: true}
+      dependencies:
+      - {groupId: org.ow2.asm, artifactId: asm, version: 7.3.1, type: jar}
+      annotationProcessorPaths:
+      - {groupId: com.google.auto.service, artifactId: auto-service, version: 1.0-rc6}
+
+distributionManagement:
+  repository: 
+    id: bintray-stcarolas-maven
+    layout: default
+    uniqueVersion: true
+    url: "https://api.bintray.com/maven/stcarolas/maven/${project.artifactId}/;publish=1"
