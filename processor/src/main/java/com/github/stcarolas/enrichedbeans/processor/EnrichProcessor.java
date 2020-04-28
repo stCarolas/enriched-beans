@@ -1,7 +1,7 @@
 package com.github.stcarolas.enrichedbeans.processor;
 
-import java.lang.reflect.Type;
-import java.util.List;
+import static io.vavr.API.Seq;
+
 import java.util.Map;
 
 import javax.annotation.processing.AbstractProcessor;
@@ -15,13 +15,13 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
-import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.type.TypeMirror;
-import javax.tools.JavaFileObject;
 
+import com.github.stcarolas.enrichedbeans.annotations.Enrich;
 import com.google.auto.service.AutoService;
 import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.JavaFile;
@@ -30,17 +30,15 @@ import com.squareup.javapoet.ParameterSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
-import com.squareup.javapoet.MethodSpec.Builder;
 
 import io.vavr.collection.HashSet;
+import io.vavr.collection.List;
 import io.vavr.collection.Seq;
 import io.vavr.collection.Set;
-import com.github.stcarolas.enrichedbeans.annotations.Enrich;
-import static io.vavr.API.*;
 
 @AutoService(Processor.class)
 @SupportedAnnotationTypes("com.github.stcarolas.enrichedbeans.annotations.Enrich")
-@SupportedSourceVersion(SourceVersion.RELEASE_8)
+@SupportedSourceVersion(SourceVersion.RELEASE_11)
 public class EnrichProcessor extends AbstractProcessor  {
 
 	@Override
@@ -48,16 +46,28 @@ public class EnrichProcessor extends AbstractProcessor  {
     java.util.Set<? extends TypeElement> annotations, 
     RoundEnvironment roundEnv
   ){
-    java.util.Set<? extends Element> annotatedElements 
-      = roundEnv.getElementsAnnotatedWith(Enrich.class);
-    Set<TypeElement> classes = HashSet.empty();
-    for (var element: annotatedElements){
-      classes = classes.add((TypeElement) element.getEnclosingElement());
-    }
-    classes.forEach(this::handle);
+    collectBeans(roundEnv.getElementsAnnotatedWith(Enrich.class))
+      .forEach(this::handle);
  
     return true;
 	}
+
+  private Seq<TypeElement> collectBeans(
+    java.util.Set<? extends Element> annotatedElements
+  ){
+    return List.ofAll(annotatedElements)
+      .map( element -> (TypeElement)element.getEnclosingElement() )
+      .distinct();
+  }
+
+  public void factoryConstructor(TypeElement type){
+      MethodSpec.Builder constructor = MethodSpec.constructorBuilder();
+      java.util.List<? extends Element> enclosedList = type.getEnclosedElements();
+      enclosedList.forEach( 
+        child -> {
+        }
+      );
+  }
 
   private void handle(TypeElement type){
     try {
@@ -65,12 +75,11 @@ public class EnrichProcessor extends AbstractProcessor  {
       String packageName = packageName(fullName);
       String className = type.getSimpleName().toString();
 
-      MethodSpec.Builder constructor = MethodSpec.constructorBuilder();
       MethodSpec.Builder createMethod = MethodSpec.methodBuilder("from")
         .returns(TypeName.get(type.asType()))
         .addModifiers(Modifier.PUBLIC);
       TypeSpec.Builder factory = TypeSpec.classBuilder(className + "Factory");
-      List<? extends Element> enclosedList = type.getEnclosedElements();
+      java.util.List<? extends Element> enclosedList = type.getEnclosedElements();
       enclosedList.forEach( 
         child -> {
           if (child.getKind().isField()){

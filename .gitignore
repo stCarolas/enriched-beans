@@ -4,3 +4,4 @@ target/
 .flattened-pom.xml
 .project
 .settings/
+.factorypath
