@@ -1,12 +1,12 @@
 name: Enriched Beans Processor
 artifactId: enriched-beans-processor
 groupId: com.github.stcarolas.enriched-beans
-version: 0.1.4
+version: 0.1.5
 
 modelVersion: 4.0.0
 properties: 
   maven.compiler.target: 11
-  maven.compiler.source: 14
+  maven.compiler.source: 11
 
 dependencies:
 - {groupId: com.squareup,                        artifactId: javapoet,                   version: 1.12.1}
