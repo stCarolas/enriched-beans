@@ -49,10 +49,3 @@ build:
       - {groupId: org.ow2.asm, artifactId: asm, version: 7.3.1, type: jar}
       annotationProcessorPaths:
       - {groupId: com.google.auto.service, artifactId: auto-service, version: 1.0-rc6}
-
-distributionManagement:
-  repository: 
-    id: bintray-stcarolas-maven
-    layout: default
-    uniqueVersion: true
-    url: "https://api.bintray.com/maven/stcarolas/maven/${project.artifactId}/;publish=1"

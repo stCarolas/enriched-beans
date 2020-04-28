@@ -9,3 +9,9 @@ modules:
   - annotations
   - processor
 
+distributionManagement:
+  repository: 
+    id: bintray-stcarolas-maven
+    layout: default
+    uniqueVersion: true
+    url: "https://api.bintray.com/maven/stcarolas/maven/${project.artifactId}/;publish=1"
