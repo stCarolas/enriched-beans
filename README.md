@@ -11,7 +11,7 @@ Say you have:
 ```java
 public class SomeClass {
   private final String notInjectableField;
-  @Enrich private final String depA;
+  @Enrich private final Integer depA;
   @Enrich @Named("myDep") private final String depB;
 
   // …
@@ -24,12 +24,12 @@ Produced factory would be like:
 ```java
 @Singleton
 public class SomeClassFactory {
-  private final String depA;
+  private final Integer depA;
   private final String depB;
 
   @Inject
   public SomeClassFactory(
-    String depA,
+    Integer depA,
     @Named("myDep") String depB
   ){
 
