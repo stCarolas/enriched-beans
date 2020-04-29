@@ -9,12 +9,11 @@ A source code generator for JSR-330-compatible factories (for Spring, Micronaut 
 Say you have:
 
 ```java
+@RequiredArgsConstructor
 public class SomeClass {
   private final String notInjectableField;
   @Enrich private final Integer depA;
   @Enrich @Named("myDep") private final String depB;
-
-  // …
 
   public void sayHello(){}
 }
