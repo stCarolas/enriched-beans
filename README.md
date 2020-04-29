@@ -53,15 +53,17 @@ public class AnotherBean{
 }
 ```
 
-### Using with Gradle and Spring
+### Using with Gradle, Lombok, Spring (Lombok must be before enriched)
 ```
   implementation 'javax.inject:javax.inject:1'
+  implementation 'org.projectlombok:lombok:1.18.12'
   implementation 'com.github.stcarolas.enriched-beans:enriched-beans-annotations:0.1.6'
+  ...
   annotationProcessor 'org.projectlombok:lombok:1.18.12'
   annotationProcessor 'com.github.stcarolas.enriched-beans:enriched-beans-processor:0.1.6'
-
 ```
-### Using with Maven, Lombok, Micronaut
+
+### Using with Maven, Lombok, Micronaut  (Lombok must be before enriched)
 ```
     <dependency>
       <groupId>com.github.stcarolas.enriched-beans</groupId>
