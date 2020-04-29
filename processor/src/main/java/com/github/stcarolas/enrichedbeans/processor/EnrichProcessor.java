@@ -1,40 +1,37 @@
 package com.github.stcarolas.enrichedbeans.processor;
 
-import static io.vavr.API.Seq;
+import static com.squareup.javapoet.TypeSpec.classBuilder;
+import static io.vavr.control.Try.run;
 
-import java.util.Map;
+import java.util.function.Function;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.annotation.processing.SupportedSourceVersion;
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 import javax.lang.model.SourceVersion;
-import javax.lang.model.element.AnnotationMirror;
-import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
-import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
-import javax.lang.model.type.TypeMirror;
 
 import com.github.stcarolas.enrichedbeans.annotations.Enrich;
 import com.google.auto.service.AutoService;
-import com.squareup.javapoet.AnnotationSpec;
+import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.ParameterSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 
-import io.vavr.collection.HashSet;
+import io.vavr.Function2;
 import io.vavr.collection.List;
 import io.vavr.collection.Seq;
-import io.vavr.collection.Set;
+import io.vavr.control.Try;
 
 @AutoService(Processor.class)
 @SupportedAnnotationTypes("com.github.stcarolas.enrichedbeans.annotations.Enrich")
@@ -46,99 +43,123 @@ public class EnrichProcessor extends AbstractProcessor  {
     java.util.Set<? extends TypeElement> annotations, 
     RoundEnvironment roundEnv
   ){
-    collectBeans(roundEnv.getElementsAnnotatedWith(Enrich.class))
-      .forEach(this::handle);
- 
-    return true;
+    return !
+      collectBeans(
+        roundEnv.getElementsAnnotatedWith(Enrich.class)
+      )
+      .map(factorySource)
+      .map(source -> run(() -> source.writeTo(processingEnv.getFiler())))
+      .exists(Try::isFailure);
 	}
+
+  private Function<Field, FieldSpec> privateFactoryField = field ->
+    FieldSpec
+      .builder(
+        ParameterizedTypeName.get(field.asTypeMirror()), 
+        field.name(),
+        Modifier.PRIVATE
+      )
+      .build();
+
+  private Function<TypeElement, TypeSpec> factory = bean ->
+    classBuilder(bean.getSimpleName().toString() + "Factory")
+      .addAnnotation(Singleton.class)
+      .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+      .addFields(
+        enrichedFieldsOf(bean).map(privateFactoryField)
+      )
+      .addMethod(
+        constructor(enrichedFieldsOf((bean)))
+      )
+      .addMethod(
+        factoryMethod(
+          notEnrichedFieldsOf(bean),
+          allFieldsOf(bean),
+          TypeName.get(bean.asType())
+        )
+      )
+      .build();
+
+  private Function<Element, TypeElement> containingBean = element ->
+    (TypeElement)element.getEnclosingElement();
+
+  private Function2<MethodSpec, Field, MethodSpec> addParameter = (method, field) ->
+    method.toBuilder()
+      .addParameter(
+        field.asParameterSpec()
+      ) 
+      .build();
+
+  private Function2<MethodSpec, Field, MethodSpec> addParameterWithAssignment = (method, field) ->
+    addParameter.apply(method, field).toBuilder()
+      .addStatement(
+        "this.$N = $N", field.name(), field.name()
+      )
+      .build();
 
   private Seq<TypeElement> collectBeans(
     java.util.Set<? extends Element> annotatedElements
   ){
-    return List.ofAll(annotatedElements)
-      .map( element -> (TypeElement)element.getEnclosingElement() )
-      .distinct();
+    return List.ofAll(annotatedElements).map(containingBean).distinct();
   }
 
-  public void factoryConstructor(TypeElement type){
-      MethodSpec.Builder constructor = MethodSpec.constructorBuilder();
-      java.util.List<? extends Element> enclosedList = type.getEnclosedElements();
-      enclosedList.forEach( 
-        child -> {
-        }
-      );
+  private MethodSpec constructor(Seq<Field> fields){
+    return fields.foldLeft(
+      MethodSpec.constructorBuilder()
+        .addModifiers(Modifier.PUBLIC)
+        .addAnnotation(Inject.class)
+        .build(),
+      addParameterWithAssignment
+    );
   }
 
-  private void handle(TypeElement type){
-    try {
-      String fullName = type.getQualifiedName().toString();
-      String packageName = packageName(fullName);
-      String className = type.getSimpleName().toString();
-
-      MethodSpec.Builder createMethod = MethodSpec.methodBuilder("from")
-        .returns(TypeName.get(type.asType()))
-        .addModifiers(Modifier.PUBLIC);
-      TypeSpec.Builder factory = TypeSpec.classBuilder(className + "Factory");
-      java.util.List<? extends Element> enclosedList = type.getEnclosedElements();
-      enclosedList.forEach( 
-        child -> {
-          if (child.getKind().isField()){
-            String fieldName = child.getSimpleName().toString();
-            TypeMirror childType = ((VariableElement) child).asType();
-            var parameter = ParameterSpec
-              .builder(ParameterizedTypeName.get(childType), fieldName);
-            boolean isEnriched = false;
-            for (AnnotationMirror annotation: child.getAnnotationMirrors()){
-              Map<? extends ExecutableElement, ? extends AnnotationValue> values = annotation.getElementValues();
-              TypeElement annoElement = ((TypeElement)annotation.getAnnotationType().asElement());
-              String name = annoElement.getQualifiedName().toString();
-              if ("com.github.stcarolas.enrichedbeans.annotations.Enrich".equals(name)){
-                isEnriched = true;
-              } else {
-                parameter.addAnnotation(AnnotationSpec.get(annotation));
-              }
-            }
-            if (isEnriched){
-              constructor.addParameter(parameter.build());
-              constructor.addStatement("this.$N = $N", fieldName, fieldName);
-              factory.addField(
-                ParameterizedTypeName.get(childType), 
-                fieldName,
-                Modifier.PRIVATE
-              );
-            } else {
-              createMethod.addParameter(
-                ParameterizedTypeName.get(childType), 
-                child.getSimpleName().toString());
-            }
-          }
-        }
-      );
-      Seq<String> fields = Seq();
-      for (var child: enclosedList){
-          if (child.getKind().isField()){
-            fields = fields.append(child.getSimpleName().toString());
-          }
-      }
-      String argLine = fields.intersperse(",").fold("", (a,b) -> a+b);
-      String code = "return new " + fullName +"(" + argLine + ")";
-      createMethod.addStatement(code);
-      
-      factory
-          .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
-          .addMethod(constructor.build())
-          .addMethod(createMethod.build())
-          .addAnnotation(Singleton.class)
-          .addAnnotation(Named.class);
-      
-      JavaFile javaFile = JavaFile.builder(packageName, factory.build())
-        .build();
-     
-      javaFile.writeTo(processingEnv.getFiler());
-    } catch(Exception e ){}
+  private MethodSpec factoryMethod(Seq<Field> signatureFields, Seq<Field> assignedFields,TypeName returnType){
+    return signatureFields.foldLeft(
+      MethodSpec.methodBuilder("from")
+        .returns(returnType)
+        .addModifiers(Modifier.PUBLIC)
+        .build(),
+      addParameter
+    )
+    .toBuilder()
+    .addCode(returnLine(assignedFields, returnType))
+    .build();
   }
 
-  private String packageName(String fullName){
+  private String returnLine(Seq<Field> fields, TypeName returnType){
+    return fields.map(Field::name)
+      .intersperse(",")
+      .foldLeft(
+        new StringBuilder("return new " + returnType.toString() +"("),
+        (returnLine, newArg) -> returnLine.append(newArg)
+      )
+      .append(");")
+      .toString();
+  }
+
+  private Seq<Field> enrichedFieldsOf(TypeElement type){
+    return allFieldsOf(type).filter(Field::isEnriched);
+  }
+
+  private Seq<Field> notEnrichedFieldsOf(TypeElement type){
+    return allFieldsOf(type).removeAll(Field::isEnriched);
+  }
+
+  private Seq<Field> allFieldsOf(TypeElement type){
+    return List.ofAll(type.getEnclosedElements())
+      .filter(element -> element.getKind().isField())
+      .map(element -> Field.from((VariableElement)element));
+  }
+
+  private JavaFile sourceFile(String packageName, TypeSpec javaClass){
+    return JavaFile.builder(packageName, javaClass).build();
+  }
+
+  private Function<TypeElement, JavaFile> factorySource = bean ->
+    sourceFile(packageName(bean), factory.apply(bean));
+
+  private String packageName(TypeElement type){
+    String fullName = type.getQualifiedName().toString();
     String packageName = "";
     int lastDot = fullName.lastIndexOf('.');
     if (lastDot > 0) {
