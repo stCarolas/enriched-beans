@@ -8,7 +8,7 @@ A source code generator for JSR-330-compatible factories (for Spring, Micronaut 
 
 Say you have:
 
-```
+```java
 public class SomeClass {
   private final String notInjectableField;
   @Enrich private final String depA;
@@ -21,7 +21,7 @@ public class SomeClass {
 ```
 
 Produced factory would be like:
-```
+```java
 @Singleton
 public class SomeClassFactory {
   private final String depA;
@@ -42,7 +42,7 @@ public class SomeClassFactory {
 ```
 
 And factory usage:
-```
+```java
 @Component
 public class AnotherBean{
   @Autowired SomeClassFactory factory;
