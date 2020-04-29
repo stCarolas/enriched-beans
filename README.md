@@ -49,7 +49,9 @@ public class AnotherBean{
 
   ...
 
-  factory.from("notInjectableFieldValue").sayHello();
+  public void sayHello(){
+    factory.from("notInjectableFieldValue").sayHello();
+  }
 }
 ```
 
