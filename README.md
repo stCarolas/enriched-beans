@@ -31,7 +31,8 @@ public class SomeClassFactory {
     Integer depA,
     @Named("myDep") String depB
   ){
-
+    this.depA = depA;
+    this.depB = depB;
   }
 
   public SomeClass from(String notInjectableField){
