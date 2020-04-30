@@ -54,6 +54,9 @@ public class AnotherBean{
 }
 ```
 
+### Why not AutoFactory or AssistedInject ?
+Its the same but with fewer code - annotations lies on fields so you can use generated constructor by lombok instead of writing one.
+
 ### Using with Gradle, Lombok, Spring (Lombok must be before enriched)
 ```
   implementation 'javax.inject:javax.inject:1'
