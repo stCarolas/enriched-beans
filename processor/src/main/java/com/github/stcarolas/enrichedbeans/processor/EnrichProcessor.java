@@ -38,8 +38,8 @@ import io.vavr.control.Try;
 @SupportedSourceVersion(SourceVersion.RELEASE_11)
 public class EnrichProcessor extends AbstractProcessor  {
 
-	@Override
-	public boolean process(
+  @Override
+  public boolean process(
     java.util.Set<? extends TypeElement> annotations, 
     RoundEnvironment roundEnv
   ){
