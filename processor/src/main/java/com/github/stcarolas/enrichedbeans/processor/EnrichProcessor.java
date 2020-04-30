@@ -50,7 +50,7 @@ public class EnrichProcessor extends AbstractProcessor  {
       .map(factorySource)
       .map(source -> run(() -> source.writeTo(processingEnv.getFiler())))
       .exists(Try::isFailure);
-	}
+  }
 
   private Function<Field, FieldSpec> privateFactoryField = field ->
     FieldSpec
