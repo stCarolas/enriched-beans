@@ -1,12 +1,13 @@
 name: Enriched Beans Annotations
 artifactId: enriched-beans-annotations
 groupId: com.github.stcarolas.enriched-beans
-version: 0.1.6
+version: ${revision} 
 
 modelVersion: 4.0.0
 properties: 
-  maven.compiler.target: 11
+  maven.compiler.target: 8
   maven.compiler.source: 11
+  revision: 0.2.0
 
 build:
   plugins:
@@ -18,10 +19,10 @@ build:
       updatePomFile: true
       flattenMode: resolveCiFriendliesOnly
     executions:
-    - id: flatten
+    - id: flatten-pom
       goals: [flatten]
       phase: process-resources
-    - id: flatten.clean
+    - id: clean-flattened-pom
       goals: [clean]
       phase: clean
 
@@ -29,13 +30,24 @@ build:
     artifactId: maven-source-plugin
     version: 3.2.1
     executions:
-    - id: attach-sources
+    - id: add-sources
       goals: [jar-no-fork]
       phase: package
 
   - groupId: org.apache.maven.plugins
     artifactId: maven-compiler-plugin
     version: 3.8.1
+
+  - groupId: org.codehaus.mojo
+    artifactId: buildnumber-maven-plugin
+    version: 1.4
+    configuration:
+      doCheck: false
+      doUpdate: false
+    executions:
+    - id: calculate-build-number
+      goals: [create]
+      phase: validate
 
 distributionManagement:
   repository: 
