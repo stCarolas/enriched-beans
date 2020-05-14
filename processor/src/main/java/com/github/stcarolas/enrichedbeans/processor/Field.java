@@ -57,7 +57,7 @@ public class Field {
   }
 
   public static Field from(VariableElement variable){
-    var field = new Field();
+    Field field = new Field();
     field.origin = variable;
     return field;
   }

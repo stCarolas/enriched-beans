@@ -5,8 +5,8 @@ version: ${revision}
 
 modelVersion: 4.0.0
 properties: 
-  maven.compiler.target: 8
-  maven.compiler.source: 11
+  maven.compiler.target: 1.8
+  maven.compiler.source: 1.8
   revision: 0.2.0
 
 build:
@@ -37,17 +37,6 @@ build:
   - groupId: org.apache.maven.plugins
     artifactId: maven-compiler-plugin
     version: 3.8.1
-
-  - groupId: org.codehaus.mojo
-    artifactId: buildnumber-maven-plugin
-    version: 1.4
-    configuration:
-      doCheck: false
-      doUpdate: false
-    executions:
-    - id: calculate-build-number
-      goals: [create]
-      phase: validate
 
 distributionManagement:
   repository: 
