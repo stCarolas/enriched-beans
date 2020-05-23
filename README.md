@@ -22,6 +22,7 @@ public class SomeClass {
 Produced factory would be like:
 ```java
 @Singleton
+@Named
 public class SomeClassFactory {
   private final Integer depA;
   private final String depB;
@@ -54,6 +55,8 @@ public class AnotherBean{
   }
 }
 ```
+
+*See also `micronaut-example`*
 
 ### Why not AutoFactory or AssistedInject ?
 Its the same but with fewer code - annotations lies on fields so you can use generated constructor by lombok instead of writing one.
@@ -112,3 +115,24 @@ Its the same but with fewer code - annotations lies on fields so you can use gen
       </configuration>
     </plugin>
 ```
+
+### How to view generated sources
+All generated factories lies in `$buildDir/generated/sources/annotationProcessor/java/main` directory if using gradle and `target/generated-sources/annotations` if using maven
+
+### Eclipse JDT and Gradle
+Eclipse JDT.LS has problems with using annotation processing so this trick can help
+
+```
+def generatedSources = "$buildDir/generated/sources/annotationProcessor/java/main"
+def generatedOutputDir = file("$generatedSources")
+
+sourceSets {
+    main {
+        java {
+            srcDirs += generatedOutputDir
+        }
+    }
+}
+```
+
+Run manually `gradle build` and eclipse will detect sources.
