@@ -56,7 +56,7 @@ public class AnotherBean{
 }
 ```
 
-*See also `micronaut-example`*
+**See also `micronaut-example`**
 
 ### Why not AutoFactory or AssistedInject ?
 Its the same but with fewer code - annotations lies on fields so you can use generated constructor by lombok instead of writing one.
