@@ -1,7 +1,7 @@
 name: Enriched Beans Processor
 artifactId: enriched-beans-processor
 groupId: com.github.stcarolas.enriched-beans
-version: 0.2.0
+version: ${revision}
 
 modelVersion: 4.0.0
 properties: 
@@ -10,7 +10,7 @@ properties:
 
 dependencies:
 - {groupId: com.squareup,                        artifactId: javapoet,                   version: 1.12.1}
-- {groupId: com.github.stcarolas.enriched-beans, artifactId: enriched-beans-annotations, version: 0.2.0}
+- {groupId: com.github.stcarolas.enriched-beans, artifactId: enriched-beans-annotations, version: "${revision}"}
 - {groupId: io.vavr,                             artifactId: vavr,                       version: 0.10.2}
 - {groupId: javax.inject,                        artifactId: javax.inject,               version: 1}
 - {groupId: com.google.auto.service,             artifactId: auto-service-annotations,   version: 1.0-rc6, scope: provided}

@@ -64,6 +64,7 @@ public class EnrichProcessor extends AbstractProcessor  {
   private Function<TypeElement, TypeSpec> factory = bean ->
     classBuilder(bean.getSimpleName().toString() + "Factory")
       .addAnnotation(Singleton.class)
+      .addAnnotation(Named.class)
       .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
       .addFields(
         enrichedFieldsOf(bean).map(privateFactoryField)
