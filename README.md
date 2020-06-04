@@ -65,10 +65,10 @@ Its the same but with fewer code - annotations lies on fields so you can use gen
 ```
   implementation 'javax.inject:javax.inject:1'
   implementation 'org.projectlombok:lombok:1.18.12'
-  implementation 'com.github.stcarolas.enriched-beans:enriched-beans-annotations:0.1.6'
+  implementation 'com.github.stcarolas.enriched-beans:enriched-beans-annotations:0.2.3'
   ...
   annotationProcessor 'org.projectlombok:lombok:1.18.12'
-  annotationProcessor 'com.github.stcarolas.enriched-beans:enriched-beans-processor:0.1.6'
+  annotationProcessor 'com.github.stcarolas.enriched-beans:enriched-beans-processor:0.2.3'
 ```
 
 ### Using with Maven, Lombok, Micronaut  (Lombok must be before enriched)
@@ -76,7 +76,7 @@ Its the same but with fewer code - annotations lies on fields so you can use gen
     <dependency>
       <groupId>com.github.stcarolas.enriched-beans</groupId>
       <artifactId>enriched-beans-annotations</artifactId>
-      <version>0.1.6</version>
+      <version>0.2.3</version>
     </dependency>
     ...
     <plugin>
@@ -104,7 +104,7 @@ Its the same but with fewer code - annotations lies on fields so you can use gen
           <annotationProcessorPath>
             <groupId>com.github.stcarolas.enriched-beans</groupId>
             <artifactId>enriched-beans-processor</artifactId>
-            <version>0.1.6</version>
+            <version>0.2.3</version>
           </annotationProcessorPath>
           <annotationProcessorPath>
             <groupId>io.micronaut</groupId>
