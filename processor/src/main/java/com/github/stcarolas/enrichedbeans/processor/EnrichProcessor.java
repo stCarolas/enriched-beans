@@ -35,8 +35,8 @@ import io.vavr.control.Try;
 
 @AutoService(Processor.class)
 @SupportedAnnotationTypes("com.github.stcarolas.enrichedbeans.annotations.Enrich")
-@SupportedSourceVersion(SourceVersion.RELEASE_11)
-public class EnrichProcessor extends AbstractProcessor  {
+@SupportedSourceVersion(SourceVersion.RELEASE_8)
+public class EnrichProcessor extends AbstractProcessor {
 
   @Override
   public boolean process(
@@ -55,7 +55,7 @@ public class EnrichProcessor extends AbstractProcessor  {
   private Function<Field, FieldSpec> privateFactoryField = field ->
     FieldSpec
       .builder(
-        ParameterizedTypeName.get(field.asTypeMirror()), 
+        field.typeName(),
         field.name(),
         Modifier.PRIVATE
       )
@@ -65,7 +65,7 @@ public class EnrichProcessor extends AbstractProcessor  {
     classBuilder(bean.getSimpleName().toString() + "Factory")
       .addAnnotation(Singleton.class)
       .addAnnotation(Named.class)
-      .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+      .addModifiers(Modifier.PUBLIC)
       .addFields(
         enrichedFieldsOf(bean).map(privateFactoryField)
       )
@@ -82,7 +82,7 @@ public class EnrichProcessor extends AbstractProcessor  {
       .build();
 
   private Function<Element, TypeElement> containingBean = element ->
-    (TypeElement)element.getEnclosingElement();
+    (TypeElement) element.getEnclosingElement();
 
   private Function2<MethodSpec, Field, MethodSpec> addParameter = (method, field) ->
     method.toBuilder()
@@ -129,13 +129,11 @@ public class EnrichProcessor extends AbstractProcessor  {
 
   private String returnLine(Seq<Field> fields, TypeName returnType){
     return fields.map(Field::name)
-      .intersperse(",")
-      .foldLeft(
-        new StringBuilder("return new " + returnType.toString() +"("),
-        (returnLine, newArg) -> returnLine.append(newArg)
-      )
-      .append(");")
-      .toString();
+      .mkString(
+        "return new " + returnType.toString() +"(",
+        ",",
+        ");"
+      );
   }
 
   private Seq<Field> enrichedFieldsOf(TypeElement type){

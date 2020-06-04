@@ -9,6 +9,7 @@ import com.github.stcarolas.enrichedbeans.annotations.Enrich;
 import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ParameterSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
+import com.squareup.javapoet.TypeName;
 
 import io.vavr.collection.List;
 
@@ -32,14 +33,18 @@ public class Field {
       );
   }
 
+  public TypeName typeName(){
+    return ParameterizedTypeName.get(asTypeMirror());
+  }
+
   public ParameterSpec asParameterSpec(){
     return List.ofAll(origin.getAnnotationMirrors())
-      .filter( annotation ->
+      .filter( annotation -> 
         ! Enrich.class.getCanonicalName().equals(annotationName(annotation))
       )
       .foldLeft(
         ParameterSpec
-          .builder(ParameterizedTypeName.get(asTypeMirror()), name())
+          .builder(typeName(), name())
           .build(), 
         this::annotate
       );
