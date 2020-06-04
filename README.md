@@ -72,7 +72,7 @@ Its the same but with fewer code - annotations lies on fields so you can use gen
 ```
 
 ### Using with Maven, Lombok, Micronaut  (Lombok must be before enriched)
-```
+```xml
     <dependency>
       <groupId>com.github.stcarolas.enriched-beans</groupId>
       <artifactId>enriched-beans-annotations</artifactId>
@@ -122,7 +122,7 @@ All generated factories lies in `$buildDir/generated/sources/annotationProcessor
 ### Eclipse JDT and Gradle
 Eclipse JDT.LS has problems with using annotation processing so this trick can help
 
-```
+```xml
 def generatedSources = "$buildDir/generated/sources/annotationProcessor/java/main"
 def generatedOutputDir = file("$generatedSources")
 
