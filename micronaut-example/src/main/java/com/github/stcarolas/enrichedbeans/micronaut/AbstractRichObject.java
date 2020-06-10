@@ -4,7 +4,7 @@ import com.github.stcarolas.enrichedbeans.annotations.Implement;
 
 public class AbstractRichObject {
 
-  private String name;
+  private final String name = "name";
   
   @Implement
   public interface Behavior {

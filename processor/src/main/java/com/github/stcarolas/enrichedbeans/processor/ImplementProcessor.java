@@ -44,12 +44,16 @@ public class ImplementProcessor extends AbstractProcessor {
         java.util.Set<? extends TypeElement> annotations,
         RoundEnvironment roundEnv
     ) {
-        println("search for implement");
         List<TargetBean> targets = collectBeans(
             roundEnv.getElementsAnnotatedWith(Implement.class)
         )
             .map(bean -> bean.getEnclosingElement())
             .map(TargetBean::new);
+        methods = targets.map(
+            bean -> bean.allSubtypes()
+                .map(type -> new TargetBean(type))
+                .flatMap(subtype -> subtype.allMethods())
+        );
         List<TypeSpec> implementations = targets.map(
             bean -> bean.allSubtypes()
                 .map(type -> new TargetBean(type))
@@ -69,19 +73,22 @@ public class ImplementProcessor extends AbstractProcessor {
     }
 
     public FieldSpec functionField(TargetBean bean, ExecutableElement method) {
-        List<Object> types = List.ofAll(method.getParameters())
-          .map($ -> $.asType());
+        List<Object> types = List.ofAll(method.getParameters()).map($ -> $.asType());
+        TypeName[] parameters = List.ofAll(method.getParameters())
+            .map(param -> param.asType())
+            .map($ -> ClassName.get($))
+            .append(ClassName.get(method.getReturnType()))
+            .toJavaArray(TypeName.class);
+        ParameterizedTypeName functionType = ParameterizedTypeName.get(
+            ClassName.get(Function.class),
+            parameters
+        );
+        println("calculated filed type: " + functionType);
         return null;
     }
 
     public MethodSpec functionMethod(TargetBean bean, ExecutableElement method) {
         println("create method: " + method.getSimpleName().toString());
-        ParameterizedTypeName functinoType = ParameterizedTypeName.get(
-            ClassName.get(Function.class),
-            ClassName.get(String.class),
-            ClassName.get(String.class)
-        );
-        println(functinoType);
         List<? extends VariableElement> knownParameters = List.ofAll(
             method.getParameters()
         )
