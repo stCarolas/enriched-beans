@@ -49,10 +49,10 @@ public class ImplementProcessor extends AbstractProcessor {
         )
             .map(bean -> bean.getEnclosingElement())
             .map(TargetBean::new);
-        methods = targets.map(
-            bean -> bean.allSubtypes()
-                .map(type -> new TargetBean(type))
-                .flatMap(subtype -> subtype.allMethods())
+        List<Seq<ExecutableElement>> methods = targets.map(
+                bean -> bean.allSubtypes()
+                        .map(type -> new TargetBean(type))
+                        .flatMap(subtype -> subtype.allMethods())
         );
         List<TypeSpec> implementations = targets.map(
             bean -> bean.allSubtypes()
