@@ -14,31 +14,22 @@ import com.squareup.javapoet.TypeName;
 import io.vavr.collection.List;
 
 public class Field {
-  private VariableElement origin;
+  private String name;
+  private TypeName type;
+  private List<AnnotationMirror> annotationMirrors;
+
   private Field(){};
 
   public String name(){
-    return origin.getSimpleName().toString();
-  }
-
-  public TypeMirror asTypeMirror(){
-    return origin.asType();
-  }
-
-  public boolean isEnriched(){
-    return List.ofAll(origin.getAnnotationMirrors())
-      .map(this::annotationName)
-      .exists( 
-        name -> Enrich.class.getCanonicalName().equals(name)
-      );
+    return name;
   }
 
   public TypeName typeName(){
-    return ParameterizedTypeName.get(asTypeMirror());
+    return type;
   }
 
   public ParameterSpec asParameterSpec(){
-    return List.ofAll(origin.getAnnotationMirrors())
+    return List.ofAll(annotationMirrors)
       .filter( annotation -> 
         ! Enrich.class.getCanonicalName().equals(annotationName(annotation))
       )
@@ -63,7 +54,25 @@ public class Field {
 
   public static Field from(VariableElement variable){
     Field field = new Field();
-    field.origin = variable;
+    field.name = variable.getSimpleName().toString();
+    field.type = ParameterizedTypeName.get(variable.asType());
+    field.annotationMirrors = List.ofAll(variable.getAnnotationMirrors());
+    return field;
+  }
+  
+  public boolean isEnriched(){
+    return List.ofAll(annotationMirrors)
+      .map(this::annotationName)
+      .exists( 
+        name -> Enrich.class.getCanonicalName().equals(name)
+      );
+  }
+
+  public static Field from(String name, TypeName type, List<AnnotationMirror> annotations){
+    Field field = new Field();
+    field.name = name;
+    field.type = type;
+    field.annotationMirrors = annotations;
     return field;
   }
   

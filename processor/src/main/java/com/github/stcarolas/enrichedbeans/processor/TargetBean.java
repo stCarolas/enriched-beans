@@ -6,6 +6,7 @@ import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 
+import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 
 import static com.squareup.javapoet.TypeSpec.classBuilder;
@@ -23,12 +24,12 @@ public class TargetBean {
     return classBuilder(original.getSimpleName().toString()).build();
   }
 
-  public Seq<Field> enrichedFields(){
-    return allFields().filter(Field::isEnriched);
+  public TypeName type(){
+    return TypeName.get(original.asType());
   }
 
-  public Seq<Field> notEnrichedFields(TypeElement type){
-    return allFields().removeAll(Field::isEnriched);
+  public String name(){
+    return original.getSimpleName().toString();
   }
 
   public Seq<TypeElement> allSubtypes(){

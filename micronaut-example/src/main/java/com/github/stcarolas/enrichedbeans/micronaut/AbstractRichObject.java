@@ -1,5 +1,7 @@
 package  com.github.stcarolas.enrichedbeans.micronaut;
 
+import javax.inject.Named;
+
 import com.github.stcarolas.enrichedbeans.annotations.Implement;
 
 public class AbstractRichObject {
@@ -8,6 +10,7 @@ public class AbstractRichObject {
   
   @Implement
   public interface Behavior {
+    @Named("ProcessName")
     String processName(String name);
   }
 

@@ -39,86 +39,20 @@ public class EnrichProcessor extends AbstractProcessor {
         java.util.Set<? extends TypeElement> annotations,
         RoundEnvironment roundEnv
     ) {
-        return !collectBeans(roundEnv.getElementsAnnotatedWith(Enrich.class))
-            .map(factorySource)
-            .map(source -> run(() -> source.writeTo(processingEnv.getFiler())))
-            .exists(Try::isFailure);
-    }
-
-    private Function<Field, FieldSpec> privateFactoryField = field -> FieldSpec.builder(
-        field.typeName(),
-        field.name(),
-        Modifier.PRIVATE
-    )
-        .build();
-
-    private Function<TypeElement, TypeSpec> factory = bean -> classBuilder(
-        bean.getSimpleName().toString() + "Factory"
-    )
-        .addAnnotation(Singleton.class)
-        .addAnnotation(Named.class)
-        .addModifiers(Modifier.PUBLIC)
-        .addFields(enrichedFieldsOf(bean).map(privateFactoryField))
-        .addMethod(constructor(enrichedFieldsOf((bean))))
-        .addMethod(
-            factoryMethod(
-                notEnrichedFieldsOf(bean),
-                allFieldsOf(bean),
-                TypeName.get(bean.asType())
-            )
+        Seq<Try<Void>> created = collectBeans(
+            roundEnv.getElementsAnnotatedWith(Enrich.class)
         )
-        .build();
-
-    private Function<Element, TypeElement> containingBean = element -> (TypeElement) element.getEnclosingElement();
-
-    private Function2<MethodSpec, Field, MethodSpec> addParameter = (method, field) -> method.toBuilder()
-        .addParameter(field.asParameterSpec())
-        .build();
-
-    private Function2<MethodSpec, Field, MethodSpec> addParameterWithAssignment = (method, field) -> addParameter.apply(
-        method,
-        field
-    )
-        .toBuilder()
-        .addStatement("this.$N = $N", field.name(), field.name())
-        .build();
+            .map(factorySource)
+            .map(source -> run(() -> source.writeTo(processingEnv.getFiler())));
+        return !created.exists(Try::isFailure);
+    }
 
     private Seq<TypeElement> collectBeans(
         java.util.Set<? extends Element> annotatedElements
     ) {
-        return List.ofAll(annotatedElements).map(containingBean).distinct();
-    }
-
-    private MethodSpec constructor(Seq<Field> fields) {
-        return fields.foldLeft(
-            MethodSpec.constructorBuilder()
-                .addModifiers(Modifier.PUBLIC)
-                .addAnnotation(Inject.class)
-                .build(),
-            addParameterWithAssignment
-        );
-    }
-
-    private MethodSpec factoryMethod(
-        Seq<Field> signatureFields,
-        Seq<Field> assignedFields,
-        TypeName returnType
-    ) {
-        return signatureFields.foldLeft(
-            MethodSpec.methodBuilder("from")
-                .returns(returnType)
-                .addModifiers(Modifier.PUBLIC)
-                .build(),
-            addParameter
-        )
-            .toBuilder()
-            .addCode(returnLine(assignedFields, returnType))
-            .build();
-    }
-
-    private String returnLine(Seq<Field> fields, TypeName returnType) {
-        return fields.map(Field::name)
-            .mkString("return new " + returnType.toString() + "(", ",", ");");
+        return List.ofAll(annotatedElements)
+            .map(element -> (TypeElement) element.getEnclosingElement())
+            .distinct();
     }
 
     private Seq<Field> enrichedFieldsOf(TypeElement type) {
@@ -126,7 +60,7 @@ public class EnrichProcessor extends AbstractProcessor {
     }
 
     private Seq<Field> notEnrichedFieldsOf(TypeElement type) {
-        return allFieldsOf(type).removeAll(Field::isEnriched);
+        return allFieldsOf(type).reject(Field::isEnriched);
     }
 
     private Seq<Field> allFieldsOf(TypeElement type) {
@@ -141,8 +75,18 @@ public class EnrichProcessor extends AbstractProcessor {
 
     private Function<TypeElement, JavaFile> factorySource = bean -> sourceFile(
         packageName(bean),
-        factory.apply(bean)
+        factory(bean)
     );
+
+    private TypeSpec factory(TypeElement bean) {
+        return new CreateAssistingFactory()
+            .apply(
+                bean.getSimpleName().toString() + "Factory",
+                TypeName.get(bean.asType()),
+                enrichedFieldsOf(bean),
+                notEnrichedFieldsOf(bean)
+            );
+    }
 
     private String packageName(TypeElement type) {
         String fullName = type.getQualifiedName().toString();
