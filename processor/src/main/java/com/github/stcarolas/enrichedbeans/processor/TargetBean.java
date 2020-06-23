@@ -44,6 +44,13 @@ public class TargetBean {
       .map(element -> Field.from((VariableElement)element));
   }
 
+  public Seq<ExecutableElement> allConstructors(){
+    return List.ofAll(original.getEnclosedElements())
+      .filter(element -> element.getKind().equals(ElementKind.CONSTRUCTOR))
+      .map( $ -> (ExecutableElement)$)
+      ;
+  }
+
   public Seq<ExecutableElement> allMethods(){
     return List.ofAll(original.getEnclosedElements())
       .filter(element -> element.getKind().equals(ElementKind.METHOD))

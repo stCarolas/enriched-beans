@@ -44,6 +44,7 @@ public class EnrichProcessor extends AbstractProcessor {
         )
             .map(factorySource)
             .map(source -> run(() -> source.writeTo(processingEnv.getFiler())));
+
         return !created.exists(Try::isFailure);
     }
 
