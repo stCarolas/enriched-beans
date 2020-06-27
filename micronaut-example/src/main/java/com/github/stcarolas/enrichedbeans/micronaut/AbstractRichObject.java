@@ -14,19 +14,17 @@ import io.vavr.Function1;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
+@Implement
 public class AbstractRichObject {
 
-  @NonNull
   private String name;
 
-  @NonNull @Enrich @Named("ProcessName")
+  @Enrich @Named("ProcessName")
   private Function1<String, String> processName;
 
-  @NonNull @Enrich @Named("AbstractRichObjectFactory")
+  @Enrich @Named("AbstractRichObjectFactory")
   private Function1<String, AbstractRichObject> createNewRichObject;
 
-  //@FunctionAsMethod
-  //private Function0<AbstractRichObject> process = () -> processName.andThen(createNewRichObject).apply(name);
+  private Function0<AbstractRichObject> process = () -> processName.andThen(createNewRichObject).apply(name);
 
 }

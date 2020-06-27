@@ -50,67 +50,6 @@ public class ImplementProcessor extends AbstractProcessor {
             roundEnv.getElementsAnnotatedWith(Implement.class)
         )
             .map(Element::getEnclosingElement);
-        List<TypeMirror> types = originalTargets.map(
-            element -> ((TypeElement) element).asType()
-        );
-        List<TargetBean> targets = originalTargets.map(TargetBean::new);
-        List<Seq<ExecutableElement>> originalMethods = targets.map(
-            bean -> bean.allSubtypes()
-                .map(TargetBean::new)
-                .flatMap(TargetBean::allMethods)
-        );
-        originalMethods.forEach(method -> println("original: " + method));
-        List<Seq<FieldSpec>> fieldsForTargets = targets.zipWith(
-            originalMethods,
-            (target, targetMethods) -> targetMethods.map(
-                method -> functionField(target, method)
-            )
-        );
-        fieldsForTargets.forEach(field -> println("fields: " + field));
-        List<Seq<MethodSpec>> methodsForTargets = targets.zipWith(
-            originalMethods,
-            (target, targetMethods) -> targetMethods.map(
-                method -> functionMethod(target, method)
-            )
-        );
-        methodsForTargets.forEach(method -> println("methods: " + method));
-        List<TypeSpec> implementations = targets.zipWith(
-            methodsForTargets,
-            (target, methods) -> methods.foldLeft(
-                target.newEmptyBean().toBuilder(),
-                (enrichedBean, method) -> enrichedBean.addMethod(method)
-            )
-                .build()
-        )
-            .zipWith(
-                fieldsForTargets,
-                (target, fields) -> fields.foldLeft(
-                    target.toBuilder(),
-                    (enrichedBean, field) -> enrichedBean.addField(field)
-                )
-                    .build()
-            )
-            .map(bean -> bean.toBuilder().addModifiers(Modifier.PUBLIC).build());
-        List<MethodSpec> constructors = implementations.zipWith(
-            fieldsForTargets,
-            this::constructor
-        );
-
-        List<Seq<Field>> injectingFields = fieldsForTargets.map(
-            fields -> fields.map($ -> Field.from($.name, $.type, List()))
-        );
-
-        List<TypeSpec> factories = targets.zipWith(
-            injectingFields,
-            (bean, fields) -> new CreateAssistingFactory()
-                .apply(bean.name() + "Factory", bean.type(), fields, List())
-        );
-        factories.forEach(f -> println(f));
-        implementations =
-            implementations.map(TypeSpec::toBuilder)
-                .zipWith(constructors, TypeSpec.Builder::addMethod)
-                .map(TypeSpec.Builder::build);
-        implementations.forEach(t -> println(t));
         return true;
     }
 
@@ -126,8 +65,6 @@ public class ImplementProcessor extends AbstractProcessor {
                 .foldLeft(constructor, MethodSpec.Builder::addCode);
         return constructor.build();
     }
-
-    public void createFactory() {}
 
     public FieldSpec functionField(TargetBean bean, ExecutableElement method) {
         List<Object> types = List.ofAll(method.getParameters()).map($ -> $.asType());
