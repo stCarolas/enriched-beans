@@ -1,5 +1,6 @@
 package com.github.stcarolas.enrichedbeans.processor;
 
+import javax.annotation.processing.ProcessingEnvironment;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -20,7 +21,8 @@ public class CreateAssistingFactory {
         String factoryName,
         TypeName targetType,
         Seq<Field> injectingFields,
-        Seq<Field> instanceFields
+        Seq<Field> instanceFields,
+        AssistingFactoryConfig config
     ) {
         return classBuilder(factoryName)
             .addAnnotation(Singleton.class)

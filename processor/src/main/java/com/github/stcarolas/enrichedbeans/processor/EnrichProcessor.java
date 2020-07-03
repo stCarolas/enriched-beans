@@ -39,63 +39,40 @@ public class EnrichProcessor extends AbstractProcessor {
         java.util.Set<? extends TypeElement> annotations,
         RoundEnvironment roundEnv
     ) {
-        Seq<Try<Void>> created = collectBeans(
-            roundEnv.getElementsAnnotatedWith(Enrich.class)
-        )
-            .map(factorySource)
-            .map(source -> run(() -> source.writeTo(processingEnv.getFiler())));
+      Seq<Try<Void>> created = collectBeans(
+          roundEnv.getElementsAnnotatedWith(Enrich.class)
+      )
+        .map(TargetBean::new)
+        .map(factorySource)
+        .map(source -> run(() -> source.writeTo(processingEnv.getFiler())));
 
-        return !created.exists(Try::isFailure);
+      return !created.exists(Try::isFailure);
     }
 
     private Seq<TypeElement> collectBeans(
         java.util.Set<? extends Element> annotatedElements
     ) {
-        return List.ofAll(annotatedElements)
-            .map(element -> (TypeElement) element.getEnclosingElement())
-            .distinct();
-    }
-
-    private Seq<Field> enrichedFieldsOf(TypeElement type) {
-        return allFieldsOf(type).filter(Field::isEnriched);
-    }
-
-    private Seq<Field> notEnrichedFieldsOf(TypeElement type) {
-        return allFieldsOf(type).reject(Field::isEnriched);
-    }
-
-    private Seq<Field> allFieldsOf(TypeElement type) {
-        return List.ofAll(type.getEnclosedElements())
-            .filter(element -> element.getKind().isField())
-            .map(element -> Field.from((VariableElement) element));
+      return List.ofAll(annotatedElements)
+        .map(element -> (TypeElement) element.getEnclosingElement())
+        .distinct();
     }
 
     private JavaFile sourceFile(String packageName, TypeSpec javaClass) {
-        return JavaFile.builder(packageName, javaClass).build();
+      return JavaFile.builder(packageName, javaClass).build();
     }
 
-    private Function<TypeElement, JavaFile> factorySource = bean -> sourceFile(
-        packageName(bean),
-        factory(bean)
+    private Function<TargetBean, JavaFile> factorySource = bean -> sourceFile(
+      bean.packageName(),
+      factory(bean)
     );
 
-    private TypeSpec factory(TypeElement bean) {
-        return new CreateAssistingFactory()
-            .apply(
-                bean.getSimpleName().toString() + "Factory",
-                TypeName.get(bean.asType()),
-                enrichedFieldsOf(bean),
-                notEnrichedFieldsOf(bean)
-            );
-    }
-
-    private String packageName(TypeElement type) {
-        String fullName = type.getQualifiedName().toString();
-        String packageName = "";
-        int lastDot = fullName.lastIndexOf('.');
-        if (lastDot > 0) {
-            packageName = fullName.substring(0, lastDot);
-        }
-        return packageName;
+    private TypeSpec factory(TargetBean bean) {
+      return new CreateAssistingFactory().apply(
+        bean.name() + "Factory",
+        bean.type(),
+        bean.allFields().filter(Field::isEnriched),
+        bean.allFields().reject(Field::isEnriched),
+        ImmutableAssistingFactoryConfig.builder().build()
+      );
     }
 }

@@ -47,15 +47,23 @@ public class TargetBean {
   public Seq<ExecutableElement> allConstructors(){
     return List.ofAll(original.getEnclosedElements())
       .filter(element -> element.getKind().equals(ElementKind.CONSTRUCTOR))
-      .map( $ -> (ExecutableElement)$)
-      ;
+      .map( $ -> (ExecutableElement)$);
   }
 
   public Seq<ExecutableElement> allMethods(){
     return List.ofAll(original.getEnclosedElements())
       .filter(element -> element.getKind().equals(ElementKind.METHOD))
-      .map( $ -> (ExecutableElement)$)
-      ;
+      .map( $ -> (ExecutableElement)$);
+  }
+    
+  public String packageName() {
+    String fullName = ((TypeElement)original).getQualifiedName().toString();
+    String packageName = "";
+    int lastDot = fullName.lastIndexOf('.');
+    if (lastDot > 0) {
+        packageName = fullName.substring(0, lastDot);
+    }
+    return packageName;
   }
 
 }
