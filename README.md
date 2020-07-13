@@ -116,6 +116,34 @@ Its the same but with fewer code - annotations lies on fields so you can use gen
     </plugin>
 ```
 
+### Factory customization
+Compiler args listed below can be passed 
+to define some aspects of generated factories
+
+1. `factoryMethodName`. Default value: "from".
+1. `factoryVisibility`. Available values: "public","package". Default value: "public".
+
+Configuration example:
+```xml
+<plugin>
+  <artifactId>maven-compiler-plugin</artifactId>
+  <version>3.8.1</version>
+  <configuration>
+    <compilerArguments>
+      <AmethodName>to</AmethodName>
+      <Avisibility>package</Avisibility>
+    </compilerArguments>
+    <annotationProcessorPaths>
+      <annotationProcessorPath>
+        <groupId>com.github.stcarolas.enriched-beans</groupId>
+        <artifactId>enriched-beans-processor</artifactId>
+        <version>${revision}</version>
+      </annotationProcessorPath>
+    </annotationProcessorPaths>
+  </configuration>
+</plugin>
+```
+
 ### How to view generated sources
 All generated factories lies in `$buildDir/generated/sources/annotationProcessor/java/main` directory if using gradle and `target/generated-sources/annotations` if using maven
 

@@ -11,44 +11,56 @@ import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
+import com.squareup.javapoet.TypeSpec.Builder;
 import io.vavr.Function2;
 import io.vavr.collection.Seq;
 import lombok.RequiredArgsConstructor;
+import com.squareup.javapoet.ParameterizedTypeName;
+import com.squareup.javapoet.ClassName;
 
 public class CreateAssistingFactory {
 
-    public TypeSpec apply(
-        String factoryName,
-        TypeName targetType,
-        Seq<Field> injectingFields,
-        Seq<Field> instanceFields,
-        AssistingFactoryConfig config
-    ) {
-        return classBuilder(factoryName)
+    public TypeSpec apply(AssistingFactoryConfig config) {
+        Builder factory = classBuilder(config.factoryClassName())
             .addAnnotation(Singleton.class)
             .addAnnotation(Named.class)
-            .addModifiers(Modifier.PUBLIC)
-            .addFields(injectingFields.map(privateFactoryField))
-            .addMethod(constructor(injectingFields))
-            .addMethod(factoryMethod(instanceFields, injectingFields, targetType))
-            .build();
+            .addFields(config.injectingFields().map(privateFactoryField))
+            .addMethod(constructor(config.injectingFields()))
+            .addMethod(
+                factoryMethod(
+                    config.factoryMethodName(),
+                    config.instanceFields(),
+                    config.injectingFields(),
+                    config.targetType()
+                )
+            );
+        if (config.visibility() == FactoryVisibility.PUBLIC) {
+            factory.addModifiers(Modifier.PUBLIC);
+        }
+        return factory.build();
     }
 
+    private Function<Field, ParameterizedTypeName> provider = field -> ParameterizedTypeName.get(
+        ClassName.get("javax.inject", "Provider"),
+        field.typeName()
+    );
+
     private Function<Field, FieldSpec> privateFactoryField = field -> FieldSpec.builder(
-        field.typeName(),
+        provider.apply(field),
         field.name(),
         Modifier.PRIVATE
     )
         .build();
 
     private MethodSpec constructor(Seq<Field> fields) {
-        return fields.foldLeft(
-            MethodSpec.constructorBuilder()
-                .addModifiers(Modifier.PUBLIC)
-                .addAnnotation(Inject.class)
-                .build(),
-            addParameterWithAssignment
-        );
+        return fields.map(field -> field.withType(provider.apply(field)))
+            .foldLeft(
+                MethodSpec.constructorBuilder()
+                    .addModifiers(Modifier.PUBLIC)
+                    .addAnnotation(Inject.class)
+                    .build(),
+                addParameterWithAssignment
+            );
     }
 
     private Function2<MethodSpec, Field, MethodSpec> addParameter = (method, field) -> method.toBuilder()
@@ -64,24 +76,33 @@ public class CreateAssistingFactory {
         .build();
 
     private MethodSpec factoryMethod(
+        String name,
         Seq<Field> signatureFields,
         Seq<Field> objectFields,
         TypeName returnType
     ) {
         return signatureFields.foldLeft(
-            MethodSpec.methodBuilder("from")
+            MethodSpec.methodBuilder(name)
                 .returns(returnType)
                 .addModifiers(Modifier.PUBLIC)
                 .build(),
             addParameter
         )
             .toBuilder()
-            .addCode(returnLine(signatureFields.appendAll(objectFields), returnType))
+            .addCode(
+                returnLine(
+                    signatureFields.map(Field::name)
+                        .appendAll(
+                            objectFields.map(field -> field.name())
+                                .map(fieldName -> fieldName + ".get()")
+                        ),
+                    returnType
+                )
+            )
             .build();
     }
 
-    private String returnLine(Seq<Field> fields, TypeName returnType) {
-        return fields.map(Field::name)
-            .mkString("return new " + returnType.toString() + "(", ",", ");");
+    private String returnLine(Seq<String> fields, TypeName returnType) {
+        return fields.mkString("return new " + returnType.toString() + "(", ",", ");");
     }
 }

@@ -31,7 +31,6 @@ import io.vavr.control.Try;
 
 @AutoService(Processor.class)
 @SupportedAnnotationTypes("com.github.stcarolas.enrichedbeans.annotations.Enrich")
-@SupportedSourceVersion(SourceVersion.RELEASE_8)
 public class EnrichProcessor extends AbstractProcessor {
 
     @Override
@@ -39,40 +38,55 @@ public class EnrichProcessor extends AbstractProcessor {
         java.util.Set<? extends TypeElement> annotations,
         RoundEnvironment roundEnv
     ) {
-      Seq<Try<Void>> created = collectBeans(
-          roundEnv.getElementsAnnotatedWith(Enrich.class)
-      )
-        .map(TargetBean::new)
-        .map(factorySource)
-        .map(source -> run(() -> source.writeTo(processingEnv.getFiler())));
+        Seq<Try<Void>> created = collectBeans(
+            roundEnv.getElementsAnnotatedWith(Enrich.class)
+        )
+            .map(TargetBean::new)
+            .map(factorySource)
+            .map(source -> run(() -> source.writeTo(processingEnv.getFiler())));
 
-      return !created.exists(Try::isFailure);
+        return !created.exists(Try::isFailure);
     }
 
     private Seq<TypeElement> collectBeans(
         java.util.Set<? extends Element> annotatedElements
     ) {
-      return List.ofAll(annotatedElements)
-        .map(element -> (TypeElement) element.getEnclosingElement())
-        .distinct();
+        return List.ofAll(annotatedElements)
+            .map(element -> (TypeElement) element.getEnclosingElement())
+            .distinct();
     }
 
     private JavaFile sourceFile(String packageName, TypeSpec javaClass) {
-      return JavaFile.builder(packageName, javaClass).build();
+        return JavaFile.builder(packageName, javaClass).build();
     }
 
     private Function<TargetBean, JavaFile> factorySource = bean -> sourceFile(
-      bean.packageName(),
-      factory(bean)
+        bean.packageName(),
+        factory(bean)
     );
 
     private TypeSpec factory(TargetBean bean) {
-      return new CreateAssistingFactory().apply(
-        bean.name() + "Factory",
-        bean.type(),
-        bean.allFields().filter(Field::isEnriched),
-        bean.allFields().reject(Field::isEnriched),
-        ImmutableAssistingFactoryConfig.builder().build()
-      );
+        return new CreateAssistingFactory()
+            .apply(
+                ImmutableAssistingFactoryConfig.builder()
+                    .factoryClassName(bean.name() + "Factory")
+                    .factoryMethodName(detectFactoryMethodName())
+                    .targetType(bean.type())
+                    .visibility(detectVisibility())
+                    .instanceFields(bean.allFields().reject(Field::isEnriched))
+                    .injectingFields(bean.allFields().filter(Field::isEnriched))
+                    .build()
+            );
+    }
+
+    private String detectFactoryMethodName() {
+        String methodName = processingEnv.getOptions().get("factoryMethodName");
+        return methodName == null ? "from" : methodName;
+    }
+
+    private FactoryVisibility detectVisibility() {
+        return "package".equals(processingEnv.getOptions().get("factoryVisibility"))
+            ? FactoryVisibility.PACKAGE
+            : FactoryVisibility.PUBLIC;
     }
 }

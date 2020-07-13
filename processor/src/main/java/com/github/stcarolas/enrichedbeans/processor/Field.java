@@ -71,11 +71,44 @@ public class Field {
         TypeName type,
         List<AnnotationMirror> annotations
     ) {
+        return from(name, type, annotations, List());
+    }
+
+    public static Field from(
+        String name,
+        TypeName type,
+        List<AnnotationMirror> annotations,
+        List<Modifier> modifiers
+    ) {
         Field field = new Field();
         field.name = name;
         field.type = type;
-        field.modifiers = List();
+        field.modifiers = modifiers;
         field.annotationMirrors = annotations;
         return field;
+    }
+
+    public Field withName(
+        String name
+    ) {
+        return from(name, this.type, this.annotationMirrors, this.modifiers);
+    }
+
+    public Field withType(
+        TypeName type
+    ) {
+        return from(this.name, type, this.annotationMirrors, this.modifiers);
+    }
+
+    public Field withAnnotations(
+      List<AnnotationMirror> annotationMirrors
+    ) {
+        return from(this.name, this.type, annotationMirrors, this.modifiers);
+    }
+
+    public Field withModifiers(
+      List<Modifier> modifiers
+    ) {
+        return from(this.name, this.type, this.annotationMirrors, modifiers);
     }
 }
