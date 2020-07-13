@@ -130,8 +130,8 @@ Configuration example:
   <version>3.8.1</version>
   <configuration>
     <compilerArguments>
-      <AmethodName>to</AmethodName>
-      <Avisibility>package</Avisibility>
+      <AfactoryMethodName>create</AfactoryMethodName>
+      <AfactoryVisibility>package</AfactoryVisibility>
     </compilerArguments>
     <annotationProcessorPaths>
       <annotationProcessorPath>
