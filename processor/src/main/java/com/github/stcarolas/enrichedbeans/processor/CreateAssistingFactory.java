@@ -37,6 +37,32 @@ public class CreateAssistingFactory {
         if (config.visibility() == FactoryVisibility.PUBLIC) {
             factory.addModifiers(Modifier.PUBLIC);
         }
+        if (config.defineAsVavrFunctionInterface()) {
+            try {
+                factory.addSuperinterface(
+                    ParameterizedTypeName.get(
+                        ClassName.get(
+                            Class.forName(
+                                "io.vavr.Function" + config.instanceFields().size()
+                            )
+                        ),
+                        config.instanceFields()
+                            .map(field -> field.typeName())
+                            .append(config.targetType())
+                            .toJavaArray(TypeName.class)
+                    )
+                );
+                factory.addMethod(
+                    applyMethod(
+                        config.factoryMethodName(),
+                        config.instanceFields(),
+                        config.targetType()
+                    )
+                );
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
         return factory.build();
     }
 
@@ -97,6 +123,29 @@ public class CreateAssistingFactory {
                                 .map(fieldName -> fieldName + ".get()")
                         ),
                     returnType
+                )
+            )
+            .build();
+    }
+
+    private MethodSpec applyMethod(
+        String factoryMethodName,
+        Seq<Field> signatureFields,
+        TypeName returnType
+    ) {
+        return signatureFields.foldLeft(
+            MethodSpec.methodBuilder("apply")
+                .returns(returnType)
+                .addModifiers(Modifier.PUBLIC)
+                .build(),
+            addParameter
+        )
+            .toBuilder()
+            .addCode(
+                String.format(
+                    "return this.%s(%s);",
+                    factoryMethodName,
+                    signatureFields.map(field -> field.name()).mkString(",")
                 )
             )
             .build();

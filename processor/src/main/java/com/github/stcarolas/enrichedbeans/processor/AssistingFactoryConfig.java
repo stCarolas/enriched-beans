@@ -10,6 +10,7 @@ public interface AssistingFactoryConfig {
     String factoryClassName();
     String factoryMethodName();
     TypeName targetType();
+    boolean defineAsVavrFunctionInterface();
     Seq<Field> injectingFields();
     Seq<Field> instanceFields();
     FactoryVisibility visibility();

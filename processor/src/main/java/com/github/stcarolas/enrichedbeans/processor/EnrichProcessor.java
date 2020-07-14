@@ -73,10 +73,15 @@ public class EnrichProcessor extends AbstractProcessor {
                     .factoryMethodName(detectFactoryMethodName())
                     .targetType(bean.type())
                     .visibility(detectVisibility())
+                    .defineAsVavrFunctionInterface(detectUseVavr())
                     .instanceFields(bean.allFields().reject(Field::isEnriched))
                     .injectingFields(bean.allFields().filter(Field::isEnriched))
                     .build()
             );
+    }
+
+    private boolean detectUseVavr() {
+        return "true".equals(processingEnv.getOptions().get("useVavr"));
     }
 
     private String detectFactoryMethodName() {
