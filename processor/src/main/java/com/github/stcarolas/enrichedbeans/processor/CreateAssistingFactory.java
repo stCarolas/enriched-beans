@@ -16,6 +16,7 @@ import io.vavr.Function2;
 import io.vavr.collection.Seq;
 import lombok.RequiredArgsConstructor;
 import com.squareup.javapoet.ParameterizedTypeName;
+import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ClassName;
 
 public class CreateAssistingFactory {
@@ -23,7 +24,11 @@ public class CreateAssistingFactory {
     public TypeSpec apply(AssistingFactoryConfig config) {
         Builder factory = classBuilder(config.factoryClassName())
             .addAnnotation(Singleton.class)
-            .addAnnotation(Named.class)
+            .addAnnotation(
+                AnnotationSpec.builder(Named.class)
+                    .addMember("value", String.format("\"%s\"", config.factoryClassName()))
+                    .build()
+            )
             .addFields(config.injectingFields().map(privateFactoryField))
             .addMethod(constructor(config.injectingFields()))
             .addMethod(
