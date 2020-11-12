@@ -8,6 +8,7 @@ import java.lang.annotation.Target;
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.SOURCE)
 
-public @interface Enrich {
-  String builder() default "";
+public @interface EnrichedStyle {
+  String useBuilder() default "";
+  String name() default "";
 }

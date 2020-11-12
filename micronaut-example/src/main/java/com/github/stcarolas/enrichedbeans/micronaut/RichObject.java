@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class RichObject {
+
   private final String name;
 
   @Enrich @Named("ProcessName")

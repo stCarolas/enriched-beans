@@ -21,12 +21,15 @@ import com.squareup.javapoet.ClassName;
 
 public class CreateAssistingFactory {
 
-    public TypeSpec apply(AssistingFactoryConfig config) {
+    public TypeSpec apply(AssistingFactorySpec config) {
         Builder factory = classBuilder(config.factoryClassName())
             .addAnnotation(Singleton.class)
             .addAnnotation(
                 AnnotationSpec.builder(Named.class)
-                    .addMember("value", String.format("\"%s\"", config.factoryClassName()))
+                    .addMember(
+                        "value",
+                        String.format("\"%s\"", config.factoryClassName())
+                    )
                     .build()
             )
             .addFields(config.injectingFields().map(privateFactoryField))
