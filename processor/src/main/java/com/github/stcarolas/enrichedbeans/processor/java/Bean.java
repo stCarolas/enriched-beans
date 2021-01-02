@@ -1,4 +1,4 @@
-package  com.github.stcarolas.enrichedbeans.processor;
+package com.github.stcarolas.enrichedbeans.processor.java;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
@@ -6,6 +6,8 @@ import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 
+import com.github.stcarolas.enrichedbeans.annotations.Assisted;
+import com.github.stcarolas.enrichedbeans.processor.java.VariableFactory;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 
@@ -17,12 +19,11 @@ import lombok.RequiredArgsConstructor;
 import static io.vavr.API.*;
 
 @RequiredArgsConstructor
-public class TargetBean {
-  private final Element original;
+public class Bean {
 
-  public TypeSpec newEmptyBean(){
-    return classBuilder(original.getSimpleName().toString()).build();
-  }
+  private final Element original;
+  private VariableFactory fieldFactory = new VariableFactory();
+  private AnnotationFactory annotationFactory  = new AnnotationFactory();
 
   public TypeName type(){
     return TypeName.get(original.asType());
@@ -32,25 +33,30 @@ public class TargetBean {
     return original.getSimpleName().toString();
   }
 
-  public Seq<TypeElement> allSubtypes(){
+  public Seq<TypeElement> subtypes(){
     return List.ofAll(original.getEnclosedElements())
       .filter(element -> element.getKind().isInterface())
       .map(element -> (TypeElement)element);
   }
 
-  public Seq<Field> allFields(){
+  public Seq<Variable> fields(){
     return List.ofAll(original.getEnclosedElements())
       .filter(element -> element.getKind().isField())
-      .map(element -> Field.from((VariableElement)element));
+      .map(fieldFactory::from);
   }
 
-  public Seq<ExecutableElement> allConstructors(){
+  public Seq<ExecutableElement> constructors(){
     return List.ofAll(original.getEnclosedElements())
       .filter(element -> element.getKind().equals(ElementKind.CONSTRUCTOR))
       .map( $ -> (ExecutableElement)$);
   }
 
-  public Seq<ExecutableElement> allMethods(){
+  public Seq<Annotation> annotations(){
+    return List.ofAll(original.getAnnotationMirrors())
+      .map(annotationFactory::from);
+  }
+
+  public Seq<ExecutableElement> methods(){
     return List.ofAll(original.getEnclosedElements())
       .filter(element -> element.getKind().equals(ElementKind.METHOD))
       .map( $ -> (ExecutableElement)$);
@@ -64,6 +70,10 @@ public class TargetBean {
         packageName = fullName.substring(0, lastDot);
     }
     return packageName;
+  }
+
+  public String toString(){
+    return packageName() + "." + name();
   }
 
 }
