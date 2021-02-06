@@ -15,39 +15,32 @@ import io.vavr.Function2;
 import io.vavr.collection.Seq;
 import io.vavr.control.Option;
 
-@Immutable public abstract class FactoryMethod implements Method {
-  abstract String name();
-  abstract Seq<Variable> signatureFields();
+@Immutable public abstract class FactoryMethod
+  implements Method {
+
   abstract Seq<Variable> objectFields();
-  abstract TypeName returnType();
 
-  static final Logger log = LogManager.getLogger();
+  @Override public MethodSpec spec() {
+    MethodSpec.Builder method = MethodSpec.methodBuilder(name())
+      .returns(returnType())
+      .addModifiers(Modifier.PUBLIC)
+      .addCode(returnNewInstance());
 
-  @Override
-	public MethodSpec spec() {
-    Seq<Variable> instanceFields = signatureFields().appendAll(objectFields());
-      MethodSpec.Builder method = MethodSpec.methodBuilder(name())
-          .returns(returnType())
-          .addModifiers(Modifier.PUBLIC)
-          .addCode(
-              returnLine(
-                  String.format("new %s(%s)",returnType().toString(),instanceFields.map(field -> field.accessor()).mkString(","))
-              )
-          );
-      return signatureFields().foldLeft(method, withParameters).build();
+    method = parameters().map(Variable::asParameterSpec)
+      .foldLeft(method, MethodSpec.Builder::addParameter);
+
+    return method.build();
 	}
 
-  Function2<MethodSpec.Builder, Variable, MethodSpec.Builder> withParameters = 
-    (method, field) -> method.addParameter(
-        field.asParameterSpec()
+  private String returnNewInstance() {
+    Seq<String> fields = parameters().appendAll(objectFields())
+      .map(Variable::accessor);
+
+    return String.format(
+      "return new %s(%s);",
+      returnType().toString(),
+      fields.mkString(",")
     );
-
-  private String returnLine(String codeLine) {
-      return "return " + codeLine + ";";
-  }
-
-  private String returnLine(Seq<String> fields, TypeName returnType) {
-      return fields.mkString("return new " + returnType.toString() + "(", ",", ");");
   }
 
 }

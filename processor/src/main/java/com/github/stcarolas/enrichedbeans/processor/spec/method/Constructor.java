@@ -14,8 +14,8 @@ import com.squareup.javapoet.TypeName;
 
 import io.vavr.collection.Seq;
 
-@Immutable public abstract class Constructor 
-  implements Method, HasAnnotation { 
+@Immutable public abstract class Constructor
+  implements HasMethodSpec, HasAnnotation { 
 
   abstract Seq<Variable> classFields();
 

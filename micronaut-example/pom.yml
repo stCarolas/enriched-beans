@@ -27,7 +27,11 @@ build:
     artifactId: maven-compiler-plugin
     version: 3.8.1
     configuration:
-      compilerArguments: {AaddGeneratedAnnotation: false, Adebug: true, AuseVavr: true}
+      compilerArguments:
+        AaddGeneratedAnnotation: false
+        Adebug: true
+        AuseVavr: true
+        AfactoryMethodName: build
       dependencies:
       - {groupId: org.ow2.asm, artifactId: asm, version: 7.3.1, type: jar}
       annotationProcessorPaths:
