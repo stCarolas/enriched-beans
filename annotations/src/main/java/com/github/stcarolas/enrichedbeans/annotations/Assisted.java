@@ -8,6 +8,6 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.SOURCE)
 public @interface Assisted {
-  Class<?> useBuilder();
-  boolean assistAllInjectedFields();
+  boolean assistAllInjectedFields() default true;
+  boolean detectBuilder() default false;
 }

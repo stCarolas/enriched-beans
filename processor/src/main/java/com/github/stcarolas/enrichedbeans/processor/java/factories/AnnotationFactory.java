@@ -1,9 +1,12 @@
-package  com.github.stcarolas.enrichedbeans.processor.java;
+package  com.github.stcarolas.enrichedbeans.processor.java.factories;
 
 import javax.inject.Inject;
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.TypeElement;
+
+import com.github.stcarolas.enrichedbeans.processor.java.Annotation;
+import com.github.stcarolas.enrichedbeans.processor.java.ImmutableAnnotation;
 
 import io.vavr.collection.HashMap;
 

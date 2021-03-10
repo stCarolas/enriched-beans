@@ -7,5 +7,5 @@ import dagger.Component;
 
 @Component(modules=SpecModule.class)
 public interface EnrichProcessorComponent {
-  FindAndEnrichBeans enrichBeansFunction();
+  FindAndEnrichBeans findAndEnrichBeans();
 }

@@ -5,15 +5,9 @@ import javax.annotation.processing.RoundEnvironment;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.github.stcarolas.enrichedbeans.processor.java.Bean;
 import com.github.stcarolas.enrichedbeans.processor.spec.CanProcessBeans;
-import com.github.stcarolas.enrichedbeans.processor.spec.JavaClass;
 
-import org.immutables.value.Value.Immutable;
-import org.immutables.value.Value.Style;
 
-import dagger.Provides;
-import dagger.Module;
 import io.vavr.Function2;
 import io.vavr.collection.Seq;
 import io.vavr.control.Try;
@@ -32,7 +26,7 @@ public class FindAndEnrichBeans
       findBeans.apply(roundEnv),
       processors
     )
-      .yield( (bean, processor) -> processor.apply(processingEnv, bean))
+      .yield( (bean, processor) -> processor.apply(processingEnv, bean) )
       .map(created -> created.writeTo(processingEnv))
       .filter(Try::isFailure)
       .isEmpty();

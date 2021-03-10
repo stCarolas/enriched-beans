@@ -4,13 +4,13 @@ import dagger.Provides;
 import io.vavr.collection.Seq;
 import static io.vavr.API.*;
 
-import com.github.stcarolas.enrichedbeans.processor.spec.assistingfactory.CreateAssistingFactory;
+import com.github.stcarolas.enrichedbeans.processor.spec.assistingfactory.CreateAssistingFactoryBeans;
 
 @dagger.Module
 public class SpecModule {
   @Provides
   public Seq<CanProcessBeans> processors(
-    CreateAssistingFactory createAssistingFactory
+    CreateAssistingFactoryBeans createAssistingFactory
   ){
     return Seq(createAssistingFactory);
   }

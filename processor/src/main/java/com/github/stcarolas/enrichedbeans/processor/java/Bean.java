@@ -4,26 +4,23 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
-import javax.lang.model.element.VariableElement;
 
-import com.github.stcarolas.enrichedbeans.annotations.Assisted;
-import com.github.stcarolas.enrichedbeans.processor.java.VariableFactory;
+import com.github.stcarolas.enrichedbeans.processor.java.factories.AnnotationFactory;
+import com.github.stcarolas.enrichedbeans.processor.java.factories.VariableFactory;
 import com.squareup.javapoet.TypeName;
-import com.squareup.javapoet.TypeSpec;
-
-import static com.squareup.javapoet.TypeSpec.classBuilder;
 
 import io.vavr.collection.List;
 import io.vavr.collection.Seq;
-import lombok.RequiredArgsConstructor;
-import static io.vavr.API.*;
 
-@RequiredArgsConstructor
 public class Bean {
 
   private final Element original;
   private VariableFactory fieldFactory = new VariableFactory();
   private AnnotationFactory annotationFactory  = new AnnotationFactory();
+
+  public Bean(Element original){
+    this.original = original;
+  }
 
   public TypeName type(){
     return TypeName.get(original.asType());

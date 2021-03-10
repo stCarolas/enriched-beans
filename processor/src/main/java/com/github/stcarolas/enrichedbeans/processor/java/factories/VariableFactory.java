@@ -1,11 +1,13 @@
-package  com.github.stcarolas.enrichedbeans.processor.java;
+package  com.github.stcarolas.enrichedbeans.processor.java.factories;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.VariableElement;
 
 import com.github.stcarolas.enrichedbeans.processor.java.Variable;
+import com.github.stcarolas.enrichedbeans.processor.java.ImmutableProvidedField;
 import com.github.stcarolas.enrichedbeans.processor.java.ImmutableVariable;
+import com.github.stcarolas.enrichedbeans.processor.java.ProvidedField;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.ParameterizedTypeName;
 

@@ -1,9 +1,11 @@
 package  com.github.stcarolas.enrichedbeans.processor.java;
 
-import org.immutables.value.Value;
+import org.immutables.value.Value.Immutable;
 
-@Value.Immutable public interface ProvidedField extends Variable {
+@Immutable public interface ProvidedField extends Variable {
+
   default String accessor(){
     return name() + ".get()";
   }
+
 }

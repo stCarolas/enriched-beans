@@ -1,16 +1,11 @@
 package  com.github.stcarolas.enrichedbeans.processor.java;
 
-import javax.lang.model.element.AnnotationMirror;
-import javax.lang.model.element.AnnotationValue;
-import javax.lang.model.element.TypeElement;
-
 import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ClassName;
 
 import org.immutables.value.Value.Default;
 import org.immutables.value.Value.Immutable;
 
-import io.vavr.collection.HashMap;
 import io.vavr.collection.Map;
 import static io.vavr.API.*;
 
@@ -23,7 +18,7 @@ import static io.vavr.API.*;
     return Map();
   }
 
-  default boolean is(Class aClass){
+  default boolean is(Class<?> aClass){
     return (packageName() + "." + className())
       .equals(aClass.getCanonicalName());
   }
