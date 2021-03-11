@@ -1,8 +1,6 @@
 package com.github.stcarolas.enrichedbeans.micronaut;
 
-import java.util.function.Consumer;
 import java.util.function.Function;
-
 import javax.inject.Named;
 
 @Named("ProcessName")

@@ -1,12 +1,8 @@
 package  com.github.stcarolas.enrichedbeans.micronaut;
 
-import java.util.function.Consumer;
 import java.util.function.Function;
-
 import javax.inject.Named;
-
 import com.github.stcarolas.enrichedbeans.annotations.Enrich;
-
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
