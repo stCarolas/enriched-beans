@@ -6,15 +6,24 @@ import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.ParameterSpec;
 import com.squareup.javapoet.TypeName;
 
+import org.immutables.value.Value.Default;
+
 import static org.immutables.value.Value.Immutable;
 
 import io.vavr.collection.List;
 
 @Immutable public interface Variable {
+
     String name();
     TypeName type();
-    List<Modifier> modifiers();
-    List<Annotation> annotations();
+
+    @Default default List<Modifier> modifiers(){
+      return List.empty();
+    }
+
+    @Default default List<Annotation> annotations(){
+      return List.empty();
+    }
 
     default ParameterSpec asParameterSpec() {
       return annotations()
@@ -34,7 +43,6 @@ import io.vavr.collection.List;
         modifiers().toJavaArray(Modifier.class)
       ).build();
     }
-
 
     default String accessor(){
       return name();

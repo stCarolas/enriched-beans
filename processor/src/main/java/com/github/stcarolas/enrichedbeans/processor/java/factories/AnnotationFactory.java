@@ -12,8 +12,6 @@ import io.vavr.collection.HashMap;
 
 public class AnnotationFactory {
 
-  @Inject public AnnotationFactory(){};
-
   public Annotation from(AnnotationMirror mirror){
     TypeElement annoElement = ((TypeElement) mirror.getAnnotationType()
         .asElement());
@@ -32,5 +30,7 @@ public class AnnotationFactory {
   private String packageName(String fullName){
     return fullName.substring(0,fullName.lastIndexOf('.'));
   }
+
+  @Inject public AnnotationFactory(){};
 
 }

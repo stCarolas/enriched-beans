@@ -2,15 +2,14 @@ package  com.github.stcarolas.enrichedbeans.processor.spec.method;
 
 import static org.immutables.value.Value.Immutable;
 
-import javax.inject.Inject;
+import javax.lang.model.element.Modifier;
 
 import com.github.stcarolas.enrichedbeans.processor.java.Annotation;
 import com.github.stcarolas.enrichedbeans.processor.java.Variable;
 import com.github.stcarolas.enrichedbeans.processor.spec.HasAnnotation;
-import com.github.stcarolas.enrichedbeans.processor.spec.HasName;
+import com.github.stcarolas.enrichedbeans.processor.spec.method.api.HasMethodSpec;
 import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.TypeName;
 
 import io.vavr.collection.Seq;
 
@@ -23,6 +22,7 @@ import io.vavr.collection.Seq;
     return MethodSpec.constructorBuilder()
       .addParameters(classFields().map(Variable::asParameterSpec))
       .addAnnotations(annotations().map(Annotation::spec))
+      .addModifiers(Modifier.PUBLIC)
       .addCode(code())
       .build();
   };

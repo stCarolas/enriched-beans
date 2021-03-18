@@ -6,17 +6,21 @@ import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 
 import com.github.stcarolas.enrichedbeans.processor.java.factories.AnnotationFactory;
+import com.github.stcarolas.enrichedbeans.processor.java.factories.MethodFactory;
 import com.github.stcarolas.enrichedbeans.processor.java.factories.VariableFactory;
 import com.squareup.javapoet.TypeName;
 
 import io.vavr.collection.List;
 import io.vavr.collection.Seq;
+import io.vavr.control.Option;
+import static io.vavr.API.*;
 
 public class Bean {
 
   private final Element original;
   private VariableFactory fieldFactory = new VariableFactory();
   private AnnotationFactory annotationFactory  = new AnnotationFactory();
+  private MethodFactory methodFactory = new MethodFactory();
 
   public Bean(Element original){
     this.original = original;
@@ -53,10 +57,10 @@ public class Bean {
       .map(annotationFactory::from);
   }
 
-  public Seq<ExecutableElement> methods(){
+  public Seq<Method> methods(){
     return List.ofAll(original.getEnclosedElements())
       .filter(element -> element.getKind().equals(ElementKind.METHOD))
-      .map( $ -> (ExecutableElement)$);
+      .map(methodFactory::from);
   }
     
   public String packageName() {
@@ -71,6 +75,15 @@ public class Bean {
 
   public String toString(){
     return packageName() + "." + name();
+  }
+
+  public Option<BeanBuilder> builder(){
+    return Some(ImmutableBeanBuilder.builder()
+      .className("Immutable" + name())
+      .packageName(packageName())
+      .newBuilderMethod("builder")
+      .build()
+    );
   }
 
 }

@@ -27,9 +27,11 @@ public class FindBeans
 
   private List<TypeElement> listEnrichedFields(RoundEnvironment env){
     return List.ofAll((java.util.Set<Element>)env.getElementsAnnotatedWith(Enrich.class))
-      .appendAll(List.ofAll(env.getElementsAnnotatedWith(Assisted.class)))
-      .map(element -> (TypeElement) element.getEnclosingElement());
-
+      .map(element -> element.getEnclosingElement())
+      .appendAll(
+        List.ofAll(env.getElementsAnnotatedWith(Assisted.class))
+      )
+      .map(element -> (TypeElement)element);
   }
 
   @Inject public FindBeans(){}
