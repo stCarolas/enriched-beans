@@ -61,7 +61,7 @@ public class AnotherBean{
 ### Why not AutoFactory or AssistedInject ?
 Its the same but with fewer code - annotations lies on fields so you can use generated constructor by lombok instead of writing one.
 
-### Using with Gradle, Lombok, Spring (Lombok must be before enriched)
+### Using with Gradle, Lombok, Spring (Lombok must be placed before enriched)
 ```
   implementation 'javax.inject:javax.inject:1'
   implementation 'org.projectlombok:lombok:1.18.12'
@@ -71,7 +71,7 @@ Its the same but with fewer code - annotations lies on fields so you can use gen
   annotationProcessor 'com.github.stcarolas.enriched-beans:enriched-beans-processor:0.2.3'
 ```
 
-### Using with Maven, Lombok, Micronaut  (Lombok must be before enriched)
+### Using with Maven, Lombok, Micronaut  (Lombok must be placed before enriched)
 ```xml
     <dependency>
       <groupId>com.github.stcarolas.enriched-beans</groupId>
