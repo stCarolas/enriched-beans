@@ -4,6 +4,7 @@ import static io.vavr.API.Seq;
 
 import java.util.function.Predicate;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import com.github.stcarolas.enrichedbeans.annotations.Assisted;
@@ -131,7 +132,7 @@ import io.vavr.control.Option;
 
     private Seq<Variable> injectedFields(boolean detectNamedFields){
       Seq<Variable> injectedByMethods = targetBean().methods()
-        .filter(method -> method.annotations().exists(anno -> anno.is(Named.class)))
+        .filter(method -> method.annotations().exists(anno -> anno.is(Named.class) || anno.is(Inject.class)))
         .map(method -> variableFactory.from(method.name(),method.returnType()));
       return targetBean().fields()
         .filter(isAnnotatedBy(annotationOnInjectingFields(detectNamedFields)))
