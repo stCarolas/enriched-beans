@@ -50,8 +50,8 @@ public class CreateAssistingFactoryBeans
 
   private Modifier detectVisibility(ProcessingEnvironment env) {
     return "package".equals(env.getOptions().get("factoryVisibility"))
-      ? Modifier.PUBLIC
-      : Modifier.DEFAULT;
+      ? Modifier.DEFAULT
+      : Modifier.PUBLIC;
   }
 
   static final Logger log = LogManager.getLogger();

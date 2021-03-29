@@ -6,6 +6,7 @@ import java.util.function.Predicate;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.lang.model.element.Modifier;
 
 import com.github.stcarolas.enrichedbeans.annotations.Assisted;
 import com.github.stcarolas.enrichedbeans.annotations.Enrich;
@@ -46,7 +47,8 @@ import io.vavr.control.Option;
       return targetBean().packageName();
     }
 
-    @Derived public String name(){
+    @Derived
+    public String name(){
       return targetBean().name() + "Factory";
     }
 
@@ -112,6 +114,9 @@ import io.vavr.control.Option;
             .map(Variable::asFieldSpec)
             .toJavaList()
         );
+      if (visibility()!= Modifier.DEFAULT){
+        spec = spec.addModifiers(visibility());
+      }
       spec = methods().foldLeft(
         spec,
         (specBuilder,method) -> specBuilder.addMethod(method.spec())

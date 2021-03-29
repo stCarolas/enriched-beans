@@ -7,9 +7,11 @@ import javax.lang.model.element.TypeElement;
 
 import com.google.auto.service.AutoService;
 
-
 @AutoService(javax.annotation.processing.Processor.class)
-@SupportedAnnotationTypes("com.github.stcarolas.enrichedbeans.annotations.Enrich")
+@SupportedAnnotationTypes({
+  "com.github.stcarolas.enrichedbeans.annotations.Enrich",
+  "com.github.stcarolas.enrichedbeans.annotations.Assisted"
+})
 public class Processor extends AbstractProcessor {
 
   @Override

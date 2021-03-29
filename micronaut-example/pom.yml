@@ -32,6 +32,7 @@ build:
         Adebug: true
         AuseVavr: true
         AfactoryMethodName: build
+        AfactoryVisibility: public
       dependencies:
       - {groupId: org.ow2.asm, artifactId: asm, version: 7.3.1, type: jar}
       annotationProcessorPaths:

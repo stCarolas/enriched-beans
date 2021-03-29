@@ -12,6 +12,7 @@ import io.vavr.control.Try;
 public interface JavaClass {
 
     String packageName();
+    String name();
     TypeSpec spec();
     
     default Try<Void> writeTo(ProcessingEnvironment env){
