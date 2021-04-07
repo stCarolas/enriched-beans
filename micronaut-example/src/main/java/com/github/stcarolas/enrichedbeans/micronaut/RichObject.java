@@ -11,6 +11,9 @@ public class RichObject {
 
   private final String name;
 
+  @Enrich
+  private final Function<String, String> processName2;
+
   @Enrich @Named("ProcessName")
   private final Function<String, String> processName;
 

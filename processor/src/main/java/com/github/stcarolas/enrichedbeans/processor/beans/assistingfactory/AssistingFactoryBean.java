@@ -158,7 +158,7 @@ import io.vavr.control.Option;
         .headOption()
         .map(Annotation::parameters)
         .flatMap(params -> params.get("assistAllInjectedFields").map(it -> (Boolean)it))
-        .getOrElse(true);
+        .getOrElse(false);
     }
 
     private Class<?> annotationOnInjectingFields(boolean detectNamedFields){
