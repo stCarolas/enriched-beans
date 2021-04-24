@@ -29,6 +29,8 @@ import com.squareup.javapoet.TypeSpec;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.TypeSpec.Builder;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.immutables.value.Value.Default;
 import org.immutables.value.Value.Derived;
 import org.immutables.value.Value.Immutable;
@@ -55,15 +57,13 @@ import io.vavr.control.Option;
     @Derived public MethodWithSpec factoryMethod(){
       Boolean detectNamedFields = assistAllInjectedFields();
       return targetBean().builder()
-          .filter(builder -> useBuilder())
-          .map(rawBuilder -> factoryMethodUsingBuilder(rawBuilder, detectNamedFields))
-          .getOrElse(() -> factoryMethodUsingConstructor(detectNamedFields));
+        .filter(builder -> useBuilder())
+        .map(rawBuilder -> factoryMethodUsingBuilder(rawBuilder, detectNamedFields))
+        .getOrElse(() -> factoryMethodUsingConstructor(detectNamedFields));
     }
 
     private MethodWithSpec factoryMethodUsingConstructor(boolean detectNamedFields){
-      System.out.println(
-        String.format("Construct factory method using constructor with %s detecting", detectNamedFields)
-      );
+      log.debug("Construct factory method using constructor with {} detecting", detectNamedFields);
       return ImmutableFactoryMethod.builder()
         .name("from")
         .returnType(targetBean().type())
@@ -73,13 +73,13 @@ import io.vavr.control.Option;
     }
 
     private MethodWithSpec factoryMethodUsingBuilder(BeanBuilder beanBuilder,Boolean detectNamedFields){
-      System.out.println(String.format("Construct factory method using builder with %s detecting", detectNamedFields));
+      log.debug("Construct factory method using builder with %s detecting", detectNamedFields);
       return ImmutableFactoryMethodUsingBuilder.builder()
         .beanBuilder(beanBuilder)
         .name("builder")
         .returnType(
           ClassName.get(
-            String.format("%s.%s",beanBuilder.packageName(),beanBuilder.className()),
+            String.format("%s.%s", beanBuilder.packageName(), beanBuilder.className()),
             "Builder"
           )
         )
@@ -170,4 +170,5 @@ import io.vavr.control.Option;
     }
 
     private VariableFactory variableFactory = new VariableFactory();
+    static final Logger log = LogManager.getLogger();
 }
