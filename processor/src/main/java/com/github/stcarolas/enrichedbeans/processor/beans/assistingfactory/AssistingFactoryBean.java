@@ -34,12 +34,10 @@ import org.apache.logging.log4j.Logger;
 import org.immutables.value.Value.Default;
 import org.immutables.value.Value.Derived;
 import org.immutables.value.Value.Immutable;
-import org.immutables.value.Value.Style;
 
 import io.vavr.collection.Seq;
 import io.vavr.control.Option;
 
-@Style(overshadowImplementation=true)
 @Immutable public abstract class AssistingFactoryBean 
   implements JavaClass, HasVisibility {
 

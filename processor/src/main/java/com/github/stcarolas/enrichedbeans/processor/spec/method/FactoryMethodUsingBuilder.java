@@ -7,11 +7,9 @@ import com.github.stcarolas.enrichedbeans.processor.java.Variable;
 import com.github.stcarolas.enrichedbeans.processor.spec.method.api.MethodWithSpec;
 import com.squareup.javapoet.MethodSpec;
 import org.immutables.value.Value.Immutable;
-import org.immutables.value.Value.Style;
 
 import io.vavr.collection.Seq;
 
-@Style(overshadowImplementation = true)
 @Immutable public abstract class FactoryMethodUsingBuilder
   implements MethodWithSpec {
 
