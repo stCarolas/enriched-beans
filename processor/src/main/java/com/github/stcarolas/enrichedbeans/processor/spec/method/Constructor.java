@@ -6,7 +6,6 @@ import javax.lang.model.element.Modifier;
 
 import com.github.stcarolas.enrichedbeans.processor.java.Annotation;
 import com.github.stcarolas.enrichedbeans.processor.java.Variable;
-import com.github.stcarolas.enrichedbeans.processor.spec.HasAnnotation;
 import com.github.stcarolas.enrichedbeans.processor.spec.method.api.HasMethodSpec;
 import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.MethodSpec;
@@ -14,10 +13,12 @@ import com.squareup.javapoet.MethodSpec;
 import io.vavr.collection.Seq;
 
 @Immutable public abstract class Constructor
-  implements HasMethodSpec, HasAnnotation { 
+  implements HasMethodSpec { 
 
+  abstract Seq<Annotation> annotations();
   abstract Seq<Variable> classFields();
 
+  @Override
   public MethodSpec spec(){
     return MethodSpec.constructorBuilder()
       .addParameters(classFields().map(Variable::asParameterSpec))

@@ -16,7 +16,6 @@ import com.github.stcarolas.enrichedbeans.processor.java.BeanBuilder;
 import com.github.stcarolas.enrichedbeans.processor.java.ImmutableAnnotation;
 import com.github.stcarolas.enrichedbeans.processor.java.Variable;
 import com.github.stcarolas.enrichedbeans.processor.java.factories.VariableFactory;
-import com.github.stcarolas.enrichedbeans.processor.spec.HasVisibility;
 import com.github.stcarolas.enrichedbeans.processor.spec.JavaClass;
 import com.github.stcarolas.enrichedbeans.processor.spec.method.Constructor;
 import com.github.stcarolas.enrichedbeans.processor.spec.method.ImmutableConstructor;
@@ -39,8 +38,9 @@ import io.vavr.collection.Seq;
 import io.vavr.control.Option;
 
 @Immutable public abstract class AssistingFactoryBean 
-  implements JavaClass, HasVisibility {
+  implements JavaClass {
 
+    abstract Modifier visibility();
     abstract Bean targetBean();
 
     @Derived public String packageName(){

@@ -4,15 +4,15 @@ import javax.lang.model.element.Modifier;
 
 import com.github.stcarolas.enrichedbeans.processor.java.Method;
 import com.github.stcarolas.enrichedbeans.processor.java.Variable;
-import com.github.stcarolas.enrichedbeans.processor.spec.HasName;
 import com.github.stcarolas.enrichedbeans.processor.spec.method.api.HasMethodSpec;
 import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.MethodSpec;
 import org.immutables.value.Value.Immutable;
 
 @Immutable public abstract class ProxyMethod
-  implements HasMethodSpec, HasName {
+  implements HasMethodSpec {
 
+  abstract String name();
   abstract Method method();
 
   @Override
