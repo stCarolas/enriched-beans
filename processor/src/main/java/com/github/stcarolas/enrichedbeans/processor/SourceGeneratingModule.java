@@ -1,34 +1,46 @@
-package com.github.stcarolas.enrichedbeans.processor.functions;
+package com.github.stcarolas.enrichedbeans.processor;
 
+import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
+
 import com.github.stcarolas.enrichedbeans.annotations.Assisted;
 import com.github.stcarolas.enrichedbeans.annotations.Enrich;
+import com.github.stcarolas.enrichedbeans.processor.domain.SourceFile;
 import com.github.stcarolas.enrichedbeans.processor.java.Bean;
 import com.github.stcarolas.enrichedbeans.processor.java.factories.BeanFactory;
+import com.github.stcarolas.enrichedbeans.processor.spec.CanProcessBeans;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import dagger.Provides;
+import dagger.Module;
 import io.vavr.Function1;
 import io.vavr.collection.List;
 import io.vavr.collection.Seq;
+import static io.vavr.API.*;
 
-@Named("FindBeans")
 @SuppressWarnings("serial")
-public class FindBeans implements Function1<RoundEnvironment, Seq<Bean>> {
+@Module
+public class SourceGeneratingModule {
 
-  private BeanFactory beanFactory;
-
-  @Inject
-  public FindBeans(BeanFactory beanFactory) {
-    this.beanFactory=beanFactory;
+  @Provides
+  public List<SourceFile> sources(
+    Seq<CanProcessBeans> processors,
+    BeanFactory beanFactory,
+    RoundEnvironment roundEnv,
+    ProcessingEnvironment processingEnv
+  ) {
+    return For(processors, apply(roundEnv,beanFactory))
+      .yield(CanProcessBeans::apply)
+      .toList();
   }
 
-  @Override
-  public Seq<Bean> apply(RoundEnvironment env) {
+  public Seq<Bean> apply(RoundEnvironment env,BeanFactory beanFactory) {
     log.info("scaning for beans to enrich");
     return listEnrichedFields(env).distinct().map(beanFactory::from);
   }

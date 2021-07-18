@@ -5,6 +5,7 @@ import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.lang.model.element.TypeElement;
 import com.github.stcarolas.enrichedbeans.processor.domain.Environment;
+import com.github.stcarolas.enrichedbeans.processor.domain.SourceFile;
 import com.google.auto.service.AutoService;
 
 @AutoService(javax.annotation.processing.Processor.class)
@@ -18,13 +19,14 @@ public class Processor extends AbstractProcessor {
 
   @Override
   public boolean process(
-    java.util.Set<? extends TypeElement> annotations,
+    java.util.Set<? extends TypeElement> types,
     RoundEnvironment roundEnv
   ) {
-    return DaggerEnrichProcessorComponent.builder()
+    DaggerEnrichProcessorComponent.builder()
       .environment(new Environment(roundEnv, processingEnv))
       .build()
-      .findAndEnrichBeans()
-      .apply(roundEnv, processingEnv);
+      .generated()
+      .map(SourceFile::write);
+    return true;
   }
 }

@@ -13,7 +13,7 @@ import com.github.stcarolas.enrichedbeans.processor.java.BeanBuilder;
 import com.github.stcarolas.enrichedbeans.processor.java.ImmutableAnnotation;
 import com.github.stcarolas.enrichedbeans.processor.java.Variable;
 import com.github.stcarolas.enrichedbeans.processor.java.factories.VariableFactory;
-import com.github.stcarolas.enrichedbeans.processor.spec.JavaClass;
+import com.github.stcarolas.enrichedbeans.processor.domain.SourceFile;
 import com.github.stcarolas.enrichedbeans.processor.spec.method.Constructor;
 import com.github.stcarolas.enrichedbeans.processor.spec.method.ImmutableConstructor;
 import com.github.stcarolas.enrichedbeans.processor.spec.method.ImmutableFactoryMethod;
@@ -29,11 +29,16 @@ import org.apache.logging.log4j.Logger;
 import org.immutables.value.Value.Default;
 import org.immutables.value.Value.Derived;
 import org.immutables.value.Value.Immutable;
+
+import io.vavr.Function2;
 import io.vavr.collection.Seq;
 import io.vavr.control.Option;
+import io.vavr.control.Try;
+
+import static io.vavr.API.*;
 
 @Immutable
-public abstract class AssistingFactoryBean implements JavaClass {
+public abstract class AssistingFactoryBean implements SourceFile {
 
   abstract VariableFactory variableFactory();
 
@@ -42,6 +47,8 @@ public abstract class AssistingFactoryBean implements JavaClass {
   abstract Bean targetBean();
 
   abstract String factoryMethodName();
+
+  abstract Function2<String, TypeSpec, Try<Void>> writeSourceFileFn();
 
   @Derived
   public String packageName() {
@@ -55,15 +62,15 @@ public abstract class AssistingFactoryBean implements JavaClass {
 
   @Derived
   public MethodWithSpec factoryMethod() {
-    Boolean detectNamedFields = assistAllInjectedFields();
-    return targetBean()
-      .beanBuilder()
-      .filter(builder -> useBuilder())
-      .map(rawBuilder -> factoryMethodUsingBuilder(rawBuilder, detectNamedFields))
-      .getOrElse(() -> factoryMethodUsingConstructor(detectNamedFields));
+    Option<BeanBuilder> builder = useBuilder() 
+      ? targetBean().beanBuilder() 
+      : None();
+    return builder.map(this::factoryMethodUsingBuilder)
+      .getOrElse(this::factoryMethodUsingConstructor);
   }
 
-  private MethodWithSpec factoryMethodUsingConstructor(boolean detectNamedFields) {
+  private MethodWithSpec factoryMethodUsingConstructor() {
+    Boolean detectNamedFields = assistAllInjectedFields();
     log.debug(
       "Construct factory method using constructor with {} detecting",
       detectNamedFields
@@ -77,9 +84,9 @@ public abstract class AssistingFactoryBean implements JavaClass {
   }
 
   private MethodWithSpec factoryMethodUsingBuilder(
-    BeanBuilder beanBuilder,
-    Boolean detectNamedFields
+    BeanBuilder beanBuilder
   ) {
+    Boolean detectNamedFields = assistAllInjectedFields();
     log.debug(
       "Construct factory method using builder with {} detecting",
       detectNamedFields
@@ -119,7 +126,7 @@ public abstract class AssistingFactoryBean implements JavaClass {
   }
 
   @Derived
-  public TypeSpec spec() {
+  protected TypeSpec spec() {
     Builder spec = TypeSpec.classBuilder(name())
       .addAnnotation(AnnotationSpec.builder(Named.class).build())
       .addFields(
@@ -138,6 +145,10 @@ public abstract class AssistingFactoryBean implements JavaClass {
     return method.map(methods()::append)
       .map(it -> ImmutableAssistingFactoryBean.builder().from(this).methods(it).build())
       .getOrElse(this);
+  }
+
+  public Try<Void> write(){
+    return writeSourceFileFn().apply(packageName(),spec());
   }
 
   private Seq<Variable> notInjectedFields(boolean detectNamedFields) {
