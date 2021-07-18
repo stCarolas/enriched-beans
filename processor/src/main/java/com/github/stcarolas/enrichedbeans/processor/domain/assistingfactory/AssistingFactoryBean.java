@@ -1,4 +1,4 @@
-package com.github.stcarolas.enrichedbeans.processor.beans.assistingfactory;
+package com.github.stcarolas.enrichedbeans.processor.domain.assistingfactory;
 
 import static io.vavr.API.Seq;
 import java.util.function.Predicate;
@@ -81,7 +81,7 @@ public abstract class AssistingFactoryBean implements JavaClass {
     Boolean detectNamedFields
   ) {
     log.debug(
-      "Construct factory method using builder with %s detecting",
+      "Construct factory method using builder with {} detecting",
       detectNamedFields
     );
     return ImmutableFactoryMethodUsingBuilder.builder()

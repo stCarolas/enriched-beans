@@ -3,7 +3,6 @@ package com.github.stcarolas.enrichedbeans.processor.domain.assistingfactory;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.lang.model.element.Modifier;
-import com.github.stcarolas.enrichedbeans.processor.beans.assistingfactory.ImmutableAssistingFactoryBean;
 import com.github.stcarolas.enrichedbeans.processor.java.Bean;
 import com.github.stcarolas.enrichedbeans.processor.java.factories.VariableFactory;
 import com.github.stcarolas.enrichedbeans.processor.spec.CanProcessBeans;
