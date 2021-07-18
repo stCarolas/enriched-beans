@@ -5,10 +5,11 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
-import javax.lang.model.type.TypeKind;
 import com.github.stcarolas.enrichedbeans.annotations.Assisted;
 import com.github.stcarolas.enrichedbeans.annotations.Enrich;
 import com.github.stcarolas.enrichedbeans.processor.java.Bean;
+import com.github.stcarolas.enrichedbeans.processor.java.factories.BeanFactory;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import io.vavr.Function1;
@@ -19,10 +20,17 @@ import io.vavr.collection.Seq;
 @SuppressWarnings("serial")
 public class FindBeans implements Function1<RoundEnvironment, Seq<Bean>> {
 
+  private BeanFactory beanFactory;
+
+  @Inject
+  public FindBeans(BeanFactory beanFactory) {
+    this.beanFactory=beanFactory;
+  }
+
   @Override
   public Seq<Bean> apply(RoundEnvironment env) {
     log.info("scaning for beans to enrich");
-    return listEnrichedFields(env).distinct().map(Bean::new);
+    return listEnrichedFields(env).distinct().map(beanFactory::from);
   }
 
   @SuppressWarnings("unchecked")
@@ -42,9 +50,6 @@ public class FindBeans implements Function1<RoundEnvironment, Seq<Bean>> {
     targetBeans.forEach(bean -> log.info("enriched bean: {}", bean.getSimpleName()));
     return targetBeans.map(element -> (TypeElement) element);
   }
-
-  @Inject
-  public FindBeans() {}
 
   static final Logger log = LogManager.getLogger();
 }

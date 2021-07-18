@@ -16,22 +16,21 @@ import static io.vavr.API.*;
 @Named("FindAndEnrichBeans")
 public class FindAndEnrichBeans {
 
-  public Boolean apply(RoundEnvironment roundEnv, ProcessingEnvironment processingEnv) {
-    List<JavaClass> createdClasses = For(findBeans.apply(roundEnv), processors)
-      .yield((bean, processor) -> processor.apply(processingEnv, bean))
-      .toList();
-    createdClasses.forEach(created -> log.info("created: {}", created.name()));
-    createdClasses
-      .map(created -> created.writeTo(processingEnv))
-      .filter(Try::isFailure)
-      .forEach(it -> log.error("error: {}", it));
-    return true;
-  }
-
   @Inject
   public FindAndEnrichBeans(FindBeans findBeans, Seq<CanProcessBeans> processors) {
     this.findBeans = findBeans;
     this.processors = processors;
+  }
+
+  public Boolean apply(RoundEnvironment roundEnv, ProcessingEnvironment processingEnv) {
+    List<JavaClass> createdClasses = For(processors, findBeans.apply(roundEnv))
+      .yield(CanProcessBeans::apply)
+      .toList();
+    createdClasses.forEach(created -> log.info("created: {}", created.name()));
+    createdClasses.map(created -> created.writeTo(processingEnv))
+      .filter(Try::isFailure)
+      .forEach(it -> log.error("error: {}", it));
+    return true;
   }
 
   private final FindBeans findBeans;

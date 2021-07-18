@@ -4,10 +4,13 @@ groupId: com.github.stcarolas.enriched-beans
 version: ${revision} 
 
 modelVersion: 4.0.0
+
 properties: 
   maven.compiler.target: 1.8
   maven.compiler.source: 1.8
+  maven.compile.nowarn: on
   revision: 0.0.1
+  project.build.sourceEncoding: UTF-8
 
 build:
   plugins:
