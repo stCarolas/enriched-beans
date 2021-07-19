@@ -38,6 +38,8 @@ public class AssistingFactoryBeanFactory implements CanProcessBeans {
   @Override
   public SourceFile apply(Bean bean) {
     return ImmutableAssistingFactoryBean.builder()
+      .packageName(bean.packageName())
+      .name(bean.name() + "Factory")
       .variableFactory(variableFactory)
       .factoryMethodName(factoryMethodName)
       .targetBean(bean)

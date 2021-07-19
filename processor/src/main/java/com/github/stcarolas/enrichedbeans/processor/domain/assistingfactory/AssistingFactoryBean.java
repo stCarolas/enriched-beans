@@ -50,15 +50,9 @@ public abstract class AssistingFactoryBean implements SourceFile {
 
   abstract Function2<String, TypeSpec, Try<Void>> writeSourceFileFn();
 
-  @Derived
-  public String packageName() {
-    return targetBean().packageName();
-  }
+  abstract String packageName();
 
-  @Derived
-  public String name() {
-    return targetBean().name() + "Factory";
-  }
+  abstract String name();
 
   @Derived
   public MethodWithSpec factoryMethod() {
@@ -135,9 +129,10 @@ public abstract class AssistingFactoryBean implements SourceFile {
     if (visibility() != Modifier.DEFAULT) {
       spec = spec.addModifiers(visibility());
     }
-    spec =
-      methods()
-        .foldLeft(spec, (specBuilder, method) -> specBuilder.addMethod(method.spec()));
+    spec = methods().foldLeft(
+      spec,
+      (specBuilder, method) -> specBuilder.addMethod(method.spec())
+    );
     return spec.build();
   }
 

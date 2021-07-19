@@ -1,86 +1,34 @@
 package com.github.stcarolas.enrichedbeans.processor.java;
 
-import javax.lang.model.element.Element;
-import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
-
-import com.github.stcarolas.enrichedbeans.processor.java.factories.AnnotationFactory;
-import com.github.stcarolas.enrichedbeans.processor.java.factories.MethodFactory;
-import com.github.stcarolas.enrichedbeans.processor.java.factories.VariableFactory;
 import com.squareup.javapoet.TypeName;
-
 import org.immutables.value.Value.Immutable;
-
-import io.vavr.collection.List;
 import io.vavr.collection.Seq;
 import io.vavr.control.Option;
-import static io.vavr.API.*;
 
 @Immutable
 public abstract class Bean {
-  abstract Element original();
-  abstract VariableFactory fieldFactory();
-  abstract AnnotationFactory annotationFactory();
-  abstract MethodFactory methodFactory();
 
-  public TypeName type() {
-    return TypeName.get(original().asType());
-  }
+  abstract public String name();
 
-  public String name() {
-    return original().getSimpleName().toString();
-  }
+  abstract public String packageName();
 
-  public Seq<TypeElement> subtypes() {
-    return List.ofAll(original().getEnclosedElements())
-      .filter(element -> element.getKind().isInterface())
-      .map(element -> (TypeElement) element);
-  }
+  abstract public TypeName type();
 
-  public Seq<Variable> fields() {
-    return List.ofAll(original().getEnclosedElements())
-      .filter(element -> element.getKind().isField())
-      .map(fieldFactory()::from);
-  }
+  abstract public Seq<TypeElement> subtypes();
 
-  public Seq<ExecutableElement> constructors() {
-    return List.ofAll(original().getEnclosedElements())
-      .filter(element -> element.getKind().equals(ElementKind.CONSTRUCTOR))
-      .map($ -> (ExecutableElement) $);
-  }
+  abstract public Seq<Variable> fields();
 
-  public Seq<Annotation> annotations() {
-    return List.ofAll(original().getAnnotationMirrors()).map(annotationFactory()::from);
-  }
+  abstract public Seq<ExecutableElement> constructors();
 
-  public Seq<Method> methods() {
-    return List.ofAll(original().getEnclosedElements())
-      .filter(element -> element.getKind().equals(ElementKind.METHOD))
-      .map(methodFactory()::from);
-  }
+  abstract public Seq<Annotation> annotations();
 
-  public String packageName() {
-    String fullName = ((TypeElement) original()).getQualifiedName().toString();
-    String packageName = "";
-    int lastDot = fullName.lastIndexOf('.');
-    if (lastDot > 0) {
-      packageName = fullName.substring(0, lastDot);
-    }
-    return packageName;
-  }
+  abstract public Seq<Method> methods();
+
+  abstract public Option<BeanBuilder> beanBuilder();
 
   public String toString() {
     return packageName() + "." + name();
-  }
-
-  public Option<BeanBuilder> beanBuilder() {
-    return Some(
-      ImmutableBeanBuilder.builder()
-        .className("Immutable" + name())
-        .packageName(packageName())
-        .newBuilderMethod("builder")
-        .build()
-    );
   }
 }
