@@ -1,5 +1,6 @@
 package  com.github.stcarolas.enrichedbeans.processor.java;
 
+import com.github.stcarolas.enrichedbeans.processor.java.annotation.Annotation;
 import com.squareup.javapoet.TypeName;
 
 import org.immutables.value.Value.Default;

@@ -17,7 +17,8 @@ import org.immutables.value.Value.Immutable;
   @Named("ProcessName")
   abstract public Function<String, String> processNameFn();
 
-  @Inject abstract public InjectedClass someField();
+  @Inject
+  abstract public InjectedClass someField();
 
   public String processName(){
     return processNameFn().apply(name());

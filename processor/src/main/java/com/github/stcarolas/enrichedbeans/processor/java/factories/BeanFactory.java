@@ -7,16 +7,15 @@ import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.DeclaredType;
-
-import com.github.stcarolas.enrichedbeans.processor.java.Annotation;
 import com.github.stcarolas.enrichedbeans.processor.java.Bean;
 import com.github.stcarolas.enrichedbeans.processor.java.BeanBuilder;
 import com.github.stcarolas.enrichedbeans.processor.java.ImmutableBean;
 import com.github.stcarolas.enrichedbeans.processor.java.ImmutableBeanBuilder;
 import com.github.stcarolas.enrichedbeans.processor.java.Method;
 import com.github.stcarolas.enrichedbeans.processor.java.Variable;
+import com.github.stcarolas.enrichedbeans.processor.java.annotation.Annotation;
+import com.github.stcarolas.enrichedbeans.processor.java.annotation.AnnotationFactory;
 import com.squareup.javapoet.TypeName;
-
 import io.vavr.collection.List;
 import io.vavr.collection.Seq;
 import io.vavr.control.Option;
@@ -40,8 +39,9 @@ public class BeanFactory {
   }
 
   public Bean from(Element origin) {
-    String superclass = ((DeclaredType)((TypeElement) origin).getSuperclass()).toString();
-    System.out.println(String.format("superclass: %s", superclass));
+    //String superclass = ((DeclaredType) ((TypeElement) origin).getSuperclass())
+      //.toString();
+    //System.out.println(String.format("superclass: %s", superclass));
     return ImmutableBean.builder()
       .name(origin.getSimpleName().toString())
       .packageName(packageName(origin))
@@ -55,8 +55,8 @@ public class BeanFactory {
       .build();
   }
 
-  private String name(Element origin){
-    return origin.getSimpleName().toString(); 
+  private String name(Element origin) {
+    return origin.getSimpleName().toString();
   }
 
   private String packageName(Element original) {

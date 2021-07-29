@@ -6,6 +6,7 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.VariableElement;
 import com.github.stcarolas.enrichedbeans.processor.java.Variable;
+import com.github.stcarolas.enrichedbeans.processor.java.annotation.AnnotationFactory;
 import com.github.stcarolas.enrichedbeans.processor.java.ImmutableVariable;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;

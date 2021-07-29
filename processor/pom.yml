@@ -43,6 +43,10 @@ dependencies:
     artifactId: annotate
     version: 2.8.8
 
+  - groupId: org.immutables.vavr
+    artifactId: vavr-encodings
+    version: 0.6.2
+
   - groupId: com.github.stcarolas.enriched-beans
     artifactId: enriched-beans-annotations
     version: ${revision}

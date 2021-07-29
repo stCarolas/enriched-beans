@@ -2,6 +2,8 @@ package com.github.stcarolas.enrichedbeans.processor.java;
 
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
+
+import com.github.stcarolas.enrichedbeans.processor.java.annotation.Annotation;
 import com.squareup.javapoet.TypeName;
 import org.immutables.value.Value.Immutable;
 import io.vavr.collection.Seq;

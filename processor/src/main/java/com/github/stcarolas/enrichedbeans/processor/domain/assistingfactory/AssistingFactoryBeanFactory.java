@@ -30,8 +30,9 @@ public class AssistingFactoryBeanFactory implements CanProcessBeans {
   ) {
     this.factoryMethodName = factoryMethodName.getOrElse("from");
     this.variableFactory = variableFactory;
-    this.visibility =
-      visibility.exists("package"::equals) ? Modifier.DEFAULT : Modifier.PUBLIC;
+    this.visibility = visibility.exists("package"::equals)
+      ? Modifier.DEFAULT 
+      : Modifier.PUBLIC;
     this.writeSourceFileFn = writeSourceFileFn;
   }
 
@@ -47,4 +48,11 @@ public class AssistingFactoryBeanFactory implements CanProcessBeans {
       .writeSourceFileFn(writeSourceFileFn)
       .build();
   }
+
+  //private Seq<Variable> notInjectedFields(Bean bean, boolean detectNamedFields) {
+    //return targetBean()
+      //.fields()
+      //.reject(isAnnotatedBy(annotationOnInjectingFields(detectNamedFields)));
+  //}
+
 }

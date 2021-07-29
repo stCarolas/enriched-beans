@@ -6,6 +6,7 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import com.github.stcarolas.enrichedbeans.processor.java.ImmutableMethod;
 import com.github.stcarolas.enrichedbeans.processor.java.Method;
+import com.github.stcarolas.enrichedbeans.processor.java.annotation.AnnotationFactory;
 import com.squareup.javapoet.TypeName;
 import io.vavr.collection.List;
 

@@ -1,7 +1,8 @@
 package com.github.stcarolas.enrichedbeans.processor.java;
 
 import javax.lang.model.element.Modifier;
-import com.github.stcarolas.enrichedbeans.annotations.Enrich;
+import com.github.stcarolas.enrichedbeans.processor.java.annotation.Annotation;
+import com.github.stcarolas.enrichedbeans.processor.java.annotation.enrich.EnrichAnnotation;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.ParameterSpec;
 import com.squareup.javapoet.TypeName;
@@ -27,7 +28,7 @@ import io.vavr.collection.List;
 
     default ParameterSpec asParameterSpec() {
       return annotations()
-        .reject(annotation -> annotation.is(Enrich.class))
+        .reject(annotation -> annotation instanceof EnrichAnnotation)
         .map(Annotation::spec)
         .foldLeft(
           ParameterSpec.builder(type(), name()),
@@ -46,10 +47,6 @@ import io.vavr.collection.List;
 
     default String accessor(){
       return name();
-    }
-
-    default boolean isEnriched() {
-      return annotations().exists(annotation -> annotation.is(Enrich.class));
     }
 
 }

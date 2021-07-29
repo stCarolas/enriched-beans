@@ -4,8 +4,8 @@ import static org.immutables.value.Value.Immutable;
 
 import javax.lang.model.element.Modifier;
 
-import com.github.stcarolas.enrichedbeans.processor.java.Annotation;
 import com.github.stcarolas.enrichedbeans.processor.java.Variable;
+import com.github.stcarolas.enrichedbeans.processor.java.annotation.Annotation;
 import com.github.stcarolas.enrichedbeans.processor.spec.method.api.HasMethodSpec;
 import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.MethodSpec;

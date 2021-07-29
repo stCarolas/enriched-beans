@@ -5,13 +5,15 @@ import java.util.function.Predicate;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.lang.model.element.Modifier;
-import com.github.stcarolas.enrichedbeans.annotations.Assisted;
 import com.github.stcarolas.enrichedbeans.annotations.Enrich;
-import com.github.stcarolas.enrichedbeans.processor.java.Annotation;
 import com.github.stcarolas.enrichedbeans.processor.java.Bean;
 import com.github.stcarolas.enrichedbeans.processor.java.BeanBuilder;
-import com.github.stcarolas.enrichedbeans.processor.java.ImmutableAnnotation;
 import com.github.stcarolas.enrichedbeans.processor.java.Variable;
+import com.github.stcarolas.enrichedbeans.processor.java.annotation.ImmutableDefaultAnnotationImpl;
+import com.github.stcarolas.enrichedbeans.processor.java.annotation.assisted.AssistedAnnotation;
+import com.github.stcarolas.enrichedbeans.processor.java.annotation.enrich.EnrichAnnotation;
+import com.github.stcarolas.enrichedbeans.processor.java.annotation.inject.InjectAnnotation;
+import com.github.stcarolas.enrichedbeans.processor.java.annotation.named.NamedAnnotation;
 import com.github.stcarolas.enrichedbeans.processor.java.factories.VariableFactory;
 import com.github.stcarolas.enrichedbeans.processor.domain.SourceFile;
 import com.github.stcarolas.enrichedbeans.processor.spec.method.Constructor;
@@ -29,12 +31,10 @@ import org.apache.logging.log4j.Logger;
 import org.immutables.value.Value.Default;
 import org.immutables.value.Value.Derived;
 import org.immutables.value.Value.Immutable;
-
 import io.vavr.Function2;
 import io.vavr.collection.Seq;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
-
 import static io.vavr.API.*;
 
 @Immutable
@@ -56,9 +56,7 @@ public abstract class AssistingFactoryBean implements SourceFile {
 
   @Derived
   public MethodWithSpec factoryMethod() {
-    Option<BeanBuilder> builder = useBuilder() 
-      ? targetBean().beanBuilder() 
-      : None();
+    Option<BeanBuilder> builder = useBuilder() ? targetBean().beanBuilder() : None();
     return builder.map(this::factoryMethodUsingBuilder)
       .getOrElse(this::factoryMethodUsingConstructor);
   }
@@ -77,9 +75,7 @@ public abstract class AssistingFactoryBean implements SourceFile {
       .build();
   }
 
-  private MethodWithSpec factoryMethodUsingBuilder(
-    BeanBuilder beanBuilder
-  ) {
+  private MethodWithSpec factoryMethodUsingBuilder(BeanBuilder beanBuilder) {
     Boolean detectNamedFields = assistAllInjectedFields();
     log.debug(
       "Construct factory method using builder with {} detecting",
@@ -105,7 +101,7 @@ public abstract class AssistingFactoryBean implements SourceFile {
       .classFields(injectedFields(assistAllInjectedFields()))
       .annotations(
         Seq(
-          ImmutableAnnotation.builder()
+          ImmutableDefaultAnnotationImpl.builder()
             .className("Inject")
             .packageName("javax.inject")
             .build()
@@ -129,10 +125,9 @@ public abstract class AssistingFactoryBean implements SourceFile {
     if (visibility() != Modifier.DEFAULT) {
       spec = spec.addModifiers(visibility());
     }
-    spec = methods().foldLeft(
-      spec,
-      (specBuilder, method) -> specBuilder.addMethod(method.spec())
-    );
+    spec =
+      methods()
+        .foldLeft(spec, (specBuilder, method) -> specBuilder.addMethod(method.spec()));
     return spec.build();
   }
 
@@ -142,14 +137,14 @@ public abstract class AssistingFactoryBean implements SourceFile {
       .getOrElse(this);
   }
 
-  public Try<Void> write(){
-    return writeSourceFileFn().apply(packageName(),spec());
+  public Try<Void> write() {
+    return writeSourceFileFn().apply(packageName(), spec());
   }
 
   private Seq<Variable> notInjectedFields(boolean detectNamedFields) {
     return targetBean()
       .fields()
-      .reject(isAnnotatedBy(annotationOnInjectingFields(detectNamedFields)));
+      .reject(shouldBeInjected(detectNamedFields));
   }
 
   private Seq<Variable> injectedFields(boolean detectNamedFields) {
@@ -157,41 +152,39 @@ public abstract class AssistingFactoryBean implements SourceFile {
       .methods()
       .filter(
         method -> method.annotations()
-          .exists(anno -> anno.is(Named.class) || anno.is(Inject.class))
+          .exists(anno -> anno instanceof NamedAnnotation || anno instanceof InjectAnnotation)
       )
       .map(method -> variableFactory().from(method.name(), method.returnType()));
     return targetBean()
       .fields()
-      .filter(isAnnotatedBy(annotationOnInjectingFields(detectNamedFields)))
+      .filter(shouldBeInjected(detectNamedFields))
       .appendAll(injectedByMethods);
   }
 
   private boolean useBuilder() {
     return targetBean()
       .annotations()
-      .filter(anno -> anno.is(Assisted.class))
-      .headOption()
-      .flatMap(anno -> anno.parameters().get("useBuilder()").map(it -> (Boolean) it))
+      .find(anno -> anno instanceof AssistedAnnotation)
+      .map(anno -> (AssistedAnnotation) anno)
+      .map(AssistedAnnotation::useBuilder)
       .getOrElse(false);
   }
 
   private boolean assistAllInjectedFields() {
     return targetBean()
       .annotations()
-      .filter(anno -> anno.is(Assisted.class))
-      .headOption()
-      .map(Annotation::parameters)
-      .flatMap(params -> params.get("assistAllInjectedFields").map(it -> (Boolean) it))
+      .find(anno -> anno instanceof AssistedAnnotation)
+      .map(anno -> (AssistedAnnotation) anno)
+      .map(AssistedAnnotation::assistAllInjectedFields)
       .getOrElse(false);
   }
 
-  private Class<?> annotationOnInjectingFields(boolean detectNamedFields) {
-    return detectNamedFields ? Named.class : Enrich.class;
-  }
-
-  private Predicate<Variable> isAnnotatedBy(Class<?> annotationClass) {
+  private Predicate<Variable> shouldBeInjected(boolean detectNamedFields){
     return variable -> variable.annotations()
-      .exists(annotation -> annotation.is(annotationClass));
+      .exists(annotation -> detectNamedFields 
+          ? annotation instanceof NamedAnnotation 
+          : annotation instanceof EnrichAnnotation
+      );
   }
 
   static final Logger log = LogManager.getLogger();
