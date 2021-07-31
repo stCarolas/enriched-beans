@@ -10,6 +10,7 @@ import com.github.stcarolas.enrichedbeans.annotations.Assisted;
 import com.github.stcarolas.enrichedbeans.annotations.Enrich;
 import com.github.stcarolas.enrichedbeans.processor.java.annotation.assisted.ImmutableAssistedAnnotation;
 import com.github.stcarolas.enrichedbeans.processor.java.annotation.enrich.ImmutableEnrichAnnotation;
+import com.github.stcarolas.enrichedbeans.processor.java.annotation.named.ImmutableNamedAnnotation;
 
 import io.vavr.collection.HashMap;
 
@@ -46,6 +47,22 @@ public class AnnotationFactory {
 
     if (fullName.equals(Enrich.class.getCanonicalName())){
       annotation = ImmutableEnrichAnnotation.builder()
+        .className(className)
+        .packageName(packageName)
+        .parameters(parameters)
+        .build();
+    }
+
+    if (fullName.equals(Named.class.getCanonicalName())){
+      annotation = ImmutableNamedAnnotation.builder()
+        .className(className)
+        .packageName(packageName)
+        .parameters(parameters)
+        .build();
+    }
+
+    if (fullName.equals(Inject.class.getCanonicalName())){
+      annotation = ImmutableNamedAnnotation.builder()
         .className(className)
         .packageName(packageName)
         .parameters(parameters)
