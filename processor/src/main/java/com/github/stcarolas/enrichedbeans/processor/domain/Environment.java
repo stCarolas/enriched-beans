@@ -50,9 +50,16 @@ public class Environment {
   }
 
   @Provides
-  @Named("defaultVisibility")
+  @Named("visibility")
   public Option<String> detectVisibility() {
     return Option(processingEnv.getOptions().get("factoryVisibility"))
+      .filter(name -> !name.isBlank());
+  }
+
+  @Provides
+  @Named("factoryClassNameSuffix")
+  public Option<String> detectFactoryClassNameSuffix() {
+    return Option(processingEnv.getOptions().get("factoryClassNameSuffix"))
       .filter(name -> !name.isBlank());
   }
 
@@ -62,7 +69,7 @@ public class Environment {
     return (packageName, spec) -> Try.run(
       () -> JavaFile.builder(packageName, spec).build().writeTo(processingEnv.getFiler())
     )
-      .onFailure(log::error);
+      .onFailure(error -> log.error("Error while writing source file: {}", error));
   }
 
   private static final Logger log = LogManager.getLogger();

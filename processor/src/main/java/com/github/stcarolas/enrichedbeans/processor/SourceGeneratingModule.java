@@ -40,11 +40,12 @@ public class SourceGeneratingModule {
 
   @SuppressWarnings("unchecked")
   private List<TypeElement> listEnrichedFields(RoundEnvironment env) {
-    List.ofAll(env.getRootElements())
-      .map(element -> (TypeElement) element)
-      .forEach(
-        element -> System.out.println(String.format("root elements: %s", element))
+    if (log.isDebugEnabled()){
+      log.debug(
+        "root elements: %s", 
+        List.ofAll(env.getRootElements())
       );
+    }
     List<Element> targetBeans = List.ofAll(
       (java.util.Set<Element>) env.getElementsAnnotatedWith(Enrich.class)
     )

@@ -22,26 +22,28 @@ import static io.vavr.API.*;
 public class AssistingFactoryBeanFactory implements CanProcessBeans {
   private static final long serialVersionUID = 7658689825243635867L;
 
-  private Modifier visibility;
-  private Function2<String, TypeSpec, Try<Void>> writeSourceFileFn;
+  private final Modifier visibility;
+  private final Function2<String, TypeSpec, Try<Void>> writeSourceFileFn;
+  private final String factoryClassNameSuffix;
 
   @Inject
   public AssistingFactoryBeanFactory(
-    @Named("defaultVisibility") Option<String> visibility,
-    @Named("WriteSourceFileFn") Function2<String, TypeSpec, Try<Void>> writeSourceFileFn,
-    VariableFactory variableFactory
+    @Named("visibility") Option<String> visibility,
+    @Named("factoryClassNameSuffix") Option<String> factoryClassNameSuffix,
+    @Named("WriteSourceFileFn") Function2<String, TypeSpec, Try<Void>> writeSourceFileFn
   ) {
     this.visibility = visibility.exists("package"::equals)
       ? Modifier.DEFAULT 
       : Modifier.PUBLIC;
     this.writeSourceFileFn = writeSourceFileFn;
+    this.factoryClassNameSuffix = factoryClassNameSuffix.getOrElse("Factory");
   }
 
   @Override
   public SourceFile apply(Bean bean) {
     return ImmutableAssistingFactoryBean.builder()
       .packageName(bean.packageName())
-      .name(bean.name() + "Factory")
+      .name(bean.name() + factoryClassNameSuffix)
       .fields(bean.injectedFields().map(Variable::asFieldSpec))
       .visibility(visibility)
       .factoryMethod(bean.createFactoryMethod())
@@ -50,7 +52,7 @@ public class AssistingFactoryBeanFactory implements CanProcessBeans {
       .build();
   }
 
-  public Constructor constructor(Bean bean) {
+  private Constructor constructor(Bean bean) {
     return ImmutableConstructor.builder()
       .classFields(bean.injectedFields())
       .annotations(
