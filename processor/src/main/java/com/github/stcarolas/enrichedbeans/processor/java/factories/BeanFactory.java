@@ -6,10 +6,9 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
-import javax.lang.model.type.DeclaredType;
-import com.github.stcarolas.enrichedbeans.processor.java.Bean;
+import com.github.stcarolas.enrichedbeans.processor.java.bean.Bean;
+import com.github.stcarolas.enrichedbeans.processor.java.bean.ImmutableBean;
 import com.github.stcarolas.enrichedbeans.processor.java.BeanBuilder;
-import com.github.stcarolas.enrichedbeans.processor.java.ImmutableBean;
 import com.github.stcarolas.enrichedbeans.processor.java.ImmutableBeanBuilder;
 import com.github.stcarolas.enrichedbeans.processor.java.Method;
 import com.github.stcarolas.enrichedbeans.processor.java.Variable;
@@ -23,7 +22,7 @@ import static io.vavr.API.*;
 
 @Named("BeanFactory")
 public class BeanFactory {
-  private VariableFactory fieldFactory;
+  private VariableFactory variableFactory;
   private AnnotationFactory annotationFactory;
   private MethodFactory methodFactory;
 
@@ -33,7 +32,7 @@ public class BeanFactory {
     AnnotationFactory annotationFactory,
     MethodFactory methodFactory
   ) {
-    this.fieldFactory = fieldFactory;
+    this.variableFactory = fieldFactory;
     this.annotationFactory = annotationFactory;
     this.methodFactory = methodFactory;
   }
@@ -43,6 +42,7 @@ public class BeanFactory {
       //.toString();
     //System.out.println(String.format("superclass: %s", superclass));
     return ImmutableBean.builder()
+      .variableFactory(variableFactory)
       .name(origin.getSimpleName().toString())
       .packageName(packageName(origin))
       .type(TypeName.get(origin.asType()))
@@ -78,7 +78,7 @@ public class BeanFactory {
   private Seq<Variable> fields(Element origin) {
     return List.ofAll(origin.getEnclosedElements())
       .filter(element -> element.getKind().isField())
-      .map(fieldFactory::from);
+      .map(variableFactory::from);
   }
 
   private Seq<ExecutableElement> constructors(Element origin) {
