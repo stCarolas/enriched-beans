@@ -30,10 +30,14 @@ import java.util.function.Predicate;
 @Immutable
 public abstract class Bean {
   private static final Logger log = LogManager.getLogger();
+  private static final String  DEFAULT_FACTORY_METHOD_NAME = "from";
+  private static final String  DEFAULT_BUILDER_METHOD_NAME = "builder";
 
   abstract public String name();
 
   abstract public String packageName();
+
+  abstract public Option<String> factoryMethodName();
 
   abstract public TypeName type();
 
@@ -80,7 +84,7 @@ public abstract class Bean {
   private MethodWithSpec factoryMethodUsingConstructor() {
     log.debug("Construct factory method using constructor with");
     return ImmutableFactoryMethod.builder()
-      .name("from")
+      .name(factoryMethodName().getOrElse(DEFAULT_FACTORY_METHOD_NAME))
       .returnType(type())
       .parameters(notInjectedFields())
       .objectFields(injectedFields())
@@ -91,7 +95,7 @@ public abstract class Bean {
     log.debug("Construct factory method using builder");
     return ImmutableFactoryMethodUsingBuilder.builder()
       .beanBuilder(beanBuilder)
-      .name("builder")
+      .name(DEFAULT_BUILDER_METHOD_NAME)
       .returnType(
         ClassName.get(
           String.format("%s.%s", beanBuilder.packageName(), beanBuilder.className()),

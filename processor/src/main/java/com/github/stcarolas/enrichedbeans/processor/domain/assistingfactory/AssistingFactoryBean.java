@@ -1,20 +1,9 @@
 package com.github.stcarolas.enrichedbeans.processor.domain.assistingfactory;
 
-import static io.vavr.API.Seq;
-import java.util.function.Predicate;
 import javax.inject.Named;
 import javax.lang.model.element.Modifier;
-import com.github.stcarolas.enrichedbeans.processor.java.Variable;
-import com.github.stcarolas.enrichedbeans.processor.java.annotation.ImmutableDefaultAnnotationImpl;
-import com.github.stcarolas.enrichedbeans.processor.java.annotation.assisted.AssistedAnnotation;
-import com.github.stcarolas.enrichedbeans.processor.java.annotation.enrich.EnrichAnnotation;
-import com.github.stcarolas.enrichedbeans.processor.java.annotation.inject.InjectAnnotation;
-import com.github.stcarolas.enrichedbeans.processor.java.annotation.named.NamedAnnotation;
-import com.github.stcarolas.enrichedbeans.processor.java.bean.Bean;
-import com.github.stcarolas.enrichedbeans.processor.java.factories.VariableFactory;
 import com.github.stcarolas.enrichedbeans.processor.domain.SourceFile;
 import com.github.stcarolas.enrichedbeans.processor.spec.method.Constructor;
-import com.github.stcarolas.enrichedbeans.processor.spec.method.ImmutableConstructor;
 import com.github.stcarolas.enrichedbeans.processor.spec.method.api.HasMethodSpec;
 import com.github.stcarolas.enrichedbeans.processor.spec.method.api.MethodWithSpec;
 import com.squareup.javapoet.AnnotationSpec;
@@ -28,8 +17,8 @@ import org.immutables.value.Value.Derived;
 import org.immutables.value.Value.Immutable;
 import io.vavr.Function2;
 import io.vavr.collection.Seq;
-import io.vavr.control.Option;
 import io.vavr.control.Try;
+
 import static io.vavr.API.*;
 
 @Immutable
@@ -50,7 +39,7 @@ public abstract class AssistingFactoryBean implements SourceFile {
   abstract Seq<FieldSpec> fields();
 
   @Default
-  public Seq<HasMethodSpec> methods() {
+  Seq<HasMethodSpec> methods() {
     return Seq(constructor(), factoryMethod());
   }
 

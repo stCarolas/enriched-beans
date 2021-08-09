@@ -8,7 +8,7 @@ import com.github.stcarolas.enrichedbeans.annotations.Assisted;
 import com.github.stcarolas.enrichedbeans.annotations.Enrich;
 import com.github.stcarolas.enrichedbeans.processor.domain.SourceFile;
 import com.github.stcarolas.enrichedbeans.processor.java.bean.Bean;
-import com.github.stcarolas.enrichedbeans.processor.java.factories.BeanFactory;
+import com.github.stcarolas.enrichedbeans.processor.java.bean.BeanFactory;
 import com.github.stcarolas.enrichedbeans.processor.spec.CanProcessBeans;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

@@ -1,4 +1,4 @@
-package com.github.stcarolas.enrichedbeans.processor.java.factories;
+package com.github.stcarolas.enrichedbeans.processor.java.bean;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -8,6 +8,8 @@ import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import com.github.stcarolas.enrichedbeans.processor.java.bean.Bean;
 import com.github.stcarolas.enrichedbeans.processor.java.bean.ImmutableBean;
+import com.github.stcarolas.enrichedbeans.processor.java.factories.MethodFactory;
+import com.github.stcarolas.enrichedbeans.processor.java.factories.VariableFactory;
 import com.github.stcarolas.enrichedbeans.processor.java.BeanBuilder;
 import com.github.stcarolas.enrichedbeans.processor.java.ImmutableBeanBuilder;
 import com.github.stcarolas.enrichedbeans.processor.java.Method;
@@ -22,16 +24,20 @@ import static io.vavr.API.*;
 
 @Named("BeanFactory")
 public class BeanFactory {
+
   private VariableFactory variableFactory;
   private AnnotationFactory annotationFactory;
   private MethodFactory methodFactory;
+  private Option<String> factoryMethodName;
 
   @Inject
   public BeanFactory(
+    @Named("defaultFactoryMethodName") Option<String> factoryMethodName,
     VariableFactory fieldFactory,
     AnnotationFactory annotationFactory,
     MethodFactory methodFactory
   ) {
+    this.factoryMethodName = factoryMethodName;
     this.variableFactory = fieldFactory;
     this.annotationFactory = annotationFactory;
     this.methodFactory = methodFactory;
@@ -45,6 +51,7 @@ public class BeanFactory {
       .variableFactory(variableFactory)
       .name(origin.getSimpleName().toString())
       .packageName(packageName(origin))
+      .factoryMethodName(factoryMethodName)
       .type(TypeName.get(origin.asType()))
       .subtypes(subtypes(origin))
       .fields(fields(origin))
