@@ -102,11 +102,13 @@ build:
     version: 2.0.0
     executions:
     - id: generate-uml
-      goals: map
+      goals: [map]
       phase: process-classes
     configuration:
       packages:
-       - com.github.stcarolas.enrichedbeans
+       - com.github.stcarolas.enrichedbeans.processor
+      includeMainDirectory: true
+      outputDirectory: ${project.basedir}/uml
 
   - groupId: org.apache.maven.plugins
     artifactId: maven-compiler-plugin
