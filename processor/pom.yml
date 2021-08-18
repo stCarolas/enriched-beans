@@ -96,6 +96,17 @@ build:
     - id: attach-sources
       goals: [jar-no-fork]
       phase: package
+      
+  - groupId: com.iluwatar.urm
+    artifactId: urm-maven-plugin
+    version: 2.0.0
+    executions:
+    - id: generate-uml
+      goals: map
+      phase: process-classes
+    configuration:
+      packages:
+       - com.github.stcarolas.enrichedbeans
 
   - groupId: org.apache.maven.plugins
     artifactId: maven-compiler-plugin
