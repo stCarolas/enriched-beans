@@ -35,7 +35,9 @@ public class SourceGeneratingModule {
 
   public Seq<Bean> apply(RoundEnvironment env, BeanFactory beanFactory) {
     log.info("scaning for beans to enrich");
-    return listEnrichedFields(env).distinct().map(beanFactory::from);
+    return listEnrichedFields(env)
+      .distinct()
+      .map(beanFactory::from);
   }
 
   @SuppressWarnings("unchecked")

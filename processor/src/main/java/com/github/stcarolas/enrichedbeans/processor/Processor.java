@@ -9,12 +9,10 @@ import com.github.stcarolas.enrichedbeans.processor.domain.SourceFile;
 import com.google.auto.service.AutoService;
 
 @AutoService(javax.annotation.processing.Processor.class)
-@SupportedAnnotationTypes(
-  {
-    "com.github.stcarolas.enrichedbeans.annotations.Enrich",
-    "com.github.stcarolas.enrichedbeans.annotations.Assisted"
-  }
-)
+@SupportedAnnotationTypes({
+  "com.github.stcarolas.enrichedbeans.annotations.Enrich",
+  "com.github.stcarolas.enrichedbeans.annotations.Assisted"
+})
 public class Processor extends AbstractProcessor {
 
   @Override
