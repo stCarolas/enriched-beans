@@ -1,4 +1,4 @@
 @org.immutables.value.Value.Style(
-	overshadowImplementation = true
+  overshadowImplementation = true
 )
 package com.github.stcarolas.enrichedbeans;

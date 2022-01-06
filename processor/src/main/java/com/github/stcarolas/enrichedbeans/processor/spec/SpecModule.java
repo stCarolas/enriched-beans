@@ -4,16 +4,15 @@ import dagger.Provides;
 import dagger.Module;
 import io.vavr.collection.Seq;
 import static io.vavr.API.*;
-
-import com.github.stcarolas.enrichedbeans.processor.domain.assistingfactory.AssistingFactoryBeanFactory;
+import javax.inject.Named;
+import com.github.stcarolas.enrichedbeans.javamodel.CanProcessBeans;
 
 @Module
 public class SpecModule {
 
   @Provides
-  public Seq<CanProcessBeans> processors(
-      AssistingFactoryBeanFactory assistingFactoryBean
-  ) {
-    return Seq(assistingFactoryBean);
+  @Named("CanProcessBeans")
+  public Seq<CanProcessBeans> processors() {
+    return Seq();
   }
 }

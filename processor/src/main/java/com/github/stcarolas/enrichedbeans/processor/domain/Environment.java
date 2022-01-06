@@ -18,6 +18,8 @@ import io.vavr.control.Try;
 
 @Module
 public class Environment {
+  private static final String DEFAULT_FACTORY_METHOD_NAME = "from";
+
   private RoundEnvironment roundEnv;
   private ProcessingEnvironment processingEnv;
 
@@ -33,20 +35,21 @@ public class Environment {
   }
 
   @Provides
-  public RoundEnvironment roundEnv(){
+  public RoundEnvironment roundEnv() {
     return roundEnv;
   }
 
   @Provides
-  public ProcessingEnvironment processingEnv(){
+  public ProcessingEnvironment processingEnv() {
     return processingEnv;
   }
 
   @Provides
   @Named("defaultFactoryMethodName")
-  public Option<String> detectFactoryMethodName() {
+  public String detectFactoryMethodName() {
     return Option(processingEnv.getOptions().get("factoryMethodName"))
-      .filter(name -> !name.isBlank());
+      .filter(name -> !name.isBlank())
+      .getOrElse(DEFAULT_FACTORY_METHOD_NAME);
   }
 
   @Provides

@@ -2,14 +2,15 @@ package com.github.stcarolas.enrichedbeans.processor;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
+import javax.inject.Named;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import com.github.stcarolas.enrichedbeans.annotations.Assisted;
 import com.github.stcarolas.enrichedbeans.annotations.Enrich;
-import com.github.stcarolas.enrichedbeans.processor.domain.SourceFile;
-import com.github.stcarolas.enrichedbeans.processor.java.bean.Bean;
-import com.github.stcarolas.enrichedbeans.processor.java.bean.BeanFactory;
-import com.github.stcarolas.enrichedbeans.processor.spec.CanProcessBeans;
+import com.github.stcarolas.enrichedbeans.javamodel.CanProcessBeans;
+import com.github.stcarolas.enrichedbeans.javamodel.SourceFile;
+import com.github.stcarolas.enrichedbeans.javamodel.bean.AbstractBeanFactory;
+import com.github.stcarolas.enrichedbeans.javamodel.bean.Bean;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import dagger.Provides;
@@ -20,11 +21,12 @@ import static io.vavr.API.*;
 
 @Module
 public class SourceGeneratingModule {
+  static final Logger log = LogManager.getLogger();
 
   @Provides
   public List<SourceFile> sources(
-    Seq<CanProcessBeans> processors,
-    BeanFactory beanFactory,
+    @Named("CanProcessBeans") Seq<CanProcessBeans> processors,
+    AbstractBeanFactory beanFactory,
     RoundEnvironment roundEnv,
     ProcessingEnvironment processingEnv
   ) {
@@ -33,7 +35,7 @@ public class SourceGeneratingModule {
       .toList();
   }
 
-  public Seq<Bean> apply(RoundEnvironment env, BeanFactory beanFactory) {
+  public Seq<Bean> apply(RoundEnvironment env, AbstractBeanFactory beanFactory) {
     log.info("scaning for beans to enrich");
     return listEnrichedFields(env)
       .distinct()
@@ -56,6 +58,4 @@ public class SourceGeneratingModule {
     targetBeans.forEach(bean -> log.info("enriched bean: {}", bean.getSimpleName()));
     return targetBeans.map(element -> (TypeElement) element);
   }
-
-  static final Logger log = LogManager.getLogger();
 }

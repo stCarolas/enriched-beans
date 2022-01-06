@@ -4,8 +4,9 @@ import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.lang.model.element.TypeElement;
+
+import com.github.stcarolas.enrichedbeans.javamodel.SourceFile;
 import com.github.stcarolas.enrichedbeans.processor.domain.Environment;
-import com.github.stcarolas.enrichedbeans.processor.domain.SourceFile;
 import com.google.auto.service.AutoService;
 
 @AutoService(javax.annotation.processing.Processor.class)

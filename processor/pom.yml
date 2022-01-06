@@ -48,7 +48,15 @@ dependencies:
     version:    0.6.2
 
   - groupId:    com.github.stcarolas.enriched-beans
-    artifactId: enriched-beans-annotations
+    artifactId: enriched-beans-java-model
+    version:    ${revision}
+
+  - groupId:    com.github.stcarolas.enriched-beans
+    artifactId: enriched-beans-assisted-inject-annotations
+    version:    ${revision}
+
+  - groupId:    com.github.stcarolas.enriched-beans
+    artifactId: enriched-beans-assisted-inject
     version:    ${revision}
 
   - groupId:    io.vavr
@@ -75,42 +83,6 @@ dependencies:
 build:
   plugins:
 
-  - groupId: org.codehaus.mojo
-    artifactId: flatten-maven-plugin
-    version: 1.1.0
-    configuration:
-      updatePomFile: true
-      flattenMode: resolveCiFriendliesOnly
-    executions:
-      - id: flatten
-        goals: [flatten]
-        phase: process-resources
-
-      - id: flatten.clean
-        goals: [clean]
-        phase: clean
-
-  - groupId: org.apache.maven.plugins
-    artifactId: maven-source-plugin
-    version: 3.2.1
-    executions:
-      - id: attach-sources
-        goals: [jar-no-fork]
-        phase: package
-      
-  - groupId: com.iluwatar.urm
-    artifactId: urm-maven-plugin
-    version: 2.0.0
-    executions:
-      - id: generate-uml
-        goals: [map]
-        phase: process-classes
-    configuration:
-      packages:
-         - com.github.stcarolas.enrichedbeans.processor
-      includeMainDirectory: true
-      outputDirectory: ${project.basedir}/uml
-
   - groupId: org.apache.maven.plugins
     artifactId: maven-compiler-plugin
     version: 3.8.1
@@ -126,21 +98,21 @@ build:
           type: jar
 
       annotationProcessorPaths:
-        - groupId: org.projectlombok
+        - groupId:    org.projectlombok
           artifactId: lombok
-          version: 1.18.12
+          version:    1.18.12
 
-        - groupId: org.immutables
+        - groupId:    org.immutables
           artifactId: value
-          version: 2.8.8
+          version:    2.8.8
 
-        - groupId: com.google.auto.service
+        - groupId:    com.google.auto.service
           artifactId: auto-service
-          version: 1.0-rc6
+          version:    1.0-rc6
 
-        - groupId: com.google.dagger
+        - groupId:    com.google.dagger
           artifactId: dagger-compiler
-          version: 2.30.1
+          version:    2.30.1
 
 distributionManagement:
   repository: 

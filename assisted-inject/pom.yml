@@ -1,0 +1,52 @@
+name:       Enriched Beans Assisted Inject Module
+artifactId: enriched-beans-assisted-inject
+groupId:    com.github.stcarolas.enriched-beans
+version:    ${revision}
+
+modelVersion: 4.0.0
+
+properties: 
+  maven.compiler.target: 1.8
+  maven.compiler.source: 1.8
+  maven.compile.nowarn: on
+  revision: 0.0.1
+  project.build.sourceEncoding: UTF-8
+
+dependencies:
+
+  - groupId:    com.squareup
+    artifactId: javapoet
+    version:    1.12.1
+
+  - groupId:    org.immutables
+    artifactId: value
+    version:    2.8.8
+    scope:      provided
+
+  - groupId:    org.immutables
+    artifactId: annotate
+    version:    2.8.8
+
+  - groupId:    org.immutables.vavr
+    artifactId: vavr-encodings
+    version:    0.6.2
+
+  - groupId:    io.vavr
+    artifactId: vavr
+    version:    0.10.2
+
+  - groupId:    javax.inject
+    artifactId: javax.inject
+    version:    1
+
+  - groupId:    org.apache.logging.log4j
+    artifactId: log4j-api
+    version:    2.14.0
+
+  - groupId:    org.apache.logging.log4j
+    artifactId: log4j-core
+    version:    2.14.0
+
+  - groupId:    com.github.stcarolas.enriched-beans
+    artifactId: enriched-beans-java-model
+    version:    ${revision}
