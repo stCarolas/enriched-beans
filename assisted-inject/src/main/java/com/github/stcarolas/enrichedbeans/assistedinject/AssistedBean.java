@@ -1,20 +1,27 @@
 package com.github.stcarolas.enrichedbeans.assistedinject;
 
 import java.util.function.Predicate;
+import javax.lang.model.element.Modifier;
 import com.github.stcarolas.enrichedbeans.assistedinject.annotation.assisted.AssistedAnnotation;
+import com.github.stcarolas.enrichedbeans.assistedinject.annotation.assisted.ImmutableAssistedAnnotation;
 import com.github.stcarolas.enrichedbeans.assistedinject.annotation.enrich.EnrichAnnotation;
 import com.github.stcarolas.enrichedbeans.assistedinject.annotation.inject.InjectAnnotation;
 import com.github.stcarolas.enrichedbeans.assistedinject.annotation.named.NamedAnnotation;
 import com.github.stcarolas.enrichedbeans.assistedinject.method.ImmutableFactoryMethodUsingBuilder;
 import com.github.stcarolas.enrichedbeans.assistedinject.method.ImmutableFactoryMethodUsingConstructor;
+import com.github.stcarolas.enrichedbeans.javamodel.SourceFile;
 import com.github.stcarolas.enrichedbeans.javamodel.bean.Bean;
 import com.github.stcarolas.enrichedbeans.javamodel.method.Method;
+import com.github.stcarolas.enrichedbeans.javamodel.method.constructor.Constructor;
+import com.github.stcarolas.enrichedbeans.javamodel.method.constructor.ImmutableConstructImpl;
 import com.github.stcarolas.enrichedbeans.javamodel.variable.AbstractVariableFactory;
 import com.github.stcarolas.enrichedbeans.javamodel.variable.ImmutableVariableImpl;
 import com.github.stcarolas.enrichedbeans.javamodel.variable.Variable;
 import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.TypeSpec;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import io.vavr.Function2;
 import io.vavr.collection.Seq;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
@@ -25,11 +32,48 @@ public abstract class AssistedBean extends Bean {
   private static final String DEFAULT_FACTORY_METHOD_NAME = "from";
   private static final String DEFAULT_BUILDER_METHOD_NAME = "builder";
 
+  abstract Modifier factoryVisibility();
+
+  abstract Function2<String, TypeSpec, Try<Void>> writeSourceFileFn();
+
   abstract public Option<String> factoryMethodName();
+
+  abstract public Option<String> factoryClassNameSuffix();
 
   abstract public Option<BeanBuilder> beanBuilder();
 
   abstract public AbstractVariableFactory variableFactory();
+
+  @Override
+  public Try<Seq<SourceFile>> process() {
+    return createFactoryMethod()
+      .map(
+        method -> Seq(
+          ImmutableAssistingFactoryBean.builder()
+            .packageName(packageName())
+            .className(className() + factoryClassNameSuffix())
+            .fields(injectedFields().map(Variable::asFieldSpec))
+            .visibility(factoryVisibility())
+            .factoryMethod(method)
+            .constructor(constructorForFactory())
+            .writeSourceFileFn(writeSourceFileFn())
+            .build()
+        )
+      );
+  }
+
+  private Constructor constructorForFactory() {
+    return ImmutableConstructImpl.builder() //.classFields(bean.injectedFields())
+      .annotations(
+        Seq(
+          ImmutableAssistedAnnotation.builder()
+            .className("Inject")
+            .packageName("javax.inject")
+            .build()
+        )
+      )
+      .build();
+  }
 
   public boolean assistAllInjectedFields() {
     return annotations()

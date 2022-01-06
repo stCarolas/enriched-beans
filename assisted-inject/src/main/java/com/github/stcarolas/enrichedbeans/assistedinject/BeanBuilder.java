@@ -4,6 +4,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.immutables.value.Value.Immutable;
 
+/**
+* @deprecated
+*/
 @Immutable
 public interface BeanBuilder {
   String packageName();

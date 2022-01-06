@@ -7,6 +7,7 @@ modelVersion: 4.0.0
 packaging: pom
 
 modules:
+  - java-model-testdatabuilders
   - java-model
   - assisted-inject-annotations
   - assisted-inject
