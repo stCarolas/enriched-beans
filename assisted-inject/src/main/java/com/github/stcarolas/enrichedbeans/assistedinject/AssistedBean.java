@@ -87,6 +87,7 @@ public abstract class AssistedBean extends Bean {
 
   public Method createFactoryMethod() {
     Option<BeanBuilder> builder = useBuilder() ? beanBuilder() : None();
+    log.atInfo().log("Builder: {}", builder);
     return builder.map(this::factoryMethodUsingBuilder)
       .getOrElse(this::factoryMethodUsingConstructor);
   }

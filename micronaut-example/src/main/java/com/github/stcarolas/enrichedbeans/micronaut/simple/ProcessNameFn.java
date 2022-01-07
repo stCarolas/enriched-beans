@@ -1,10 +1,10 @@
-package com.github.stcarolas.enrichedbeans.micronaut;
+package com.github.stcarolas.enrichedbeans.micronaut.simple;
 
 import java.util.function.Function;
 import javax.inject.Named;
 
 @Named("ProcessName")
-public class ProcessName implements Function<String, String> {
+public class ProcessNameFn implements Function<String, String> {
 
   public String apply(String name) {
     return name;
