@@ -1,12 +1,42 @@
 package com.github.stcarolas.enrichedbeans.processor;
 
-import com.github.stcarolas.enrichedbeans.javamodel.SourceFile;
-import com.github.stcarolas.enrichedbeans.processor.domain.Environment;
-import com.github.stcarolas.enrichedbeans.processor.spec.SpecModule;
-import dagger.Component;
-import io.vavr.collection.List;
+import javax.annotation.processing.ProcessingEnvironment;
+import javax.annotation.processing.RoundEnvironment;
 
-@Component(modules = { SpecModule.class, Environment.class, SourceGeneratingModule.class })
+import com.github.stcarolas.enrichedbeans.javamodel.SourceFile;
+import com.github.stcarolas.enrichedbeans.javamodel.bean.Bean;
+import com.github.stcarolas.enrichedbeans.processor.modules.AnnotationFactoriesModule;
+import com.github.stcarolas.enrichedbeans.processor.modules.BeanFactoriesModule;
+import com.github.stcarolas.enrichedbeans.processor.modules.BeansModule;
+import com.github.stcarolas.enrichedbeans.processor.modules.MethodFactoriesModule;
+import com.github.stcarolas.enrichedbeans.processor.modules.SourceFilesModule;
+import com.github.stcarolas.enrichedbeans.processor.modules.VariableFactoriesModule;
+import dagger.BindsInstance;
+import dagger.Component;
+import io.vavr.collection.Seq;
+import io.vavr.control.Try;
+
+@Component(
+  modules = {
+    VariableFactoriesModule.class,
+    AnnotationFactoriesModule.class,
+    MethodFactoriesModule.class,
+    BeanFactoriesModule.class,
+    BeansModule.class,
+    SourceFilesModule.class
+  }
+)
 public interface EnrichProcessorComponent {
-  List<SourceFile> generated();
+  Try<Seq<SourceFile>> beans();
+
+  @Component.Builder
+  interface Builder {
+    @BindsInstance
+    Builder roundEnv(RoundEnvironment roundEnv);
+
+    @BindsInstance
+    Builder processingEnv(ProcessingEnvironment processingEnv);
+
+    EnrichProcessorComponent build();
+  }
 }

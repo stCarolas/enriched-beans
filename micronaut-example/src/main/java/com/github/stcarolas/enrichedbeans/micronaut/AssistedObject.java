@@ -1,16 +1,14 @@
 package com.github.stcarolas.enrichedbeans.micronaut;
 
 import java.util.function.Function;
-
 import javax.inject.Inject;
 import javax.inject.Named;
-
 import com.github.stcarolas.enrichedbeans.annotations.Assisted;
-
 import org.immutables.value.Value.Immutable;
 
 @Assisted(useBuilder = true)
-@Immutable public abstract class AssistedObject {
+@Immutable
+public abstract class AssistedObject {
 
   abstract public String name();
 
@@ -20,8 +18,7 @@ import org.immutables.value.Value.Immutable;
   @Inject
   abstract public InjectedClass someField();
 
-  public String processName(){
+  public String processName() {
     return processNameFn().apply(name());
   }
-
 }

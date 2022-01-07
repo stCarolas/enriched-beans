@@ -42,7 +42,7 @@ public class AbstractMethodFactory {
       .returnType(TypeName.get(originalMethod.getReturnType()))
       .parameters(List.ofAll(originalMethod.getParameters()).map(variableFactory::from))
       .annotations(
-        List.ofAll(originalMethod.getAnnotationMirrors()).map(annotationFactory::from)
+        List.ofAll(originalMethod.getAnnotationMirrors()).flatMap(annotationFactory::from)
       )
       .build();
   }

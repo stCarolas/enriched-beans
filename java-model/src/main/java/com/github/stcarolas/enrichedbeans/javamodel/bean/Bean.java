@@ -34,13 +34,7 @@ public abstract class Bean {
 
   abstract public Try<Seq<SourceFile>> process();
 
-  public Try<TypeName> asType() {
-    return Try(
-      () -> TypeName.get(
-        Class.forName(String.format("%s.%s", packageName(), className()))
-      )
-    );
-  }
+  abstract public TypeName type();
 
   @Override
   public String toString() {

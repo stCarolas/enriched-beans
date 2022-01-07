@@ -5,6 +5,7 @@ import javax.inject.Named;
 
 @Named("ProcessName")
 public class ProcessName implements Function<String, String> {
+
   public String apply(String name) {
     return name;
   }

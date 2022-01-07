@@ -1,15 +1,16 @@
 package com.github.stcarolas.enrichedbeans.javamodel.annotation;
 
+import static io.vavr.API.Some;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.lang.model.element.AnnotationMirror;
-import javax.lang.model.element.AnnotationValue;
-import javax.lang.model.element.TypeElement;
-import io.vavr.collection.HashMap;
+
 import io.vavr.collection.Seq;
+import io.vavr.control.Option;
 
 @Named
-public class AbstractAnnotationFactory {
+public class AbstractAnnotationFactory extends AnnotationFactory {
 
   private Seq<AnnotationFactory> factories;
 
@@ -20,10 +21,10 @@ public class AbstractAnnotationFactory {
     this.factories = factories;
   }
 
-  public Annotation from(AnnotationMirror mirror) {
+  public Option<Annotation> from(AnnotationMirror mirror) {
     return factories.flatMap(f -> f.from(mirror))
       .headOption()
-      .getOrElse(defaultImplementation(mirror));
+      .orElse(Some(defaultImplementation(mirror)));
 
     //if (fullName.equals(Assisted.class.getCanonicalName())){
     //annotation = ImmutableAssistedAnnotation.builder()
@@ -55,24 +56,4 @@ public class AbstractAnnotationFactory {
     //}
   }
 
-  protected final Annotation defaultImplementation(AnnotationMirror mirror) {
-    TypeElement annoElement = ((TypeElement) mirror.getAnnotationType().asElement());
-
-    HashMap<String, Object> parameters = HashMap.ofAll(mirror.getElementValues())
-      .mapKeys(Object::toString)
-      .mapValues(AnnotationValue::getValue);
-
-    String className = annoElement.getSimpleName().toString();
-    String packageName = packageName(annoElement.getQualifiedName().toString());
-
-    return ImmutableAnnotationImpl.builder()
-      .className(className)
-      .packageName(packageName)
-      .parameters(parameters)
-      .build();
-  }
-
-  private String packageName(String fullName) {
-    return fullName.substring(0, fullName.lastIndexOf('.'));
-  }
 }

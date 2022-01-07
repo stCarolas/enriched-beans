@@ -5,10 +5,12 @@ import com.github.stcarolas.enrichedbeans.javamodel.method.Method;
 import com.github.stcarolas.enrichedbeans.javamodel.variable.Variable;
 import com.squareup.javapoet.CodeBlock;
 import org.immutables.value.Value.Immutable;
+import org.immutables.vavr.encodings.VavrEncodingEnabled;
 
 import io.vavr.collection.Seq;
 
 @Immutable
+@VavrEncodingEnabled
 public abstract class FactoryMethodUsingBuilder extends Method {
 
   abstract BeanBuilder beanBuilder();
@@ -26,7 +28,7 @@ public abstract class FactoryMethodUsingBuilder extends Method {
       .toString();
 
     return CodeBlock.builder()
-      .add("return %s(%s);", beanBuilder().build(), settingsParametersLine)
+      .add(String.format("return %s(%s);", beanBuilder().build(), settingsParametersLine))
       .build();
   }
 }

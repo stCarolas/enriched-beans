@@ -35,7 +35,7 @@ public class AbstractVariableFactory {
       .name(element.getSimpleName().toString())
       .type(ParameterizedTypeName.get(element.asType()))
       .annotations(
-        List.ofAll(element.getAnnotationMirrors()).map(annotationFactory::from)
+        List.ofAll(element.getAnnotationMirrors()).flatMap(annotationFactory::from)
       )
       .modifiers(List(Modifier.PRIVATE))
       .build();

@@ -1,11 +1,39 @@
 package com.github.stcarolas.enrichedbeans.javamodel.method.constructor;
 
 import static org.immutables.value.Value.Immutable;
+
+import javax.lang.model.element.Modifier;
+
+import com.github.stcarolas.enrichedbeans.javamodel.annotation.Annotation;
 import com.github.stcarolas.enrichedbeans.javamodel.method.Method;
+import com.github.stcarolas.enrichedbeans.javamodel.variable.Variable;
 import com.squareup.javapoet.CodeBlock;
+import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.TypeName;
+
 import org.immutables.vavr.encodings.VavrEncodingEnabled;
 
+import io.vavr.NotImplementedError;
+
 public abstract class Constructor extends Method {
+
+  public String name(){
+    return "";
+  }
+
+  public TypeName returnType(){
+    throw new NotImplementedError();
+  }
+
+  @Override
+  public MethodSpec spec(){
+    return MethodSpec.constructorBuilder()
+      .addParameters(parameters().map(Variable::asParameterSpec))
+      .addAnnotations(annotations().map(Annotation::spec))
+      .addModifiers(Modifier.PUBLIC)
+      .addCode(code())
+      .build();
+  }
 
   @Override
   protected CodeBlock code() {

@@ -4,9 +4,12 @@ import com.github.stcarolas.enrichedbeans.javamodel.method.Method;
 import com.github.stcarolas.enrichedbeans.javamodel.variable.Variable;
 import com.squareup.javapoet.CodeBlock;
 import org.immutables.value.Value.Immutable;
+import org.immutables.vavr.encodings.VavrEncodingEnabled;
+
 import io.vavr.collection.Seq;
 
 @Immutable
+@VavrEncodingEnabled
 public abstract class FactoryMethodUsingConstructor extends Method {
 
   abstract Seq<Variable> injectedFields();
@@ -16,7 +19,7 @@ public abstract class FactoryMethodUsingConstructor extends Method {
     Seq<String> fields = parameters().appendAll(injectedFields()).map(Variable::accessor);
 
     return CodeBlock.builder()
-      .add("return new %s(%s);", returnType().toString(), fields.mkString(","))
+      .add(String.format("return new %s(%s);", returnType().toString(), fields.mkString(",")))
       .build();
   }
 }
