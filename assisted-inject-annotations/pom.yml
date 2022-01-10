@@ -3,7 +3,7 @@ artifactId: enriched-beans-assisted-inject-annotations
 version:    ${revision}
 
 parent:
-  groupId:    com.github.stcarolas.enriched-beans
+  groupId:    io.github.stcarolas.enriched-beans
   artifactId: enriched-beans-parent-pom
   version:    0.0.1
 

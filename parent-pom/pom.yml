@@ -1,6 +1,6 @@
 name:       Enriched Beans Parent Pom
 artifactId: enriched-beans-parent-pom
-groupId:    com.github.stcarolas.enriched-beans
+groupId:    io.github.stcarolas.enriched-beans
 version:    0.0.1
 packaging:  pom
 
