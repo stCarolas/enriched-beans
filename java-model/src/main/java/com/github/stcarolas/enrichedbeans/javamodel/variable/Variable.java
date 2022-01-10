@@ -20,8 +20,13 @@ public abstract class Variable {
   abstract public List<Annotation> annotations();
 
   public ParameterSpec asParameterSpec() {
-    return annotations()//.reject(annotation -> annotation instanceof EnrichAnnotation)
-    .map(Annotation::spec).foldLeft(ParameterSpec.builder(type(), name()), ParameterSpec.Builder::addAnnotation).build();
+    return annotations()
+      .map(Annotation::spec)
+      .foldLeft(
+        ParameterSpec.builder(type(), name()),
+        ParameterSpec.Builder::addAnnotation
+      )
+      .build();
   }
 
   public FieldSpec asFieldSpec() {
@@ -39,8 +44,8 @@ public abstract class Variable {
       .annotations(
         annotations()
           .reject(
-            annotation -> annotation.packageName().equals(packageName) 
-              && annotation.className().equals(className)
+            annotation -> annotation.packageName().equals(packageName) &&
+            annotation.className().equals(className)
           )
       )
       .build();

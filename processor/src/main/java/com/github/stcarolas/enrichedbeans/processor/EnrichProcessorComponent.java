@@ -3,8 +3,8 @@ package com.github.stcarolas.enrichedbeans.processor;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 
-import com.github.stcarolas.enrichedbeans.javamodel.SourceFile;
 import com.github.stcarolas.enrichedbeans.javamodel.bean.Bean;
+import com.github.stcarolas.enrichedbeans.javamodel.bean.GeneratedBean;
 import com.github.stcarolas.enrichedbeans.processor.modules.AnnotationFactoriesModule;
 import com.github.stcarolas.enrichedbeans.processor.modules.BeanFactoriesModule;
 import com.github.stcarolas.enrichedbeans.processor.modules.BeansModule;
@@ -27,7 +27,7 @@ import io.vavr.control.Try;
   }
 )
 public interface EnrichProcessorComponent {
-  Try<Seq<SourceFile>> beans();
+  Try<Seq<GeneratedBean>> beans();
 
   @Component.Builder
   interface Builder {

@@ -1,49 +1,10 @@
-name: Enriched Beans Assisted Inject Annotations
+name:       Enriched Beans Assisted Inject Annotations
 artifactId: enriched-beans-assisted-inject-annotations
-groupId: com.github.stcarolas.enriched-beans
-version: ${revision} 
+version:    ${revision}
+
+parent:
+  groupId:    com.github.stcarolas.enriched-beans
+  artifactId: enriched-beans-parent-pom
+  version:    0.0.1
 
 modelVersion: 4.0.0
-
-properties: 
-  maven.compiler.target: 1.8
-  maven.compiler.source: 1.8
-  maven.compile.nowarn: on
-  revision: 0.0.1
-  project.build.sourceEncoding: UTF-8
-
-build:
-  plugins:
-
-  - groupId: org.codehaus.mojo
-    artifactId: flatten-maven-plugin
-    version: 1.1.0
-    configuration:
-      updatePomFile: true
-      flattenMode: resolveCiFriendliesOnly
-    executions:
-    - id: flatten-pom
-      goals: [flatten]
-      phase: process-resources
-    - id: clean-flattened-pom
-      goals: [clean]
-      phase: clean
-
-  - groupId: org.apache.maven.plugins
-    artifactId: maven-source-plugin
-    version: 3.2.1
-    executions:
-    - id: add-sources
-      goals: [jar-no-fork]
-      phase: package
-
-  - groupId: org.apache.maven.plugins
-    artifactId: maven-compiler-plugin
-    version: 3.8.1
-
-distributionManagement:
-  repository: 
-    id: bintray-stcarolas-maven
-    layout: default
-    uniqueVersion: true
-    url: "https://api.bintray.com/maven/stcarolas/maven/${project.artifactId}/;publish=1"

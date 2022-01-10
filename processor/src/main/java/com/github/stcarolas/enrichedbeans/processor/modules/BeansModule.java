@@ -9,6 +9,8 @@ import com.github.stcarolas.enrichedbeans.annotations.Assisted;
 import com.github.stcarolas.enrichedbeans.annotations.Enrich;
 import com.github.stcarolas.enrichedbeans.javamodel.bean.AbstractBeanFactory;
 import com.github.stcarolas.enrichedbeans.javamodel.bean.Bean;
+import com.github.stcarolas.enrichedbeans.javamodel.bean.EnrichableBean;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import dagger.Provides;

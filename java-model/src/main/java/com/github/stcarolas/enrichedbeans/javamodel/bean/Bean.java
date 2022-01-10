@@ -1,20 +1,19 @@
 package com.github.stcarolas.enrichedbeans.javamodel.bean;
 
-import static io.vavr.API.Try;
-import static io.vavr.API.Seq;
-import static io.vavr.API.Success;
 import javax.lang.model.element.ExecutableElement;
-import com.github.stcarolas.enrichedbeans.javamodel.SourceFile;
+
+import com.github.stcarolas.enrichedbeans.javamodel.Environment;
 import com.github.stcarolas.enrichedbeans.javamodel.annotation.Annotation;
 import com.github.stcarolas.enrichedbeans.javamodel.method.Method;
 import com.github.stcarolas.enrichedbeans.javamodel.variable.Variable;
 import com.squareup.javapoet.TypeName;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.immutables.value.Value.Immutable;
 import org.immutables.vavr.encodings.VavrEncodingEnabled;
+
 import io.vavr.collection.Seq;
-import io.vavr.control.Try;
 
 @Immutable
 public abstract class Bean {
@@ -32,9 +31,7 @@ public abstract class Bean {
 
   abstract public Seq<Method> methods();
 
-  abstract public Try<Seq<SourceFile>> process();
-
-  abstract public TypeName type();
+  abstract public Environment env();
 
   @Override
   public String toString() {
@@ -43,10 +40,5 @@ public abstract class Bean {
 
   @Immutable
   @VavrEncodingEnabled
-  public abstract static class BeanImpl extends Bean {
-
-    public Try<Seq<SourceFile>> process() {
-      return Success(Seq());
-    }
-  }
+  public abstract static class BeanImpl extends Bean {}
 }

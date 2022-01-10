@@ -10,7 +10,6 @@ import com.squareup.javapoet.TypeSpec;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.squareup.javapoet.JavaFile;
-import io.vavr.Function2;
 import io.vavr.collection.List;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
@@ -32,14 +31,12 @@ public class Environment {
     return List.ofAll(roundEnv.getRootElements()).map(element -> (TypeElement) element);
   }
 
-  public Option<String> getOption(String name){
-    return Option(processingEnv.getOptions().get(name))
-      .filter(it -> !it.isBlank());
+  public Option<String> getOption(String name) {
+    return Option(processingEnv.getOptions().get(name)).filter(it -> !it.isBlank());
   }
 
-  // todo refack
-  public Function2<String, TypeSpec, Try<Void>> writeSourceFileFn() {
-    return (packageName, spec) -> Try.run(
+  public Try<Void> writeSource(String packageName, TypeSpec spec) {
+    return Try.run(
       () -> JavaFile.builder(packageName, spec).build().writeTo(processingEnv.getFiler())
     )
       .onFailure(error -> log.error("Error while writing source file: {}", error));

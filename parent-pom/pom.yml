@@ -1,0 +1,104 @@
+name:       Enriched Beans Parent Pom
+artifactId: enriched-beans-parent-pom
+groupId:    com.github.stcarolas.enriched-beans
+version:    0.0.1
+packaging:  pom
+
+modelVersion: 4.0.0
+
+properties: 
+  maven.compiler.target: 1.8
+  maven.compiler.source: 1.8
+  maven.compile.nowarn: on
+  revision: 0.0.1
+  project.build.sourceEncoding: UTF-8
+
+dependencies:
+
+  - groupId:    com.squareup
+    artifactId: javapoet
+    version:    1.12.1
+
+  - groupId:    org.immutables
+    artifactId: value
+    version:    2.8.8
+    scope:      provided
+
+  - groupId:    org.immutables
+    artifactId: annotate
+    version:    2.8.8
+
+  - groupId:    org.immutables.vavr
+    artifactId: vavr-encodings
+    version:    0.6.2
+
+  - groupId:    org.apache.logging.log4j
+    artifactId: log4j-api
+    version:    2.14.0
+
+  - groupId:    org.apache.logging.log4j
+    artifactId: log4j-core
+    version:    2.14.0
+
+  - groupId:    io.vavr
+    artifactId: vavr
+    version:    0.10.2
+
+  - groupId:    javax.inject
+    artifactId: javax.inject
+    version:    1
+
+  - groupId: org.junit.jupiter
+    artifactId: junit-jupiter-engine
+    version: 5.6.2
+    scope: test
+
+build:
+  plugins:
+
+  - groupId: org.codehaus.mojo
+    artifactId: flatten-maven-plugin
+    version: 1.1.0
+    configuration:
+      updatePomFile: true
+      flattenMode: resolveCiFriendliesOnly
+    executions:
+    - id: flatten-pom
+      goals: [flatten]
+      phase: process-resources
+    - id: clean-flattened-pom
+      goals: [clean]
+      phase: clean
+
+  - groupId: org.apache.maven.plugins
+    artifactId: maven-source-plugin
+    version: 3.2.1
+    executions:
+    - id: add-sources
+      goals: [jar-no-fork]
+      phase: package
+
+  - groupId: org.apache.maven.plugins
+    artifactId: maven-compiler-plugin
+    version: 3.8.1
+    configuration:
+      compilerArguments:
+        AaddGeneratedAnnotation: false
+        Adebug: true
+
+      dependencies:
+        - groupId: org.ow2.asm
+          artifactId: asm
+          version: 7.3.1
+          type: jar
+
+      annotationProcessorPaths:
+
+        - groupId:    org.immutables
+          artifactId: value
+          version:    2.8.8
+
+distributionManagement:
+  snapshotRepository: 
+    id: ossrh
+    url: https://s01.oss.sonatype.org/content/repositories/snapshots

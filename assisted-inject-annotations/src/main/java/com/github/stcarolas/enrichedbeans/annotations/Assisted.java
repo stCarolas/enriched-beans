@@ -9,5 +9,4 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.SOURCE)
 public @interface Assisted {
   boolean assistAllInjectedFields() default true;
-  boolean useBuilder() default false;
 }

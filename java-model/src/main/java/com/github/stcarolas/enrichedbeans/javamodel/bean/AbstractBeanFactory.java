@@ -4,6 +4,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.lang.model.element.Element;
 
+import com.github.stcarolas.enrichedbeans.javamodel.Environment;
 import com.github.stcarolas.enrichedbeans.javamodel.annotation.AbstractAnnotationFactory;
 import com.github.stcarolas.enrichedbeans.javamodel.method.AbstractMethodFactory;
 import com.github.stcarolas.enrichedbeans.javamodel.variable.AbstractVariableFactory;
@@ -21,9 +22,10 @@ public class AbstractBeanFactory extends BeanFactory {
       AbstractVariableFactory variableFactory,
       AbstractAnnotationFactory annotationFactory,
       AbstractMethodFactory methodFactory,
+      Environment env,
       @Named("BeanFactories") Seq<BeanFactory> factories
   ){
-    super(variableFactory, annotationFactory, methodFactory);
+    super(variableFactory, annotationFactory, methodFactory, env);
     this.factories = factories;
   }
 

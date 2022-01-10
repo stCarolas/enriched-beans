@@ -5,6 +5,7 @@ import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 
+import com.github.stcarolas.enrichedbeans.javamodel.Environment;
 import com.github.stcarolas.enrichedbeans.javamodel.annotation.AbstractAnnotationFactory;
 import com.github.stcarolas.enrichedbeans.javamodel.annotation.Annotation;
 import com.github.stcarolas.enrichedbeans.javamodel.method.AbstractMethodFactory;
@@ -22,21 +23,24 @@ public abstract class BeanFactory {
   private final AbstractVariableFactory variableFactory;
   private final AbstractAnnotationFactory annotationFactory;
   private final AbstractMethodFactory methodFactory;
+  private final Environment env;
 
   public BeanFactory(
     AbstractVariableFactory variableFactory,
     AbstractAnnotationFactory annotationFactory,
-    AbstractMethodFactory methodFactory
+    AbstractMethodFactory methodFactory,
+    Environment env
   ){
     this.variableFactory = variableFactory;
     this.annotationFactory = annotationFactory;
     this.methodFactory = methodFactory;
+    this.env = env;
   }
 
   abstract public Option<Bean> from(Element origin);
 
   protected final Bean defaultImplementation(Element origin) {
-    return ImmutableBeanImpl.builder()
+    return ImmutableEnrichableBeanImpl.builder()
       .className(origin.getSimpleName().toString())
       .packageName(packageName(origin))
       .fields(fields(origin))
@@ -44,6 +48,7 @@ public abstract class BeanFactory {
       .constructors(constructors(origin))
       .annotations(annotations(origin))
       .methods(methods(origin))
+      .env(env)
       .build();
   }
 

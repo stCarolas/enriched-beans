@@ -16,11 +16,4 @@ public abstract class AssistedAnnotation extends Annotation {
       .getOrElse(false);
   }
 
-  public boolean useBuilder() {
-    return parameters()
-      .get("useBuilder()")
-      .map(it -> (Boolean) it)
-      .getOrElse(false);
-  }
-
 }
