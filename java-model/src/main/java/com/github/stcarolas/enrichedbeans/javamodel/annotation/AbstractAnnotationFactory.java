@@ -25,35 +25,6 @@ public class AbstractAnnotationFactory extends AnnotationFactory {
     return factories.flatMap(f -> f.from(mirror))
       .headOption()
       .orElse(Some(defaultImplementation(mirror)));
-
-    //if (fullName.equals(Assisted.class.getCanonicalName())){
-    //annotation = ImmutableAssistedAnnotation.builder()
-    //.className(className)
-    //.packageName(packageName)
-    //.parameters(parameters)
-    //.build();
-    //}
-    //if (fullName.equals(Enrich.class.getCanonicalName())){
-    //annotation = ImmutableEnrichAnnotation.builder()
-    //.className(className)
-    //.packageName(packageName)
-    //.parameters(parameters)
-    //.build();
-    //}
-    //if (fullName.equals(Named.class.getCanonicalName())){
-    //annotation = ImmutableNamedAnnotation.builder()
-    //.className(className)
-    //.packageName(packageName)
-    //.parameters(parameters)
-    //.build();
-    //}
-    //if (fullName.equals(Inject.class.getCanonicalName())){
-    //annotation = ImmutableNamedAnnotation.builder()
-    //.className(className)
-    //.packageName(packageName)
-    //.parameters(parameters)
-    //.build();
-    //}
   }
 
 }
