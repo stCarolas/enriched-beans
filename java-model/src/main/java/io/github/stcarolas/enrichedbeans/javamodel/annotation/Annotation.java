@@ -1,4 +1,4 @@
-package com.github.stcarolas.enrichedbeans.javamodel.annotation;
+package io.github.stcarolas.enrichedbeans.javamodel.annotation;
 
 import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ClassName;

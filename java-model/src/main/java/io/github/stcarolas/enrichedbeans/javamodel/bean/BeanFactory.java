@@ -1,17 +1,17 @@
-package com.github.stcarolas.enrichedbeans.javamodel.bean;
+package io.github.stcarolas.enrichedbeans.javamodel.bean;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 
-import com.github.stcarolas.enrichedbeans.javamodel.Environment;
-import com.github.stcarolas.enrichedbeans.javamodel.annotation.AbstractAnnotationFactory;
-import com.github.stcarolas.enrichedbeans.javamodel.annotation.Annotation;
-import com.github.stcarolas.enrichedbeans.javamodel.method.AbstractMethodFactory;
-import com.github.stcarolas.enrichedbeans.javamodel.method.Method;
-import com.github.stcarolas.enrichedbeans.javamodel.variable.AbstractVariableFactory;
-import com.github.stcarolas.enrichedbeans.javamodel.variable.Variable;
+import io.github.stcarolas.enrichedbeans.javamodel.Environment;
+import io.github.stcarolas.enrichedbeans.javamodel.annotation.AbstractAnnotationFactory;
+import io.github.stcarolas.enrichedbeans.javamodel.annotation.Annotation;
+import io.github.stcarolas.enrichedbeans.javamodel.method.AbstractMethodFactory;
+import io.github.stcarolas.enrichedbeans.javamodel.method.Method;
+import io.github.stcarolas.enrichedbeans.javamodel.variable.AbstractVariableFactory;
+import io.github.stcarolas.enrichedbeans.javamodel.variable.Variable;
 import com.squareup.javapoet.TypeName;
 
 import io.vavr.collection.List;

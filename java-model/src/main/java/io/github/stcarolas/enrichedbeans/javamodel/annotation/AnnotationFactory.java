@@ -1,4 +1,4 @@
-package com.github.stcarolas.enrichedbeans.javamodel.annotation;
+package io.github.stcarolas.enrichedbeans.javamodel.annotation;
 
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;

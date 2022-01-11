@@ -1,4 +1,4 @@
-package com.github.stcarolas.enrichedbeans.javamodel.annotation;
+package io.github.stcarolas.enrichedbeans.javamodel.annotation;
 
 import static io.vavr.API.Some;
 

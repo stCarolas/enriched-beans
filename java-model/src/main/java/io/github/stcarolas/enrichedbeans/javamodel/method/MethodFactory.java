@@ -1,4 +1,4 @@
-package  com.github.stcarolas.enrichedbeans.javamodel.method;
+package  io.github.stcarolas.enrichedbeans.javamodel.method;
 
 import javax.lang.model.element.Element;
 

@@ -1,10 +1,10 @@
-package com.github.stcarolas.enrichedbeans.processor.modules;
+package io.github.stcarolas.enrichedbeans.processor.modules;
 
 import javax.inject.Named;
 
-import com.github.stcarolas.enrichedbeans.javamodel.bean.Bean;
-import com.github.stcarolas.enrichedbeans.javamodel.bean.EnrichableBean;
-import com.github.stcarolas.enrichedbeans.javamodel.bean.GeneratedBean;
+import io.github.stcarolas.enrichedbeans.javamodel.bean.Bean;
+import io.github.stcarolas.enrichedbeans.javamodel.bean.EnrichableBean;
+import io.github.stcarolas.enrichedbeans.javamodel.bean.GeneratedBean;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

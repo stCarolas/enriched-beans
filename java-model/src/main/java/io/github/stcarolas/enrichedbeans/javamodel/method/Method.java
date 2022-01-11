@@ -1,9 +1,9 @@
-package  com.github.stcarolas.enrichedbeans.javamodel.method;
+package  io.github.stcarolas.enrichedbeans.javamodel.method;
 
 import javax.lang.model.element.Modifier;
 
-import com.github.stcarolas.enrichedbeans.javamodel.annotation.Annotation;
-import com.github.stcarolas.enrichedbeans.javamodel.variable.Variable;
+import io.github.stcarolas.enrichedbeans.javamodel.annotation.Annotation;
+import io.github.stcarolas.enrichedbeans.javamodel.variable.Variable;
 import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeName;

@@ -1,9 +1,9 @@
-package com.github.stcarolas.enrichedbeans.javamodel.variable;
+package io.github.stcarolas.enrichedbeans.javamodel.variable;
 
 import org.junit.jupiter.api.Test;
 import io.vavr.collection.Map;
-import com.github.stcarolas.enrichedbeans.javamodel.annotation.Annotation;
-import com.github.stcarolas.enrichedbeans.javamodel.variable.ImmutableVariableImpl.Builder;
+import io.github.stcarolas.enrichedbeans.javamodel.annotation.Annotation;
+import io.github.stcarolas.enrichedbeans.javamodel.variable.ImmutableVariableImpl.Builder;
 import com.squareup.javapoet.TypeName;
 import static org.junit.jupiter.api.Assertions.*;
 import static io.vavr.API.*;

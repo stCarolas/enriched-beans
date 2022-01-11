@@ -1,10 +1,10 @@
-package com.github.stcarolas.enrichedbeans.javamodel.variable;
+package io.github.stcarolas.enrichedbeans.javamodel.variable;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
-import com.github.stcarolas.enrichedbeans.javamodel.annotation.AbstractAnnotationFactory;
+import io.github.stcarolas.enrichedbeans.javamodel.annotation.AbstractAnnotationFactory;
 import com.squareup.javapoet.ParameterizedTypeName;
 import io.vavr.collection.List;
 import io.vavr.collection.Seq;

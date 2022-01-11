@@ -1,13 +1,13 @@
-package  com.github.stcarolas.enrichedbeans.javamodel.bean;
+package  io.github.stcarolas.enrichedbeans.javamodel.bean;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.lang.model.element.Element;
 
-import com.github.stcarolas.enrichedbeans.javamodel.Environment;
-import com.github.stcarolas.enrichedbeans.javamodel.annotation.AbstractAnnotationFactory;
-import com.github.stcarolas.enrichedbeans.javamodel.method.AbstractMethodFactory;
-import com.github.stcarolas.enrichedbeans.javamodel.variable.AbstractVariableFactory;
+import io.github.stcarolas.enrichedbeans.javamodel.Environment;
+import io.github.stcarolas.enrichedbeans.javamodel.annotation.AbstractAnnotationFactory;
+import io.github.stcarolas.enrichedbeans.javamodel.method.AbstractMethodFactory;
+import io.github.stcarolas.enrichedbeans.javamodel.variable.AbstractVariableFactory;
 
 import io.vavr.collection.Seq;
 import io.vavr.control.Option;

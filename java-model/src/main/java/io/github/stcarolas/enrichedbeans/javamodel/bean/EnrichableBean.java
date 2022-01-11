@@ -1,4 +1,4 @@
-package com.github.stcarolas.enrichedbeans.javamodel.bean;
+package io.github.stcarolas.enrichedbeans.javamodel.bean;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

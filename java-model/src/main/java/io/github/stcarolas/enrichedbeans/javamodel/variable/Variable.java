@@ -1,7 +1,7 @@
-package com.github.stcarolas.enrichedbeans.javamodel.variable;
+package io.github.stcarolas.enrichedbeans.javamodel.variable;
 
 import javax.lang.model.element.Modifier;
-import com.github.stcarolas.enrichedbeans.javamodel.annotation.Annotation;
+import io.github.stcarolas.enrichedbeans.javamodel.annotation.Annotation;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.ParameterSpec;
 import com.squareup.javapoet.TypeName;

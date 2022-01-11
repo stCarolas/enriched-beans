@@ -1,4 +1,4 @@
-package com.github.stcarolas.enrichedbeans.processor;
+package io.github.stcarolas.enrichedbeans.processor;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;
@@ -11,8 +11,8 @@ import org.apache.logging.log4j.Logger;
 @AutoService(javax.annotation.processing.Processor.class)
 @SupportedAnnotationTypes(
   {
-    "com.github.stcarolas.enrichedbeans.annotations.Enrich",
-    "com.github.stcarolas.enrichedbeans.annotations.Assisted"
+    "io.github.stcarolas.enrichedbeans.annotations.Enrich",
+    "io.github.stcarolas.enrichedbeans.annotations.Assisted"
   }
 )
 public class Processor extends AbstractProcessor {

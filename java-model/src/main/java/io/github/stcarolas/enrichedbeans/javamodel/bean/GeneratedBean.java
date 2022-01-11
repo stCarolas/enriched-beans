@@ -1,4 +1,4 @@
-package com.github.stcarolas.enrichedbeans.javamodel.bean;
+package io.github.stcarolas.enrichedbeans.javamodel.bean;
 
 import com.squareup.javapoet.TypeSpec;
 import org.apache.logging.log4j.LogManager;

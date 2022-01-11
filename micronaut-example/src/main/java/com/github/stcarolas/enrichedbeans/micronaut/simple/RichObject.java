@@ -1,10 +1,10 @@
-package com.github.stcarolas.enrichedbeans.micronaut.simple;
+package io.github.stcarolas.enrichedbeans.micronaut.simple;
 
 import java.util.function.Function;
 
 import javax.inject.Named;
 
-import com.github.stcarolas.enrichedbeans.annotations.Enrich;
+import io.github.stcarolas.enrichedbeans.annotations.Enrich;
 
 import lombok.RequiredArgsConstructor;
 

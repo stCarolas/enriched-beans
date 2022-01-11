@@ -1,4 +1,4 @@
-package com.github.stcarolas.enrichedbeans.micronaut.simple;
+package io.github.stcarolas.enrichedbeans.micronaut.simple;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

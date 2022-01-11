@@ -1,10 +1,19 @@
-name:       Enriched Beans Java Model
-artifactId: enriched-beans-java-model
-version:    ${revision}
+name:        Enriched Beans Java Model
+artifactId:  enriched-beans-java-model
+version:     ${revision}
+description: Model of java sources for enriched beans
 
 parent:
   groupId:    io.github.stcarolas.enriched-beans
   artifactId: enriched-beans-parent-pom
-  version:    0.0.1
+  version:    0.0.2
 
 modelVersion: 4.0.0
+
+distributionManagement:
+  snapshotRepository: 
+    id: ossrh
+    url: https://s01.oss.sonatype.org/content/repositories/snapshots
+  repository: 
+    id: ossrh
+    url: https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/

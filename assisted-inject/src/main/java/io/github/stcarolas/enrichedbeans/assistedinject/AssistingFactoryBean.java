@@ -1,14 +1,14 @@
-package com.github.stcarolas.enrichedbeans.assistedinject;
+package io.github.stcarolas.enrichedbeans.assistedinject;
 
 import static io.vavr.API.Seq;
 
 import javax.inject.Named;
 import javax.lang.model.element.Modifier;
 
-import com.github.stcarolas.enrichedbeans.javamodel.bean.GeneratedBean;
-import com.github.stcarolas.enrichedbeans.javamodel.method.Method;
-import com.github.stcarolas.enrichedbeans.javamodel.method.constructor.Constructor;
-import com.github.stcarolas.enrichedbeans.javamodel.variable.Variable;
+import io.github.stcarolas.enrichedbeans.javamodel.bean.GeneratedBean;
+import io.github.stcarolas.enrichedbeans.javamodel.method.Method;
+import io.github.stcarolas.enrichedbeans.javamodel.method.constructor.Constructor;
+import io.github.stcarolas.enrichedbeans.javamodel.variable.Variable;
 import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.TypeSpec;
 import com.squareup.javapoet.TypeSpec.Builder;

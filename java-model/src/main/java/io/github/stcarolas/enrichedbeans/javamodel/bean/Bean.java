@@ -1,11 +1,11 @@
-package com.github.stcarolas.enrichedbeans.javamodel.bean;
+package io.github.stcarolas.enrichedbeans.javamodel.bean;
 
 import javax.lang.model.element.ExecutableElement;
 
-import com.github.stcarolas.enrichedbeans.javamodel.Environment;
-import com.github.stcarolas.enrichedbeans.javamodel.annotation.Annotation;
-import com.github.stcarolas.enrichedbeans.javamodel.method.Method;
-import com.github.stcarolas.enrichedbeans.javamodel.variable.Variable;
+import io.github.stcarolas.enrichedbeans.javamodel.Environment;
+import io.github.stcarolas.enrichedbeans.javamodel.annotation.Annotation;
+import io.github.stcarolas.enrichedbeans.javamodel.method.Method;
+import io.github.stcarolas.enrichedbeans.javamodel.variable.Variable;
 import com.squareup.javapoet.TypeName;
 
 import org.apache.logging.log4j.LogManager;

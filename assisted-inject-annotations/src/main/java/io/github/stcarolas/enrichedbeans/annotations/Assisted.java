@@ -1,4 +1,4 @@
-package com.github.stcarolas.enrichedbeans.annotations;
+package io.github.stcarolas.enrichedbeans.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

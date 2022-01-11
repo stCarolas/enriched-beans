@@ -1,4 +1,4 @@
-package com.github.stcarolas.enrichedbeans.javamodel.variable;
+package io.github.stcarolas.enrichedbeans.javamodel.variable;
 
 public @interface Test {
 

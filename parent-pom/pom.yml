@@ -1,7 +1,7 @@
 name:        Enriched Beans Parent Pom
 artifactId:  enriched-beans-parent-pom
 groupId:     io.github.stcarolas.enriched-beans
-version:     0.0.1
+version:     0.0.2
 packaging:   pom
 description: Parent Pom for Enriched Beans
 url:         https://github.com/stCaroals/enriched-beans
@@ -83,6 +83,18 @@ build:
     - id: clean-flattened-pom
       goals: [clean]
       phase: clean
+
+  - groupId: org.apache.maven.plugins
+    artifactId: maven-javadoc-plugin
+    version: 3.3.1
+    executions:
+      - id: attach-javadocs
+        goals:
+          - jar
+
+  - groupId: org.apache.maven.plugins
+    artifactId: maven-site-plugin
+    version: 3.7.1
 
   - groupId: org.apache.maven.plugins
     artifactId: maven-source-plugin

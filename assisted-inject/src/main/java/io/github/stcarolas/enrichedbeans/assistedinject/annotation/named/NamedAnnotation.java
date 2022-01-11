@@ -1,6 +1,6 @@
-package  com.github.stcarolas.enrichedbeans.assistedinject.annotation.named;
+package  io.github.stcarolas.enrichedbeans.assistedinject.annotation.named;
 
-import com.github.stcarolas.enrichedbeans.javamodel.annotation.Annotation;
+import io.github.stcarolas.enrichedbeans.javamodel.annotation.Annotation;
 
 import org.immutables.value.Value.Immutable;
 import org.immutables.vavr.encodings.VavrEncodingEnabled;

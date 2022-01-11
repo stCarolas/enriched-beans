@@ -1,7 +1,7 @@
-package com.github.stcarolas.enrichedbeans.assistedinject.method;
+package io.github.stcarolas.enrichedbeans.assistedinject.method;
 
-import com.github.stcarolas.enrichedbeans.javamodel.method.Method;
-import com.github.stcarolas.enrichedbeans.javamodel.variable.Variable;
+import io.github.stcarolas.enrichedbeans.javamodel.method.Method;
+import io.github.stcarolas.enrichedbeans.javamodel.variable.Variable;
 import com.squareup.javapoet.CodeBlock;
 import org.immutables.value.Value.Immutable;
 import org.immutables.vavr.encodings.VavrEncodingEnabled;

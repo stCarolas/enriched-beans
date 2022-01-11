@@ -1,16 +1,16 @@
-package com.github.stcarolas.enrichedbeans.processor;
+package io.github.stcarolas.enrichedbeans.processor;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 
-import com.github.stcarolas.enrichedbeans.javamodel.bean.Bean;
-import com.github.stcarolas.enrichedbeans.javamodel.bean.GeneratedBean;
-import com.github.stcarolas.enrichedbeans.processor.modules.AnnotationFactoriesModule;
-import com.github.stcarolas.enrichedbeans.processor.modules.BeanFactoriesModule;
-import com.github.stcarolas.enrichedbeans.processor.modules.BeansModule;
-import com.github.stcarolas.enrichedbeans.processor.modules.MethodFactoriesModule;
-import com.github.stcarolas.enrichedbeans.processor.modules.SourceFilesModule;
-import com.github.stcarolas.enrichedbeans.processor.modules.VariableFactoriesModule;
+import io.github.stcarolas.enrichedbeans.javamodel.bean.Bean;
+import io.github.stcarolas.enrichedbeans.javamodel.bean.GeneratedBean;
+import io.github.stcarolas.enrichedbeans.processor.modules.AnnotationFactoriesModule;
+import io.github.stcarolas.enrichedbeans.processor.modules.BeanFactoriesModule;
+import io.github.stcarolas.enrichedbeans.processor.modules.BeansModule;
+import io.github.stcarolas.enrichedbeans.processor.modules.MethodFactoriesModule;
+import io.github.stcarolas.enrichedbeans.processor.modules.SourceFilesModule;
+import io.github.stcarolas.enrichedbeans.processor.modules.VariableFactoriesModule;
 import dagger.BindsInstance;
 import dagger.Component;
 import io.vavr.collection.Seq;

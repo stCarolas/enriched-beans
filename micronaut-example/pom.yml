@@ -2,7 +2,7 @@ modelVersion: 4.0.0
 
 name:       Enriched Beans Micronaut Example
 artifactId: micronaut-example
-groupId:    com.github.stcarolas.enriched-beans
+groupId:    io.github.stcarolas.enriched-beans
 version:    ${revision}
 
 properties: 
@@ -26,7 +26,7 @@ dependencies:
     version: 1.18.12
     scope: provided
 
-  - groupId: com.github.stcarolas.enriched-beans
+  - groupId: io.github.stcarolas.enriched-beans
     artifactId: enriched-beans-assisted-inject-annotations
     version: "${revision}"
 
@@ -70,7 +70,7 @@ build:
       annotationProcessorPaths:
       - {groupId: org.projectlombok,                   artifactId: lombok,                   version: 1.18.12}
       - {groupId: org.immutables,                      artifactId: value,                    version: 2.8.2}
-      - {groupId: com.github.stcarolas.enriched-beans, artifactId: enriched-beans-processor, version: "${revision}"}
+      - {groupId: io.github.stcarolas.enriched-beans, artifactId: enriched-beans-processor, version: "${revision}"}
       - {groupId: io.micronaut,                        artifactId: micronaut-inject-java,    version: 1.3.4}
 
   - groupId: org.codehaus.mojo
@@ -85,3 +85,11 @@ build:
         configuration:
           sources:
             - ${project.build.directory}/generated-sources/annotations/
+
+distributionManagement:
+  snapshotRepository: 
+    id: ossrh
+    url: https://s01.oss.sonatype.org/content/repositories/snapshots
+  repository: 
+    id: ossrh
+    url: https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/

@@ -1,11 +1,12 @@
-name:       Enriched Beans Assisted Inject Module
-artifactId: enriched-beans-assisted-inject
-version:    ${revision}
+name:        Enriched Beans Assisted Inject Module
+artifactId:  enriched-beans-assisted-inject
+version:     ${revision}
+description: AssistedInject module for Enriched-Beans
 
 parent:
   groupId:    io.github.stcarolas.enriched-beans
   artifactId: enriched-beans-parent-pom
-  version:    0.0.1
+  version:    0.0.2
 
 modelVersion: 4.0.0
 
@@ -14,10 +15,18 @@ dependencies:
     artifactId: dagger
     version:    2.30.1
 
-  - groupId:    com.github.stcarolas.enriched-beans
+  - groupId:    io.github.stcarolas.enriched-beans
     artifactId: enriched-beans-assisted-inject-annotations
     version:    ${revision}
 
-  - groupId:    com.github.stcarolas.enriched-beans
+  - groupId:    io.github.stcarolas.enriched-beans
     artifactId: enriched-beans-java-model
     version:    ${revision}
+
+distributionManagement:
+  snapshotRepository: 
+    id: ossrh
+    url: https://s01.oss.sonatype.org/content/repositories/snapshots
+  repository: 
+    id: ossrh
+    url: https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/

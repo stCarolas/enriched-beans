@@ -1,4 +1,4 @@
-package com.github.stcarolas.enrichedbeans.assistedinject;
+package io.github.stcarolas.enrichedbeans.assistedinject;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

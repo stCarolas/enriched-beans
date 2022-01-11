@@ -1,4 +1,4 @@
-package com.github.stcarolas.enrichedbeans.javamodel.variable;
+package io.github.stcarolas.enrichedbeans.javamodel.variable;
 
 import javax.lang.model.element.Element;
 import io.vavr.control.Option;

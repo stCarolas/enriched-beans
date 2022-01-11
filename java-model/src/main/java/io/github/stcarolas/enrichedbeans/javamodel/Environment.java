@@ -1,4 +1,4 @@
-package com.github.stcarolas.enrichedbeans.javamodel;
+package io.github.stcarolas.enrichedbeans.javamodel;
 
 import static io.vavr.API.Option;
 import javax.annotation.processing.ProcessingEnvironment;

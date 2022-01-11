@@ -1,4 +1,4 @@
-package com.github.stcarolas.enrichedbeans.assistedinject;
+package io.github.stcarolas.enrichedbeans.assistedinject;
 
 import static io.vavr.API.Seq;
 import static io.vavr.API.Success;
@@ -7,20 +7,20 @@ import java.util.function.Predicate;
 
 import javax.lang.model.element.Modifier;
 
-import com.github.stcarolas.enrichedbeans.annotations.Enrich;
-import com.github.stcarolas.enrichedbeans.assistedinject.annotation.assisted.AssistedAnnotation;
-import com.github.stcarolas.enrichedbeans.assistedinject.annotation.assisted.ImmutableAssistedAnnotation;
-import com.github.stcarolas.enrichedbeans.assistedinject.annotation.enrich.EnrichAnnotation;
-import com.github.stcarolas.enrichedbeans.assistedinject.annotation.inject.InjectAnnotation;
-import com.github.stcarolas.enrichedbeans.assistedinject.annotation.named.NamedAnnotation;
-import com.github.stcarolas.enrichedbeans.assistedinject.method.ImmutableFactoryMethodUsingConstructor;
-import com.github.stcarolas.enrichedbeans.javamodel.bean.EnrichableBean;
-import com.github.stcarolas.enrichedbeans.javamodel.bean.GeneratedBean;
-import com.github.stcarolas.enrichedbeans.javamodel.method.Method;
-import com.github.stcarolas.enrichedbeans.javamodel.method.constructor.Constructor;
-import com.github.stcarolas.enrichedbeans.javamodel.method.constructor.ImmutableConstructImpl;
-import com.github.stcarolas.enrichedbeans.javamodel.variable.ImmutableVariableImpl;
-import com.github.stcarolas.enrichedbeans.javamodel.variable.Variable;
+import io.github.stcarolas.enrichedbeans.annotations.Enrich;
+import io.github.stcarolas.enrichedbeans.assistedinject.annotation.assisted.AssistedAnnotation;
+import io.github.stcarolas.enrichedbeans.assistedinject.annotation.assisted.ImmutableAssistedAnnotation;
+import io.github.stcarolas.enrichedbeans.assistedinject.annotation.enrich.EnrichAnnotation;
+import io.github.stcarolas.enrichedbeans.assistedinject.annotation.inject.InjectAnnotation;
+import io.github.stcarolas.enrichedbeans.assistedinject.annotation.named.NamedAnnotation;
+import io.github.stcarolas.enrichedbeans.assistedinject.method.ImmutableFactoryMethodUsingConstructor;
+import io.github.stcarolas.enrichedbeans.javamodel.bean.EnrichableBean;
+import io.github.stcarolas.enrichedbeans.javamodel.bean.GeneratedBean;
+import io.github.stcarolas.enrichedbeans.javamodel.method.Method;
+import io.github.stcarolas.enrichedbeans.javamodel.method.constructor.Constructor;
+import io.github.stcarolas.enrichedbeans.javamodel.method.constructor.ImmutableConstructImpl;
+import io.github.stcarolas.enrichedbeans.javamodel.variable.ImmutableVariableImpl;
+import io.github.stcarolas.enrichedbeans.javamodel.variable.Variable;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

@@ -1,4 +1,4 @@
-package  com.github.stcarolas.enrichedbeans.assistedinject.annotation.inject;
+package  io.github.stcarolas.enrichedbeans.assistedinject.annotation.inject;
 
 import static io.vavr.API.Option;
 
@@ -6,8 +6,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.lang.model.element.AnnotationMirror;
 
-import com.github.stcarolas.enrichedbeans.javamodel.annotation.Annotation;
-import com.github.stcarolas.enrichedbeans.javamodel.annotation.AnnotationFactory;
+import io.github.stcarolas.enrichedbeans.javamodel.annotation.Annotation;
+import io.github.stcarolas.enrichedbeans.javamodel.annotation.AnnotationFactory;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
