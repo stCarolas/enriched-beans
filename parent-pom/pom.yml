@@ -1,10 +1,24 @@
-name:       Enriched Beans Parent Pom
-artifactId: enriched-beans-parent-pom
-groupId:    io.github.stcarolas.enriched-beans
-version:    0.0.1
-packaging:  pom
+name:        Enriched Beans Parent Pom
+artifactId:  enriched-beans-parent-pom
+groupId:     io.github.stcarolas.enriched-beans
+version:     0.0.1
+packaging:   pom
+description: Parent Pom for Enriched Beans
+url:         https://github.com/stCaroals/enriched-beans
 
 modelVersion: 4.0.0
+
+licenses:
+  - name: MIT License
+
+scm:
+  url: https://github.com/stCaroals/enriched-beans/
+  connection: scm:git:git://github.com/stCarolas/enriched-beans.git
+
+developers:
+  - name: stCarolas
+    url: https://github/stCarolas
+    roles: [project maintainer]
 
 properties: 
   maven.compiler.target: 1.8
@@ -79,6 +93,14 @@ build:
       phase: package
 
   - groupId: org.apache.maven.plugins
+    artifactId: maven-gpg-plugin
+    version: 1.5
+    executions:
+    - id: sign-artifacts
+      goals: [sign]
+      phase: verify
+
+  - groupId: org.apache.maven.plugins
     artifactId: maven-compiler-plugin
     version: 3.8.1
     configuration:
@@ -102,3 +124,6 @@ distributionManagement:
   snapshotRepository: 
     id: ossrh
     url: https://s01.oss.sonatype.org/content/repositories/snapshots
+  repository: 
+    id: ossrh
+    url: https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/
