@@ -1,0 +1,101 @@
+modelVersion: 4.0.0
+
+name:       Enriched Beans Micronaut Example
+artifactId: micronaut-example
+groupId:    io.github.stcarolas.enriched-beans
+version:    ${revision}
+
+properties: 
+  maven.compiler.target: 1.8
+  maven.compiler.source: 1.8
+  revision: 0.0.1
+
+dependencies:
+  - groupId:    org.immutables
+    artifactId: value
+    version:    2.8.2
+    scope:      provided
+
+  - groupId:    org.immutables
+    artifactId: annotate
+    version:    2.8.2
+    scope:      provided
+
+  - groupId:    org.projectlombok
+    artifactId: lombok
+    version:    1.18.12
+    scope:      provided
+
+  - groupId:    io.github.stcarolas.enriched-beans
+    artifactId: enriched-beans-assisted-inject-annotations
+    version:    "${revision}"
+
+  - groupId:    org.junit.jupiter
+    artifactId: junit-jupiter-engine
+    version:    5.6.2
+    scope:      test
+
+  - groupId:    org.mockito
+    artifactId: mockito-core
+    version:    4.2.0
+    scope:      test
+
+  - groupId:    javax.inject
+    artifactId: javax.inject
+    version:    1
+
+  - groupId:    io.vavr
+    artifactId: vavr
+    version:    0.10.2
+
+  - groupId:    io.micronaut
+    artifactId: micronaut-inject
+    version:    1.3.4
+
+build:
+  plugins:
+
+  - groupId: org.apache.maven.plugins
+    artifactId: maven-compiler-plugin
+    version: 3.8.1
+    configuration:
+      compilerArguments:
+        AaddGeneratedAnnotation: false
+        Adebug: true
+        AfactoryMethodName: from
+        AfactoryVisibility: public
+      dependencies:
+        - groupId:    org.ow2.asm
+          artifactId: asm
+          version:    7.3.1
+          type:       jar
+
+      annotationProcessorPaths:
+        - groupId:    org.projectlombok
+          artifactId: lombok
+          version:    1.18.12
+
+        - groupId:    org.immutables
+          artifactId: value
+          version:    2.8.2
+
+        - groupId:    io.github.stcarolas.enriched-beans
+          artifactId: enriched-beans-processor
+          version:    "${revision}"
+
+        - groupId:    io.micronaut
+          artifactId: micronaut-inject-java
+          version:    1.3.4
+
+  - groupId: org.codehaus.mojo
+    artifactId: build-helper-maven-plugin
+    version: 3.2.0
+    executions:
+
+      - id: add-source
+        phase: generate-sources
+        goals: 
+          - add-source
+        configuration:
+          sources:
+            - ${project.build.directory}/generated-sources/annotations/

@@ -1,0 +1,10 @@
+name: Enriched Beans Examples
+artifactId: enriched-beans-examples-pom
+groupId: io.github.stcarolas.enriched-beans
+version: ${revision}
+
+modelVersion: 4.0.0
+packaging: pom
+
+modules:
+  - micronaut-example
