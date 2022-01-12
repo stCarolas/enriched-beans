@@ -64,18 +64,18 @@ Its the same but with fewer code - annotations lies on fields so you can use gen
 ```
   implementation 'javax.inject:javax.inject:1'
   implementation 'org.projectlombok:lombok:1.18.12'
-  implementation 'io.github.stcarolas.enriched-beans:enriched-beans-annotations:0.2.3'
+  implementation 'io.github.stcarolas.enriched-beans:enriched-beans-assisted-inject-annotations:0.4.0'
   ...
   annotationProcessor 'org.projectlombok:lombok:1.18.12'
-  annotationProcessor 'io.github.stcarolas.enriched-beans:enriched-beans-processor:0.2.3'
+  annotationProcessor 'io.github.stcarolas.enriched-beans:enriched-beans-processor:0.4.0'
 ```
 
 ### Using with Maven, Lombok, Micronaut  (Lombok must be placed before enriched)
 ```xml
     <dependency>
       <groupId>io.github.stcarolas.enriched-beans</groupId>
-      <artifactId>enriched-beans-annotations</artifactId>
-      <version>0.2.3</version>
+      <artifactId>enriched-beans-assisted-inject-annotations</artifactId>
+      <version>0.4.0</version>
     </dependency>
     ...
     <plugin>
@@ -103,7 +103,7 @@ Its the same but with fewer code - annotations lies on fields so you can use gen
           <annotationProcessorPath>
             <groupId>io.github.stcarolas.enriched-beans</groupId>
             <artifactId>enriched-beans-processor</artifactId>
-            <version>0.2.3</version>
+            <version>0.4.0</version>
           </annotationProcessorPath>
           <annotationProcessorPath>
             <groupId>io.micronaut</groupId>
@@ -136,7 +136,7 @@ Configuration example:
       <annotationProcessorPath>
         <groupId>io.github.stcarolas.enriched-beans</groupId>
         <artifactId>enriched-beans-processor</artifactId>
-        <version>${revision}</version>
+        <version>0.4.0</version>
       </annotationProcessorPath>
     </annotationProcessorPaths>
   </configuration>
