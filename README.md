@@ -9,11 +9,19 @@ Say you have:
 ```java
 @RequiredArgsConstructor
 public class SomeClass {
-  private final String notInjectableField;
-  @Enrich private final Integer depA;
-  @Enrich @Named("myDep") private final String depB;
 
-  public void sayHello(){}
+  private final String notInjectableField;
+
+  @Enrich
+  private final Integer depA;
+
+  @Enrich
+  @Named("myDep")
+  private final String depB;
+
+  public void sayHello(){
+  }
+
 }
 ```
 
@@ -22,6 +30,7 @@ Produced factory would be like:
 @Singleton
 @Named
 public class SomeClassFactory {
+
   private final Integer depA;
   private final String depB;
 
@@ -44,7 +53,9 @@ And factory usage:
 ```java
 @Component
 public class AnotherBean{
-  @Autowired SomeClassFactory factory;
+
+  @Autowired
+  SomeClassFactory factory;
 
   ...
 

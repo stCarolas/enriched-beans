@@ -22,4 +22,8 @@ public class RichObject {
   public String processName() {
     return processName.apply(name);
   }
+
+  public String processName2() {
+    return processName2.apply(name);
+  }
 }

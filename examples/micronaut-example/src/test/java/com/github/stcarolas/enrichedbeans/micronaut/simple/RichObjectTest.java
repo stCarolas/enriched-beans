@@ -7,15 +7,16 @@ import io.micronaut.context.ApplicationContext;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class  RichObjectTest {
+public class RichObjectTest {
 
   @Test
   public void testDI(){
     ApplicationContext context = ApplicationContext.builder().start();
     RichObjectFactory factory = context.getBean(RichObjectFactory.class);
     String expectedName = "someName";
-    String actualName = factory.from(expectedName).processName();
-    Assertions.assertEquals(expectedName, actualName);
+    RichObject bean = factory.from(expectedName);
+    Assertions.assertEquals(expectedName, bean.processName());
+    Assertions.assertEquals(expectedName, bean.processName2());
   }
 
 }
