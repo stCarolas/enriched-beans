@@ -19,7 +19,6 @@ import io.vavr.control.Option;
 public class AssistedBeanFactory extends BeanFactory {
 
   private static final Logger log = LogManager.getLogger();
-  private static final String DEFAULT_FACTORY_METHOD_NAME = "from";
 
   @Inject
   public AssistedBeanFactory(
@@ -39,5 +38,6 @@ public class AssistedBeanFactory extends BeanFactory {
         .build()
     );
   }
+
 }
 

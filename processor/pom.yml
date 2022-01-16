@@ -24,6 +24,10 @@ dependencies:
     version:    ${revision}
 
   - groupId:    io.github.stcarolas.enriched-beans
+    artifactId: enriched-beans-assisted-inject-immutables
+    version:    ${revision}
+
+  - groupId:    io.github.stcarolas.enriched-beans
     artifactId: enriched-beans-assisted-inject
     version:    ${revision}
 

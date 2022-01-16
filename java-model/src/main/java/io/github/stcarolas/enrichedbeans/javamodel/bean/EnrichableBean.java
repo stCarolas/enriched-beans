@@ -15,13 +15,14 @@ public abstract class EnrichableBean extends Bean {
 
   abstract public TypeName type();
 
-  abstract public Try<Seq<GeneratedBean>> process();
+  abstract public Try<Seq<GeneratedBean>> enrich();
 
   @Immutable
   @VavrEncodingEnabled
   public abstract static class EnrichableBeanImpl extends EnrichableBean {
 
-    public Try<Seq<GeneratedBean>> process() {
+    @Override
+    public Try<Seq<GeneratedBean>> enrich() {
       return Success(Seq());
     }
   }

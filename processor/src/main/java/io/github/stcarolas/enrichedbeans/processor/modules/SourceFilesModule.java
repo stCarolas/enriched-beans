@@ -23,7 +23,7 @@ public class SourceFilesModule {
     return Try.sequence(
       beans.filter(bean -> bean instanceof EnrichableBean)
         .map(it -> (EnrichableBean) it)
-        .map(EnrichableBean::process)
+        .map(EnrichableBean::enrich)
     )
       .map(seq -> seq.flatMap(it -> it));
   }

@@ -11,5 +11,6 @@ modules:
   - java-model
   - assisted-inject-annotations
   - assisted-inject
+  - assisted-inject-immutables
   - processor
   - examples

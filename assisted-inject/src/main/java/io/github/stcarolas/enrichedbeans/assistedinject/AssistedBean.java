@@ -2,18 +2,15 @@ package io.github.stcarolas.enrichedbeans.assistedinject;
 
 import static io.vavr.API.Seq;
 import static io.vavr.API.Success;
-
 import java.util.function.Predicate;
-
 import javax.lang.model.element.Modifier;
-
 import io.github.stcarolas.enrichedbeans.annotations.Enrich;
 import io.github.stcarolas.enrichedbeans.assistedinject.annotation.assisted.AssistedAnnotation;
-import io.github.stcarolas.enrichedbeans.assistedinject.annotation.assisted.ImmutableAssistedAnnotation;
 import io.github.stcarolas.enrichedbeans.assistedinject.annotation.enrich.EnrichAnnotation;
 import io.github.stcarolas.enrichedbeans.assistedinject.annotation.inject.InjectAnnotation;
 import io.github.stcarolas.enrichedbeans.assistedinject.annotation.named.NamedAnnotation;
 import io.github.stcarolas.enrichedbeans.assistedinject.method.ImmutableFactoryMethodUsingConstructor;
+import io.github.stcarolas.enrichedbeans.javamodel.annotation.ImmutableAnnotationImpl;
 import io.github.stcarolas.enrichedbeans.javamodel.bean.EnrichableBean;
 import io.github.stcarolas.enrichedbeans.javamodel.bean.GeneratedBean;
 import io.github.stcarolas.enrichedbeans.javamodel.method.Method;
@@ -21,12 +18,10 @@ import io.github.stcarolas.enrichedbeans.javamodel.method.constructor.Constructo
 import io.github.stcarolas.enrichedbeans.javamodel.method.constructor.ImmutableConstructImpl;
 import io.github.stcarolas.enrichedbeans.javamodel.variable.ImmutableVariableImpl;
 import io.github.stcarolas.enrichedbeans.javamodel.variable.Variable;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.immutables.value.Value.Immutable;
 import org.immutables.vavr.encodings.VavrEncodingEnabled;
-
 import io.vavr.collection.Seq;
 import io.vavr.control.Try;
 
@@ -35,37 +30,46 @@ public abstract class AssistedBean extends EnrichableBean {
   private static final String DEFAULT_FACTORY_METHOD_NAME = "from";
 
   @Override
-  public Try<Seq<GeneratedBean>> process() {
-    Modifier visibility = env().getOption("factoryVisibility").exists("package"::equals)
-      ? Modifier.DEFAULT
-      : Modifier.PUBLIC;
-    String factoryClassNameSuffix = env()
-      .getOption("factoryClassNameSuffix")
-      .getOrElse("Factory");
-    String factoryMethodName = env()
-      .getOption("factoryMethodName")
-      .getOrElse(DEFAULT_FACTORY_METHOD_NAME);
-    return Success(
-      Seq(
-        ImmutableAssistingFactoryBean.builder()
-          .packageName(packageName())
-          .env(env())
-          .className(className() + factoryClassNameSuffix)
-          .fields(injectedFields())
-          .visibility(visibility)
-          .factoryMethod(createFactoryMethod(factoryMethodName))
-          .constructor(constructorForFactory())
-          .build()
-      )
-    );
+  public Try<Seq<GeneratedBean>> enrich() {
+    return Success(Seq(factoryBean()));
   }
 
-  private Constructor constructorForFactory() {
+  protected AssistingFactoryBean factoryBean() {
+    return ImmutableAssistingFactoryBean.builder()
+      .packageName(packageName())
+      .env(env())
+      .className(factoryClassName())
+      .fields(injectedFields())
+      .visibility(visibility())
+      .factoryMethod(createFactoryMethod())
+      .constructor(constructorForFactory())
+      .build();
+  }
+
+  protected String factoryMethodName() {
+    return env().getOption("factoryMethodName").getOrElse(DEFAULT_FACTORY_METHOD_NAME);
+  }
+
+  protected String factoryClassName() {
+    return className() + factoryClassNameSuffix();
+  }
+
+  protected String factoryClassNameSuffix() {
+    return env().getOption("factoryClassNameSuffix").getOrElse("Factory");
+  }
+
+  protected Modifier visibility() {
+    return env().getOption("factoryVisibility").exists("package"::equals)
+      ? Modifier.DEFAULT
+      : Modifier.PUBLIC;
+  }
+
+  protected Constructor constructorForFactory() {
     return ImmutableConstructImpl.builder()
       .parameters(injectedFields())
       .annotations(
         Seq(
-          ImmutableAssistedAnnotation.builder()
+          ImmutableAnnotationImpl.builder()
             .className("Inject")
             .packageName("javax.inject")
             .build()
@@ -74,7 +78,7 @@ public abstract class AssistedBean extends EnrichableBean {
       .build();
   }
 
-  public boolean assistAllInjectedFields() {
+  private boolean assistAllInjectedFields() {
     return annotations()
       .find(anno -> anno instanceof AssistedAnnotation)
       .map(anno -> (AssistedAnnotation) anno)
@@ -82,21 +86,21 @@ public abstract class AssistedBean extends EnrichableBean {
       .getOrElse(false);
   }
 
-  private Method createFactoryMethod(String factoryMethodName) {
+  protected Method createFactoryMethod() {
     log.debug("Construct factory method using constructor with");
     return ImmutableFactoryMethodUsingConstructor.builder()
-      .name(factoryMethodName)
+      .name(factoryMethodName())
       .returnType(type())
       .parameters(notInjectedFields())
       .injectedFields(injectedFields())
       .build();
   }
 
-  public Seq<Variable> notInjectedFields() {
+  protected Seq<Variable> notInjectedFields() {
     return fields().reject(shouldBeInjected(assistAllInjectedFields()));
   }
 
-  public Seq<Variable> injectedFields() {
+  protected Seq<Variable> injectedFields() {
     Seq<Variable> injectedByMethods = methods()
       .filter(
         method -> method.annotations()

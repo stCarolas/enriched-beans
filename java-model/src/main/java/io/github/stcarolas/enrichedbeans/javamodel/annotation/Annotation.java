@@ -3,6 +3,8 @@ package io.github.stcarolas.enrichedbeans.javamodel.annotation;
 import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ClassName;
 import org.immutables.value.Value.Immutable;
+import org.immutables.vavr.encodings.VavrEncodingEnabled;
+
 import io.vavr.collection.Map;
 
 public abstract class Annotation {
@@ -26,5 +28,6 @@ public abstract class Annotation {
   }
 
   @Immutable
+  @VavrEncodingEnabled
   public abstract static class AnnotationImpl extends Annotation {}
 }

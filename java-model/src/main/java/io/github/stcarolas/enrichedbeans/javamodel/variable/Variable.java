@@ -34,10 +34,6 @@ public abstract class Variable {
       .build();
   }
 
-  public String accessor() {
-    return name();
-  }
-
   public Variable removeAnnotation(String packageName, String className) {
     return ImmutableVariableImpl.builder()
       .from(this)

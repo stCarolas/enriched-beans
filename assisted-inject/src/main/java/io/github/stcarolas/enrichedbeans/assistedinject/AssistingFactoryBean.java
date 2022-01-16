@@ -23,7 +23,10 @@ import io.vavr.collection.Seq;
 
 @Immutable
 @VavrEncodingEnabled
-public abstract class AssistingFactoryBean extends GeneratedBean {
+public abstract class AssistingFactoryBean
+  extends GeneratedBean 
+  implements WithAssistingFactoryBean {
+
   private static final Logger log = LogManager.getLogger();
 
   abstract Modifier visibility();
