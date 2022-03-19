@@ -2,22 +2,18 @@ package io.github.stcarolas.enrichedbeans.javamodel.bean;
 
 import javax.lang.model.element.ExecutableElement;
 
+import org.immutables.value.Value.Immutable;
+import org.immutables.vavr.encodings.VavrEncodingEnabled;
+
 import io.github.stcarolas.enrichedbeans.javamodel.Environment;
 import io.github.stcarolas.enrichedbeans.javamodel.annotation.Annotation;
 import io.github.stcarolas.enrichedbeans.javamodel.method.Method;
 import io.github.stcarolas.enrichedbeans.javamodel.variable.Variable;
-import com.squareup.javapoet.TypeName;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.immutables.value.Value.Immutable;
-import org.immutables.vavr.encodings.VavrEncodingEnabled;
 
 import io.vavr.collection.Seq;
 
 @Immutable
 public abstract class Bean {
-  private static final Logger log = LogManager.getLogger();
 
   abstract public String packageName();
 
@@ -32,6 +28,18 @@ public abstract class Bean {
   abstract public Seq<Method> methods();
 
   abstract public Environment env();
+
+  abstract public Boolean isAbstract();
+
+  public boolean missingAnnotation(Class<?> targetAnnotationClass){
+    return !hasAnnotation(targetAnnotationClass);
+  }
+
+  public boolean hasAnnotation(Class<?> targetAnnotationClass){
+    return annotations()
+      .find(annotation -> annotation.is(targetAnnotationClass))
+      .isEmpty();
+  }
 
   @Override
   public String toString() {

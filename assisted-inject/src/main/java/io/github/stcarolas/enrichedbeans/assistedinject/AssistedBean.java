@@ -4,6 +4,7 @@ import static io.vavr.API.Seq;
 import static io.vavr.API.Success;
 import java.util.function.Predicate;
 import javax.lang.model.element.Modifier;
+
 import io.github.stcarolas.enrichedbeans.annotations.Enrich;
 import io.github.stcarolas.enrichedbeans.assistedinject.annotation.assisted.AssistedAnnotation;
 import io.github.stcarolas.enrichedbeans.assistedinject.annotation.enrich.EnrichAnnotation;
@@ -39,6 +40,7 @@ public abstract class AssistedBean extends EnrichableBean {
       .packageName(packageName())
       .env(env())
       .className(factoryClassName())
+      .isAbstract(Boolean.FALSE)
       .fields(injectedFields())
       .visibility(visibility())
       .factoryMethod(createFactoryMethod())

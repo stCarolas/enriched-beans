@@ -27,6 +27,12 @@ public abstract class Annotation {
       .build();
   }
 
+  public boolean is(Class<?> annotationClass){
+    return className().equals(annotationClass.getSimpleName())
+      && packageName().equals(annotationClass.getPackageName());
+  }
+
+
   @Immutable
   @VavrEncodingEnabled
   public abstract static class AnnotationImpl extends Annotation {}

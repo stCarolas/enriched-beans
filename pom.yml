@@ -1,7 +1,7 @@
-name: Enriched Beans
-artifactId: enriched-beans-parent-pom
-groupId: io.github.stcarolas.enriched-beans
-version: 1.0.1
+name:       Enriched Beans
+artifactId: enriched-beans-aggregate-pom
+groupId:    io.github.stcarolas.enriched-beans
+version:    1.0.1
 
 modelVersion: 4.0.0
 packaging: pom
@@ -9,8 +9,8 @@ packaging: pom
 modules:
   - java-model-testdatabuilders
   - java-model
-  - assisted-inject-annotations
+  - annotations
+  - base-processor
   - assisted-inject
-  - assisted-inject-immutables
-  - processor
+  #- assisted-inject-immutables
   - examples

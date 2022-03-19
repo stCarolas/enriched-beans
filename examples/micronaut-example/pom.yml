@@ -55,9 +55,9 @@ dependencies:
 build:
   plugins:
 
-  - groupId: org.apache.maven.plugins
+  - groupId:    org.apache.maven.plugins
     artifactId: maven-compiler-plugin
-    version: 3.8.1
+    version:    3.8.1
     configuration:
       compilerArguments:
         AaddGeneratedAnnotation: false
@@ -80,7 +80,7 @@ build:
           version:    2.8.2
 
         - groupId:    io.github.stcarolas.enriched-beans
-          artifactId: enriched-beans-processor
+          artifactId: enriched-beans-assisted-inject
           version:    "${revision}"
 
         - groupId:    io.micronaut

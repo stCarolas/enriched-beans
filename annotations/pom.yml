@@ -1,0 +1,19 @@
+name:       Enriched Beans Annotations
+artifactId: enriched-beans-annotations
+version:    ${revision}
+description: Annotations for Enriched-Beans
+
+parent:
+  groupId:    io.github.stcarolas.enriched-beans
+  artifactId: enriched-beans-parent-pom
+  version:    0.0.2
+
+modelVersion: 4.0.0
+
+distributionManagement:
+  snapshotRepository: 
+    id: ossrh
+    url: https://s01.oss.sonatype.org/content/repositories/snapshots
+  repository: 
+    id: ossrh
+    url: https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/

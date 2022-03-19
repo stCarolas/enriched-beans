@@ -1,14 +1,11 @@
 package io.github.stcarolas.enrichedbeans.javamodel.bean;
 
 import com.squareup.javapoet.TypeSpec;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.immutables.value.Value.Immutable;
 import org.immutables.vavr.encodings.VavrEncodingEnabled;
 import io.vavr.control.Try;
 
 public abstract class GeneratedBean extends Bean {
-  private static final Logger log = LogManager.getLogger();
 
   abstract protected TypeSpec spec();
 

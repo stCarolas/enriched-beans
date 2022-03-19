@@ -3,6 +3,7 @@ package io.github.stcarolas.enrichedbeans.javamodel.bean;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 
 import io.github.stcarolas.enrichedbeans.javamodel.Environment;
@@ -37,13 +38,16 @@ public abstract class BeanFactory {
     this.env = env;
   }
 
-  abstract public Option<Bean> from(Element origin);
+  abstract public Option<EnrichableBean> from(Element origin);
 
-  protected final Bean defaultImplementation(Element origin) {
+  protected final EnrichableBean defaultImplementation(Element origin) {
+    TypeElement type = ((TypeElement) origin);
+    boolean isAbstract = type.getModifiers().contains(Modifier.ABSTRACT);
     return ImmutableEnrichableBeanImpl.builder()
       .className(origin.getSimpleName().toString())
       .packageName(packageName(origin))
       .fields(fields(origin))
+      .isAbstract(isAbstract)
       .type(TypeName.get(origin.asType()))
       .constructors(constructors(origin))
       .annotations(annotations(origin))

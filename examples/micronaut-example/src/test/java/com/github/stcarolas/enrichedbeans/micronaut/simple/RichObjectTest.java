@@ -16,7 +16,6 @@ public class RichObjectTest {
     String expectedName = "someName";
     RichObject bean = factory.from(expectedName);
     Assertions.assertEquals(expectedName, bean.processName());
-    Assertions.assertEquals(expectedName, bean.processName2());
   }
 
 }

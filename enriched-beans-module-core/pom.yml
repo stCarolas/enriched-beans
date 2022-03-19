@@ -1,14 +1,14 @@
-name:        Enriched Beans Assisted Inject Module
-artifactId:  enriched-beans-assisted-inject
-version:     ${revision}
-description: AssistedInject module for Enriched-Beans
+name:       Enriched Beans Module Core
+artifactId: enriched-beans-module-core
+version:    ${revision}
+description: Core Classes for Enriched Beans Modules.
+
+modelVersion: 4.0.0
 
 parent:
   groupId:    io.github.stcarolas.enriched-beans
   artifactId: enriched-beans-parent-pom
   version:    0.0.2
-
-modelVersion: 4.0.0
 
 dependencies:
   - groupId:    com.google.dagger
@@ -19,26 +19,14 @@ dependencies:
     artifactId: config
     version:    1.4.1
 
-  - groupId:    com.google.auto.service
-    artifactId: auto-service-annotations
-    version:    1.0-rc6
-    scope:      provided
-
-  - groupId:    io.github.stcarolas.enriched-beans
-    artifactId: enriched-beans-annotations
-    version:    ${revision}
-
   - groupId:    io.github.stcarolas.enriched-beans
     artifactId: enriched-beans-java-model
     version:    ${revision}
 
-  - groupId:    io.github.stcarolas.enriched-beans
-    artifactId: enriched-beans-base-processor
-    version:    ${revision}
-
-  - groupId:    org.mockito
-    artifactId: mockito-core
-    version:    4.3.1
+  - groupId:    com.google.auto.service
+    artifactId: auto-service-annotations
+    version:    1.0-rc6
+    scope:      provided
 
 build:
   plugins:
