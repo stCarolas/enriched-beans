@@ -31,6 +31,16 @@ public abstract class Bean {
 
   abstract public Boolean isAbstract();
 
+  public boolean missingFieldAnnotatedWith(Class<?> targetAnnotationClass){
+    return !hasFieldAnootatedWith(targetAnnotationClass);
+  }
+
+  public boolean hasFieldAnootatedWith(Class<?> targetAnnotationClass){
+    return fields()
+      .filter(field -> field.hasAnnotation(targetAnnotationClass))
+      .nonEmpty();
+  }
+
   public boolean missingAnnotation(Class<?> targetAnnotationClass){
     return !hasAnnotation(targetAnnotationClass);
   }
@@ -38,7 +48,7 @@ public abstract class Bean {
   public boolean hasAnnotation(Class<?> targetAnnotationClass){
     return annotations()
       .find(annotation -> annotation.is(targetAnnotationClass))
-      .isEmpty();
+      .isDefined();
   }
 
   @Override

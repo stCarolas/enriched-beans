@@ -22,22 +22,29 @@ public class Environment {
   private ProcessingEnvironment processingEnv;
 
   @Inject
-  public Environment(RoundEnvironment roundEnv, ProcessingEnvironment processingEnv) {
+  public Environment(
+    RoundEnvironment roundEnv,
+    ProcessingEnvironment processingEnv
+  ) {
     this.roundEnv = roundEnv;
     this.processingEnv = processingEnv;
   }
 
   public List<TypeElement> javaClasses() {
-    return List.ofAll(roundEnv.getRootElements()).map(element -> (TypeElement) element);
+    return List.ofAll(roundEnv.getRootElements())
+      .map(element -> (TypeElement) element);
   }
 
   public Option<String> getOption(String name) {
-    return Option(processingEnv.getOptions().get(name)).filter(it -> !it.isBlank());
+    return Option(processingEnv.getOptions().get(name))
+      .filter(it -> !it.isBlank());
   }
 
   public Try<Void> writeSource(String packageName, TypeSpec spec) {
     return Try.run(
-      () -> JavaFile.builder(packageName, spec).build().writeTo(processingEnv.getFiler())
+      () -> JavaFile.builder(packageName, spec)
+        .build()
+        .writeTo(processingEnv.getFiler())
     )
       .onFailure(error -> log.error("Error while writing source file: {}", error));
   }

@@ -1,7 +1,7 @@
 modelVersion: 4.0.0
 
-name:       Enriched Beans Micronaut Example
-artifactId: micronaut-example
+name:       Enriched Beans Micronaut Assisted Inject Example
+artifactId: micronaut-assisted-inject-example
 groupId:    io.github.stcarolas.enriched-beans
 version:    ${revision}
 
@@ -27,7 +27,7 @@ dependencies:
     scope:      provided
 
   - groupId:    io.github.stcarolas.enriched-beans
-    artifactId: enriched-beans-assisted-inject-annotations
+    artifactId: enriched-beans-assisted-inject
     version:    "${revision}"
 
   - groupId:    org.junit.jupiter

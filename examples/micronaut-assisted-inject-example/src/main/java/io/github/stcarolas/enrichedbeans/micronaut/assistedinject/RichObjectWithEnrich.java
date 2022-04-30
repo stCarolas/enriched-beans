@@ -1,4 +1,4 @@
-package io.github.stcarolas.enrichedbeans.micronaut.simple;
+package io.github.stcarolas.enrichedbeans.micronaut.assistedinject;
 
 import java.util.function.Function;
 import javax.inject.Named;
@@ -6,7 +6,7 @@ import io.github.stcarolas.enrichedbeans.annotations.Enrich;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class RichObject {
+public class RichObjectWithEnrich {
   private final String name;
 
   @Enrich

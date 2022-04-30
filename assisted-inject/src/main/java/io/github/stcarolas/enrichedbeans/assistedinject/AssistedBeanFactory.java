@@ -6,6 +6,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.lang.model.element.Element;
 import io.github.stcarolas.enrichedbeans.annotations.Assisted;
+import io.github.stcarolas.enrichedbeans.annotations.Enrich;
 import io.github.stcarolas.enrichedbeans.javamodel.Environment;
 import io.github.stcarolas.enrichedbeans.javamodel.annotation.AbstractAnnotationFactory;
 import io.github.stcarolas.enrichedbeans.javamodel.bean.Bean;
@@ -30,12 +31,14 @@ public class AssistedBeanFactory extends BeanFactory {
 
   @Override
   public Option<EnrichableBean> from(Element origin) {
-    //return None();
-    Bean bean = super.defaultImplementation(origin);
-    return Some(bean);
-    //if (bean.isAbstract() || bean.missingAnnotation(Assisted.class)) {
-      //return None();
-    //}
-    //return Some(ImmutableAssistedBeanImpl.builder().from(bean).build());
+    Bean bean = defaultImplementation(origin);
+    if (bean.isAbstract()) {
+      return None();
+    }
+    if (bean.missingAnnotation(Assisted.class) 
+        && bean.missingFieldAnnotatedWith(Enrich.class)) {
+      return None();
+    }
+    return Some(ImmutableAssistedBeanImpl.builder().from(bean).build());
   }
 }

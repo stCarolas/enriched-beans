@@ -65,13 +65,13 @@ build:
       goals: [jar-no-fork]
       phase: package
 
-  - groupId: org.apache.maven.plugins
-    artifactId: maven-gpg-plugin
-    version: 1.5
-    executions:
-    - id: sign-artifacts
-      goals: [sign]
-      phase: verify
+  # - groupId: org.apache.maven.plugins
+  #   artifactId: maven-gpg-plugin
+  #   version: 1.5
+  #   executions:
+  #   - id: sign-artifacts
+  #     goals: [sign]
+  #     phase: verify
 
   - groupId: org.apache.maven.plugins
     artifactId: maven-compiler-plugin

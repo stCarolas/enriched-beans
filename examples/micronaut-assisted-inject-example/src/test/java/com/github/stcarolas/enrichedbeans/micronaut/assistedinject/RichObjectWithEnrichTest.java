@@ -1,4 +1,4 @@
-package io.github.stcarolas.enrichedbeans.micronaut.simple;
+package io.github.stcarolas.enrichedbeans.micronaut.assistedinject;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -7,14 +7,14 @@ import io.micronaut.context.ApplicationContext;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class RichObjectTest {
+public class RichObjectWithEnrichTest {
 
   @Test
-  public void testDI(){
+  public void testRichObjectWithEnrichFactoryGenerating(){
     ApplicationContext context = ApplicationContext.builder().start();
-    RichObjectFactory factory = context.getBean(RichObjectFactory.class);
+    RichObjectWithEnrichFactory factory = context.getBean(RichObjectWithEnrichFactory.class);
     String expectedName = "someName";
-    RichObject bean = factory.from(expectedName);
+    RichObjectWithEnrich bean = factory.from(expectedName);
     Assertions.assertEquals(expectedName, bean.processName());
   }
 

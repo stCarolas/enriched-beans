@@ -7,4 +7,4 @@ modelVersion: 4.0.0
 packaging: pom
 
 modules:
-  - micronaut-example
+  - micronaut-assisted-inject-example

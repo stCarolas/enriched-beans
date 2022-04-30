@@ -79,7 +79,8 @@ public abstract class BeanFactory {
   }
 
   protected final Seq<Annotation> annotations(Element original) {
-    return List.ofAll(original.getAnnotationMirrors()).flatMap(annotationFactory::from);
+    return List.ofAll(original.getAnnotationMirrors())
+      .flatMap(annotationFactory::from);
   }
 
   private Seq<Method> methods(Element original) {
@@ -87,4 +88,5 @@ public abstract class BeanFactory {
       .filter(element -> element.getKind().equals(ElementKind.METHOD))
       .map(methodFactory::from);
   }
+
 }

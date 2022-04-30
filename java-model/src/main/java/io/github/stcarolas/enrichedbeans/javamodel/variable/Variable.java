@@ -34,6 +34,12 @@ public abstract class Variable {
       .build();
   }
 
+  public boolean hasAnnotation(Class<?> targetAnnotationClass){
+    return annotations()
+      .filter(annotation -> annotation.is(targetAnnotationClass))
+      .nonEmpty();
+  }
+
   public Variable removeAnnotation(String packageName, String className) {
     return ImmutableVariableImpl.builder()
       .from(this)
