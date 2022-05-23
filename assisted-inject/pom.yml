@@ -90,7 +90,7 @@ build:
       annotationProcessorPaths:
         - groupId:    org.projectlombok
           artifactId: lombok
-          version:    1.18.12
+          version:    1.18.22
 
         - groupId:    org.immutables
           artifactId: value
