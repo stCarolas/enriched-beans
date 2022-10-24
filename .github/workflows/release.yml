@@ -15,4 +15,4 @@ jobs:
         uses: stCarolas/setup-maven@master
 
       - name: Run a one-line script
-        run: mvn clean install
+        run: mvn --version
