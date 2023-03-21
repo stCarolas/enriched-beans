@@ -23,4 +23,5 @@ public abstract class EnrichableBean extends Bean {
       return Success(Seq());
     }
   }
+
 }
