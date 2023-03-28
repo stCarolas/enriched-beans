@@ -1,8 +1,4 @@
-package  io.github.stcarolas.enrichedbeans.assistedinject.dagger;
-
-import javax.annotation.processing.ProcessingEnvironment;
-import javax.annotation.processing.RoundEnvironment;
-import javax.inject.Named;
+package io.github.stcarolas.enrichedbeans.immutablescriteriaspring.dagger;
 
 import dagger.BindsInstance;
 import dagger.Component;
@@ -13,24 +9,28 @@ import io.github.stcarolas.enrichedbeans.baseprocessor.modules.BeansModule;
 import io.github.stcarolas.enrichedbeans.baseprocessor.modules.ConfigFactoryModule;
 import io.github.stcarolas.enrichedbeans.baseprocessor.modules.MethodFactoriesModule;
 import io.github.stcarolas.enrichedbeans.baseprocessor.modules.VariableFactoriesModule;
-import io.github.stcarolas.enrichedbeans.javamodel.bean.EnrichableBean;
+import io.github.stcarolas.enrichedbeans.immutablescriteriaspring.bean.CriteriaRepositoryBean;
 import io.vavr.collection.Seq;
+import javax.annotation.processing.ProcessingEnvironment;
+import javax.annotation.processing.RoundEnvironment;
+import javax.inject.Named;
 
 @Component(
   modules = {
     VariableFactoriesModule.class,
-    AnnotationFactoriesModule.class,
     MethodFactoriesModule.class,
     BeansModule.class,
     ConfigFactoryModule.class,
+    AnnotationFactoriesModule.class,
     BeanFactoriesModule.class,
-    EnrichableBeansModule.class
+    CriteriaRepositoryBeansModule.class,
   }
 )
-public abstract class AssistedInjectComponent implements BeanProcessorComponent {
+public abstract class ImmutablesCriteriaSpringComponent
+  implements BeanProcessorComponent {
 
-  @Named("EnrichableBeans")
-  abstract public Seq<EnrichableBean> beans();
+  @Named("CriteriaRepositoryBeans")
+  public abstract Seq<CriteriaRepositoryBean> beans();
 
   @Component.Builder
   public interface Builder {
@@ -40,15 +40,15 @@ public abstract class AssistedInjectComponent implements BeanProcessorComponent 
     @BindsInstance
     Builder processingEnv(ProcessingEnvironment processingEnv);
 
-    AssistedInjectComponent build();
+    ImmutablesCriteriaSpringComponent build();
   }
 
   @Override
   public ProcessingResult process() {
-    return ImmutableProcessingResultImpl.builder()
-      .beans(beans().map(EnrichableBean::enrich))
+    return ImmutableProcessingResultImpl
+      .builder()
+      .beans(beans().map(CriteriaRepositoryBean::enrich))
       .isFinished(true)
       .build();
   }
-
 }

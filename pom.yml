@@ -12,5 +12,5 @@ modules:
   - annotations
   - base-processor
   - assisted-inject
-  #- assisted-inject-immutables
+  - immutables-criteria-spring
   - examples

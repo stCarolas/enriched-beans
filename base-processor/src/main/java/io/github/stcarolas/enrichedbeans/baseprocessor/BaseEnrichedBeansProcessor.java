@@ -29,13 +29,12 @@ public abstract class BaseEnrichedBeansProcessor extends AbstractProcessor {
     beans.forEach(
       generationTry -> generationTry.map(beansSeq -> beansSeq.map(GeneratedBean::write))
     );
-    beans.filter(Try::isFailure)
-      .forEach(
-        error -> log.error(
-          "Exception while processing beans: {}",
-          error.getCause().getMessage()
-        )
-      );
+    beans.filter(Try::isFailure).forEach(
+      error -> log.error(
+        "Exception while processing beans: {}",
+        error.getCause().getMessage()
+      )
+    );
     Boolean result = generationResults.foldLeft(
       true,
       (overallResult, componentResult) -> overallResult && componentResult.isFinished()

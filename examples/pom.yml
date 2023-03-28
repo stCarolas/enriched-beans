@@ -8,3 +8,4 @@ packaging: pom
 
 modules:
   - micronaut-assisted-inject-example
+  - immutables-criteria-spring-example

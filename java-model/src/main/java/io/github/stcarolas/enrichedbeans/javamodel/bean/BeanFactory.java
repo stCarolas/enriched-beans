@@ -9,11 +9,11 @@ import javax.lang.model.element.TypeElement;
 import io.github.stcarolas.enrichedbeans.javamodel.Environment;
 import io.github.stcarolas.enrichedbeans.javamodel.annotation.AbstractAnnotationFactory;
 import io.github.stcarolas.enrichedbeans.javamodel.annotation.Annotation;
+import io.github.stcarolas.enrichedbeans.javamodel.bean.Bean.BeanImpl;
 import io.github.stcarolas.enrichedbeans.javamodel.method.AbstractMethodFactory;
 import io.github.stcarolas.enrichedbeans.javamodel.method.Method;
 import io.github.stcarolas.enrichedbeans.javamodel.variable.AbstractVariableFactory;
 import io.github.stcarolas.enrichedbeans.javamodel.variable.Variable;
-import com.squareup.javapoet.TypeName;
 
 import io.vavr.collection.List;
 import io.vavr.collection.Seq;
@@ -38,17 +38,16 @@ public abstract class BeanFactory {
     this.env = env;
   }
 
-  abstract public Option<EnrichableBean> from(Element origin);
+  abstract public Option<? extends Bean> from(Element origin);
 
-  protected final EnrichableBean defaultImplementation(Element origin) {
+  protected final BeanImpl defaultImplementation(Element origin) {
     TypeElement type = ((TypeElement) origin);
     boolean isAbstract = type.getModifiers().contains(Modifier.ABSTRACT);
-    return ImmutableEnrichableBeanImpl.builder()
+    return ImmutableBeanImpl.builder()
       .className(origin.getSimpleName().toString())
       .packageName(packageName(origin))
       .fields(fields(origin))
       .isAbstract(isAbstract)
-      .type(TypeName.get(origin.asType()))
       .constructors(constructors(origin))
       .annotations(annotations(origin))
       .methods(methods(origin))

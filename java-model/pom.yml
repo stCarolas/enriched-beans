@@ -11,9 +11,9 @@ parent:
 modelVersion: 4.0.0
 
 distributionManagement:
-  snapshotRepository: 
+  snapshotRepository:
     id: ossrh
     url: https://s01.oss.sonatype.org/content/repositories/snapshots
-  repository: 
+  repository:
     id: ossrh
     url: https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/

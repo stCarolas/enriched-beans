@@ -4,14 +4,10 @@ import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.TypeElement;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import io.vavr.collection.HashMap;
 import io.vavr.control.Option;
 
 public abstract class AnnotationFactory {
-  private static final Logger log = LogManager.getLogger();
 
   abstract protected Option<Annotation> from(AnnotationMirror mirror);
 
@@ -25,11 +21,12 @@ public abstract class AnnotationFactory {
     String className = annoElement.getSimpleName().toString();
     String packageName = packageName(annoElement.getQualifiedName().toString());
 
-    return ImmutableAnnotationImpl.builder()
+    ImmutableAnnotationImpl annotation = ImmutableAnnotationImpl.builder()
       .className(className)
       .packageName(packageName)
       .parameters(parameters)
       .build();
+    return annotation;
   }
 
   protected final TypeElement asElement(AnnotationMirror mirror){

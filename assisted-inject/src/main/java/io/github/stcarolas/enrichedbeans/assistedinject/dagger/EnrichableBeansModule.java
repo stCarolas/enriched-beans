@@ -8,15 +8,17 @@ import io.vavr.collection.List;
 import io.vavr.collection.Seq;
 import io.vavr.control.Option;
 
-import static io.vavr.API.*;
-
 import javax.annotation.processing.RoundEnvironment;
+import javax.inject.Named;
 import javax.lang.model.element.TypeElement;
 
+import static io.vavr.API.*;
+
 @Module
-public class AssistInjectBeansModule {
+public class EnrichableBeansModule {
 
   @Provides
+  @Named("EnrichableBeans")
   public Seq<EnrichableBean> enrichableBeans(
       RoundEnvironment roundEnvironment,
       AbstractEnrichableBeanFactory beanFactory

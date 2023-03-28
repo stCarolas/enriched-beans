@@ -7,6 +7,7 @@ import com.squareup.javapoet.ParameterSpec;
 import com.squareup.javapoet.TypeName;
 import org.immutables.vavr.encodings.VavrEncodingEnabled;
 import static org.immutables.value.Value.Immutable;
+
 import io.vavr.collection.List;
 
 public abstract class Variable {

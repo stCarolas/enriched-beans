@@ -27,8 +27,10 @@ import io.vavr.collection.Seq;
 import io.vavr.control.Try;
 
 public abstract class AssistedBean extends EnrichableBean {
+
   private static final Logger log = LogManager.getLogger();
   private static final String DEFAULT_FACTORY_METHOD_NAME = "from";
+  private static final String DEFAULT_FACTORY_CLASS_NAME_SUFFIX = "Factory";
 
   @Override
   public Try<Seq<GeneratedBean>> enrich() {
@@ -37,19 +39,15 @@ public abstract class AssistedBean extends EnrichableBean {
 
   protected AssistingFactoryBean factoryBean() {
     return ImmutableAssistingFactoryBean.builder()
+      .className(factoryClassName())
       .packageName(packageName())
       .env(env())
-      .className(factoryClassName())
       .isAbstract(Boolean.FALSE)
       .fields(injectedFields())
       .visibility(visibility())
-      .factoryMethod(createFactoryMethod())
+      .factoryMethod(factoryMethod())
       .constructor(constructorForFactory())
       .build();
-  }
-
-  protected String factoryMethodName() {
-    return env().getOption("factoryMethodName").getOrElse(DEFAULT_FACTORY_METHOD_NAME);
   }
 
   protected String factoryClassName() {
@@ -57,7 +55,7 @@ public abstract class AssistedBean extends EnrichableBean {
   }
 
   protected String factoryClassNameSuffix() {
-    return env().getOption("factoryClassNameSuffix").getOrElse("Factory");
+    return env().getOption("factoryClassNameSuffix").getOrElse(DEFAULT_FACTORY_CLASS_NAME_SUFFIX);
   }
 
   protected Modifier visibility() {
@@ -88,7 +86,7 @@ public abstract class AssistedBean extends EnrichableBean {
       .getOrElse(false);
   }
 
-  protected Method createFactoryMethod() {
+  protected Method factoryMethod() {
     log.debug("Construct factory method using constructor with");
     return ImmutableFactoryMethodUsingConstructor.builder()
       .name(factoryMethodName())
@@ -96,6 +94,10 @@ public abstract class AssistedBean extends EnrichableBean {
       .parameters(notInjectedFields())
       .injectedFields(injectedFields())
       .build();
+  }
+
+  protected String factoryMethodName() {
+    return env().getOption("factoryMethodName").getOrElse(DEFAULT_FACTORY_METHOD_NAME);
   }
 
   protected Seq<Variable> notInjectedFields() {
@@ -138,4 +140,5 @@ public abstract class AssistedBean extends EnrichableBean {
   @Immutable
   @VavrEncodingEnabled
   public abstract static class AssistedBeanImpl extends AssistedBean {}
+
 }

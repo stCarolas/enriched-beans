@@ -15,7 +15,7 @@ public abstract class FactoryMethodUsingConstructor extends Method {
   abstract Seq<Variable> injectedFields();
 
   @Override
-  protected CodeBlock code() {
+  public CodeBlock code() {
     Seq<String> fields = parameters().appendAll(injectedFields()).map(Variable::name);
 
     return CodeBlock.builder()

@@ -33,7 +33,7 @@ public abstract class ProxyMethod extends Method{
   }
 
   @Override
-  protected CodeBlock code() {
+  public CodeBlock code() {
     return CodeBlock.builder()
       .addStatement(
         String.format(

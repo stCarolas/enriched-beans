@@ -36,7 +36,7 @@ public abstract class Constructor extends Method {
   }
 
   @Override
-  protected CodeBlock code() {
+  public CodeBlock code() {
     return parameters()
       .foldLeft(
         CodeBlock.builder(),
