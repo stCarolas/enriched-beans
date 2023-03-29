@@ -7,6 +7,8 @@ import javax.lang.model.element.ExecutableElement;
 
 import io.github.stcarolas.enrichedbeans.javamodel.annotation.AbstractAnnotationFactory;
 import io.github.stcarolas.enrichedbeans.javamodel.variable.AbstractVariableFactory;
+
+import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.TypeName;
 
 import io.vavr.collection.List;
@@ -37,13 +39,15 @@ public class AbstractMethodFactory {
 
   protected final Method defaultImplementation(Element element) {
     ExecutableElement originalMethod = (ExecutableElement) element;
+    TypeName returnType = TypeName.get(originalMethod.getReturnType());
     return ImmutableMethodImpl.builder()
       .name(originalMethod.getSimpleName().toString())
-      .returnType(TypeName.get(originalMethod.getReturnType()))
+      .returnType(returnType)
       .parameters(List.ofAll(originalMethod.getParameters()).map(variableFactory::from))
       .annotations(
         List.ofAll(originalMethod.getAnnotationMirrors()).flatMap(annotationFactory::from)
       )
+      .code(TypeName.VOID.equals(returnType) ? CodeBlock.of("return;") : CodeBlock.of("return null;"))
       .build();
   }
 }

@@ -8,6 +8,17 @@ parent:
   artifactId: enriched-beans-parent-pom
   version:    0.0.2
 
+dependencies:
+  - groupId:    org.junit.jupiter
+    artifactId: junit-jupiter-engine
+    version:    5.6.2
+    scope:      test
+
+  - groupId:    org.mockito
+    artifactId: mockito-core
+    version:    4.2.0
+    scope:      test
+
 modelVersion: 4.0.0
 
 distributionManagement:

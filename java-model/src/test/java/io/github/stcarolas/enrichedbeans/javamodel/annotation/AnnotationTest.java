@@ -1,6 +1,5 @@
 package io.github.stcarolas.enrichedbeans.javamodel.annotation;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

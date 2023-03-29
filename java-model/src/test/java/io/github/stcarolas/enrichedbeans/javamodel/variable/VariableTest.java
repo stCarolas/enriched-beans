@@ -18,7 +18,7 @@ public class VariableTest {
   public void hasAnnotationMethodWorksCorrectly() {
     Builder baseVariable = ImmutableVariableImpl.builder()
       .name("testVariable")
-      .type(TypeName.BOOLEAN);
+      .typeName(TypeName.BOOLEAN);
 
     Variable variableWithTestAnnotation = baseVariable
       .addAnnotations(new TestAnnotation())
@@ -37,7 +37,7 @@ public class VariableTest {
   public void testRemovingAnnotation() {
     Variable variable = ImmutableVariableImpl.builder()
       .name("testVariable")
-      .type(TypeName.BOOLEAN)
+      .typeName(TypeName.BOOLEAN)
       .addAnnotations(new TestAnnotation())
       .build();
     Variable updatedVariable = variable.removeAnnotation(
@@ -52,7 +52,7 @@ public class VariableTest {
   public void testCheckingIfVariableHasAnnotationsAfterRemoving() {
     Variable variable = ImmutableVariableImpl.builder()
       .name("testVariable")
-      .type(TypeName.BOOLEAN)
+      .typeName(TypeName.BOOLEAN)
       .addAnnotations(new TestAnnotation())
       .build();
     Variable updatedVariable = variable.removeAnnotation(

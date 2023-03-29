@@ -6,11 +6,7 @@ import io.vavr.collection.Seq;
 import io.vavr.control.Try;
 import static io.vavr.API.*;
 
-import com.squareup.javapoet.TypeName;
-
-public abstract class EnrichableBean extends Bean {
-
-  abstract public TypeName type();
+public abstract class EnrichableBean extends ProcessedBean {
 
   abstract public Try<Seq<GeneratedBean>> enrich();
 

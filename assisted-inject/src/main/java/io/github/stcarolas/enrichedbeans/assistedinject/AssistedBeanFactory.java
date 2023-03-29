@@ -43,7 +43,6 @@ public class AssistedBeanFactory extends BeanFactory {
       return None();
     }
     return Some(ImmutableAssistedBeanImpl.builder()
-      .type(TypeName.get(origin.asType()))
       .from(bean)
       .build());
   }

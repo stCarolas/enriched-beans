@@ -1,20 +1,23 @@
 package io.github.stcarolas.enrichedbeans.javamodel.variable;
 
 import javax.lang.model.element.Modifier;
-import io.github.stcarolas.enrichedbeans.javamodel.annotation.Annotation;
+
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.ParameterSpec;
 import com.squareup.javapoet.TypeName;
-import org.immutables.vavr.encodings.VavrEncodingEnabled;
-import static org.immutables.value.Value.Immutable;
 
+import org.immutables.value.Value.Immutable;
+import org.immutables.vavr.encodings.VavrEncodingEnabled;
+
+import io.github.stcarolas.enrichedbeans.javamodel.annotation.Annotation;
 import io.vavr.collection.List;
 
 public abstract class Variable {
+  // TODO static factory method for creating with TypeName, Type, Class, String
 
   abstract public String name();
 
-  abstract public TypeName type();
+  abstract public TypeName typeName();
 
   abstract public List<Modifier> modifiers();
 
@@ -24,14 +27,14 @@ public abstract class Variable {
     return annotations()
       .map(Annotation::spec)
       .foldLeft(
-        ParameterSpec.builder(type(), name()),
+        ParameterSpec.builder(typeName(), name()),
         ParameterSpec.Builder::addAnnotation
       )
       .build();
   }
 
   public FieldSpec asFieldSpec() {
-    return FieldSpec.builder(type(), name(), modifiers().toJavaArray(Modifier.class))
+    return FieldSpec.builder(typeName(), name(), modifiers().toJavaArray(Modifier.class))
       .build();
   }
 

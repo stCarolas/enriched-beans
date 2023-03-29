@@ -9,7 +9,6 @@ import javax.lang.model.element.TypeElement;
 import io.github.stcarolas.enrichedbeans.javamodel.Environment;
 import io.github.stcarolas.enrichedbeans.javamodel.annotation.AbstractAnnotationFactory;
 import io.github.stcarolas.enrichedbeans.javamodel.annotation.Annotation;
-import io.github.stcarolas.enrichedbeans.javamodel.bean.Bean.BeanImpl;
 import io.github.stcarolas.enrichedbeans.javamodel.method.AbstractMethodFactory;
 import io.github.stcarolas.enrichedbeans.javamodel.method.Method;
 import io.github.stcarolas.enrichedbeans.javamodel.variable.AbstractVariableFactory;
@@ -40,12 +39,11 @@ public abstract class BeanFactory {
 
   abstract public Option<? extends Bean> from(Element origin);
 
-  protected final BeanImpl defaultImplementation(Element origin) {
+  protected final ProcessedBean defaultImplementation(Element origin) {
     TypeElement type = ((TypeElement) origin);
     boolean isAbstract = type.getModifiers().contains(Modifier.ABSTRACT);
-    return ImmutableBeanImpl.builder()
-      .className(origin.getSimpleName().toString())
-      .packageName(packageName(origin))
+    return ImmutableProcessedBean.builder()
+      .type(type)
       .fields(fields(origin))
       .isAbstract(isAbstract)
       .constructors(constructors(origin))
@@ -55,15 +53,6 @@ public abstract class BeanFactory {
       .build();
   }
 
-  protected final String packageName(Element original) {
-    String fullName = ((TypeElement) original).getQualifiedName().toString();
-    String packageName = "";
-    int lastDot = fullName.lastIndexOf('.');
-    if (lastDot > 0) {
-      packageName = fullName.substring(0, lastDot);
-    }
-    return packageName;
-  }
 
   protected final List<Variable> fields(Element origin) {
     return List.ofAll(origin.getEnclosedElements())

@@ -33,7 +33,7 @@ public class AbstractVariableFactory {
   protected final Variable defaultImplementation(Element element) {
     return ImmutableVariableImpl.builder()
       .name(element.getSimpleName().toString())
-      .type(ParameterizedTypeName.get(element.asType()))
+      .typeName(ParameterizedTypeName.get(element.asType()))
       .annotations(
         List.ofAll(element.getAnnotationMirrors()).flatMap(annotationFactory::from)
       )

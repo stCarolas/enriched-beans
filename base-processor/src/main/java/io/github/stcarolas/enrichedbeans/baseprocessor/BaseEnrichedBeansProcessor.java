@@ -10,7 +10,7 @@ import io.vavr.collection.Seq;
 import io.vavr.control.Try;
 
 public abstract class BaseEnrichedBeansProcessor extends AbstractProcessor {
-  private static final Logger log = LogManager.getLogger();
+  private static final Logger log = LogManager.getLogger(BaseEnrichedBeansProcessor.class);
 
   abstract public Seq<BeanProcessorComponent> components(
     RoundEnvironment roundEnvironment
@@ -21,6 +21,7 @@ public abstract class BaseEnrichedBeansProcessor extends AbstractProcessor {
     java.util.Set<? extends TypeElement> types,
     RoundEnvironment roundEnv
   ) {
+    log.debug("Processing beans");
     Seq<ProcessingResult> generationResults = components(roundEnv)
       .map(component -> component.process());
     Seq<Try<Seq<GeneratedBean>>> beans = generationResults.flatMap(
@@ -32,13 +33,15 @@ public abstract class BaseEnrichedBeansProcessor extends AbstractProcessor {
     beans.filter(Try::isFailure).forEach(
       error -> log.error(
         "Exception while processing beans: {}",
-        error.getCause().getMessage()
+        // error.getCause().getMessage()
+        error
       )
     );
     Boolean result = generationResults.foldLeft(
       true,
       (overallResult, componentResult) -> overallResult && componentResult.isFinished()
     );
+    log.debug("Finished bean processing");
     return result;
   }
 }

@@ -5,7 +5,7 @@ artifactId: micronaut-assisted-inject-example
 groupId:    io.github.stcarolas.enriched-beans
 version:    ${revision}
 
-properties: 
+properties:
   maven.compiler.target: 1.8
   maven.compiler.source: 1.8
   revision: 0.0.1
@@ -23,11 +23,11 @@ dependencies:
 
   - groupId:    org.projectlombok
     artifactId: lombok
-    version:    1.18.22
+    version:    1.18.26
     scope:      provided
 
   - groupId:    io.github.stcarolas.enriched-beans
-    artifactId: enriched-beans-assisted-inject
+    artifactId: enriched-beans-annotations
     version:    "${revision}"
 
   - groupId:    org.junit.jupiter
@@ -52,6 +52,18 @@ dependencies:
     artifactId: micronaut-inject
     version:    1.3.4
 
+  - groupId:    org.apache.logging.log4j
+    artifactId: log4j-api
+    version:    2.20.0
+
+  - groupId:    org.apache.logging.log4j
+    artifactId: log4j-core
+    version:    2.20.0
+
+  - groupId:    org.apache.logging.log4j
+    artifactId: log4j-slf4j-impl
+    version:    2.20.0
+
 build:
   plugins:
 
@@ -73,7 +85,7 @@ build:
       annotationProcessorPaths:
         - groupId:    org.projectlombok
           artifactId: lombok
-          version:    1.18.22
+          version:    1.18.26
 
         - groupId:    org.immutables
           artifactId: value

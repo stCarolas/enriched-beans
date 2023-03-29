@@ -6,4 +6,7 @@ import org.immutables.vavr.encodings.VavrEncodingEnabled;
 
 @Immutable
 @VavrEncodingEnabled
-public abstract class CriteriaRepositoryAnnotation extends Annotation {}
+public abstract class CriteriaRepositoryAnnotation extends Annotation {
+  public static final String ANNOTATION_CANONICAL_NAME = "org.immutables.criteria.Criteria.Repository";
+
+}

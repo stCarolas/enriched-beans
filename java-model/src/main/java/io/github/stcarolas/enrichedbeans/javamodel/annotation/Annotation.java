@@ -2,12 +2,17 @@ package io.github.stcarolas.enrichedbeans.javamodel.annotation;
 
 import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ClassName;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.immutables.value.Value.Immutable;
 import org.immutables.vavr.encodings.VavrEncodingEnabled;
 
 import io.vavr.collection.Map;
 
 public abstract class Annotation {
+
+  private Logger log =  LogManager.getLogger();
 
   abstract public String className();
 
@@ -28,8 +33,11 @@ public abstract class Annotation {
   }
 
   public boolean is(Class<?> annotationClass){
-    return className().equals(annotationClass.getSimpleName())
-      && packageName().equals(annotationClass.getPackageName());
+    return is(annotationClass.getCanonicalName());
+  }
+
+  public boolean is(String annotationClass){
+    return (packageName() + "." + className()).equals(annotationClass);
   }
 
 

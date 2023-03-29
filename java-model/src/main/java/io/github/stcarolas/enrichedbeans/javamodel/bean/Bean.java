@@ -2,6 +2,8 @@ package io.github.stcarolas.enrichedbeans.javamodel.bean;
 
 import javax.lang.model.element.ExecutableElement;
 
+import com.squareup.javapoet.TypeName;
+
 import org.immutables.value.Value.Immutable;
 import org.immutables.vavr.encodings.VavrEncodingEnabled;
 
@@ -11,13 +13,21 @@ import io.github.stcarolas.enrichedbeans.javamodel.method.Method;
 import io.github.stcarolas.enrichedbeans.javamodel.variable.Variable;
 
 import io.vavr.collection.Seq;
+import io.vavr.control.Try;
+
+import static io.vavr.API.Try;
 
 @Immutable
+@VavrEncodingEnabled
 public abstract class Bean {
 
   abstract public String packageName();
 
   abstract public String className();
+
+  public Try<TypeName> typeName(){
+    return Try(() -> TypeName.get(Class.forName(packageName() + "." + className())));
+  }
 
   abstract public Seq<Annotation> annotations();
 
@@ -42,10 +52,14 @@ public abstract class Bean {
   }
 
   public boolean missingAnnotation(Class<?> targetAnnotationClass){
+    return !hasAnnotation(targetAnnotationClass.getCanonicalName());
+  }
+
+  public boolean missingAnnotation(String targetAnnotationClass){
     return !hasAnnotation(targetAnnotationClass);
   }
 
-  public boolean hasAnnotation(Class<?> targetAnnotationClass){
+  public boolean hasAnnotation(String targetAnnotationClass){
     return annotations()
       .find(annotation -> annotation.is(targetAnnotationClass))
       .isDefined();
@@ -56,7 +70,4 @@ public abstract class Bean {
     return packageName() + "." + className();
   }
 
-  @Immutable
-  @VavrEncodingEnabled
-  public abstract static class BeanImpl extends Bean {}
 }

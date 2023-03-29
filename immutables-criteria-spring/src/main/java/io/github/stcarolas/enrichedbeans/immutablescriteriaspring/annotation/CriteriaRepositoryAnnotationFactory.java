@@ -20,9 +20,9 @@ public class CriteriaRepositoryAnnotationFactory extends AnnotationFactory {
     return Option(mirror)
       .map(this::asElement)
       .filter(anno ->
-        "org.immutables.criteria.Criteria.Repository".equals(
-            anno.getQualifiedName().toString()
-          )
+        CriteriaRepositoryAnnotation.ANNOTATION_CANONICAL_NAME.equals(
+          anno.getQualifiedName().toString()
+        )
       )
       .map(anno ->
         ImmutableCriteriaRepositoryAnnotation

@@ -13,8 +13,12 @@ import javax.annotation.processing.RoundEnvironment;
 import javax.inject.Named;
 import javax.lang.model.element.TypeElement;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 @Module
 public class CriteriaRepositoryBeansModule {
+  private Logger log = LogManager.getLogger();
 
   @Provides
   @Named("CriteriaRepositoryBeans")
@@ -22,10 +26,12 @@ public class CriteriaRepositoryBeansModule {
     RoundEnvironment roundEnvironment,
     CriteriaRepositoryBeanFactory beanFactory
   ) {
+    log.always().log("Processing CriteriaRepositoryBeans");
     List<TypeElement> classes = Option(roundEnvironment)
       .map(RoundEnvironment::getRootElements)
       .flatMap(Option::of)
       .map(List::ofAll)
+      .peek(beans -> log.always().log("Processing beans: {}",beans))
       .getOrElse(List())
       .map(element -> (TypeElement) element);
     return classes.flatMap(beanFactory::from);
