@@ -101,7 +101,7 @@ build:
 
   - groupId: org.codehaus.mojo
     artifactId: build-helper-maven-plugin
-    version: 3.2.0
+    version: 3.4.0
     executions:
 
       - id: add-source
