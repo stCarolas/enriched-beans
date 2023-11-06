@@ -115,7 +115,14 @@ public abstract class AssistedBean extends EnrichableBean {
   }
 
   protected Seq<Variable> notInjectedFields() {
-    return fields().reject(shouldBeInjected(assistAllInjectedFields()));
+    // TODO filter static fields and inited fields
+    return fields()
+      .reject(shouldBeInjected(assistAllInjectedFields()))
+      .map(field -> field.removeAnnotation("com.fasterxml.jackson.annotation", "JsonIgnore"))
+      .map(field -> field.removeAnnotation("org.springframework.data.annotation","Id"))
+      .map(field -> field.removeAnnotation("org.springframework.data.annotation","Transient"))
+    ;
+
   }
 
   protected Seq<Variable> injectedFields() {
@@ -142,7 +149,11 @@ public abstract class AssistedBean extends EnrichableBean {
           Enrich.class.getPackageName(),
           Enrich.class.getSimpleName()
         )
-      );
+      )
+      .map(field -> field.removeAnnotation("com.fasterxml.jackson.annotation", "JsonIgnore"))
+      .map(field -> field.removeAnnotation("org.springframework.data.annotation","Id"))
+      .map(field -> field.removeAnnotation("org.springframework.data.annotation","Transient"))
+    ;
   }
 
   private Predicate<Variable> shouldBeInjected(boolean detectNamedFields) {

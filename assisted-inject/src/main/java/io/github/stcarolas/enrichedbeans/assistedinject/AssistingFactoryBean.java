@@ -24,6 +24,7 @@ public abstract class AssistingFactoryBean extends GeneratedBean implements With
 
   abstract Modifier visibility();
 
+  // todo почему он не тут?
   abstract Method factoryMethod();
 
   abstract Constructor constructor();
