@@ -28,6 +28,7 @@ public class VariableTest {
 
     Variable variableWithBothAnnotations = baseVariable
       .addAnnotations(new TestAnnotation())
+      .addAnnotations(new SecondTestAnnotation())
       .build();
     assertTrue(variableWithBothAnnotations.hasAnnotation(TestAnnotation.class));
     assertTrue(variableWithBothAnnotations.hasAnnotation(SecondTestAnnotation.class));
