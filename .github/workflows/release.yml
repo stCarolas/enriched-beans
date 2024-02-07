@@ -3,6 +3,7 @@ name: Enriched Beans Release Pipeline
 on:
   push:
     branches: [ master ]
+  workflow_dispatch:
 
 jobs:
   build:
